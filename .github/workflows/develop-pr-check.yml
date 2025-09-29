@@ -1,0 +1,141 @@
+name: gwanghwamun-pr-check
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  pull_request:
+    branches:
+      - "develop"
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+        shell: bash
+
+      - name: Set start time
+        run: echo "START_TIME=$(date +%s)" >> $GITHUB_ENV
+
+      - name: Validate application.yml
+        run: |
+          if [ ! -f src/main/resources/application.yml ]; then
+            echo "Error: application.yml not found!"
+            exit 1
+          fi
+
+      - name: Build with Gradle
+        env:
+
+        run: ./gradlew clean build -x test
+
+      - name: Calculate Duration
+        if: always()
+        run: |
+          END_TIME=$(date +%s)
+          DURATION=$((END_TIME - START_TIME))
+          echo "DURATION=$DURATION" >> $GITHUB_ENV
+
+      - name: Notify Slack
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+    
+          echo "Job Status: $JOB_STATUS"
+          echo "GitHub Job Status: ${{ job.status }}"
+          
+          send_slack_notification() {
+            local status="$1"
+            local color=""
+            local title=""
+          
+            if [ "$status" = "success" ]; then
+              color="good"
+             title="✅ 빌드 성공"
+            else
+              color="danger"
+              title="❌ 빌드 실패"
+            fi
+    
+            payload=$(jq -n \
+              --arg color "$color" \
+              --arg title "$title" \
+              --arg pr_title "$PR_TITLE" \
+              --arg duration "$DURATION" \
+              --arg url "$ACTIONS_URL" \
+              '{
+                attachments: [{
+                  color: $color,
+                  blocks: [
+                    {
+                      type: "header",
+                      text: {
+                        type: "plain_text",
+                        text: $title,
+                        emoji: true
+                      }
+                    },
+                    {
+                      type: "section",
+                      fields: [
+                        {
+                          type: "mrkdwn",
+                          text: ("*작업 제목:*\n" + $pr_title)
+                        },
+                        {
+                          type: "mrkdwn",
+                          text: ("*실행 시간:*\n" + $duration + "초")
+                        }
+                      ]
+                    },
+                    {
+                      type: "section",
+                      text: {
+                        type: "mrkdwn",
+                        text: ("*Actions 로그:* <" + $url + "|보기>")
+                      }
+                    }
+                  ]
+                }]
+              }')
+          
+            curl -X POST -H "Content-type: application/json" \
+              --data "$payload" \
+              "$SLACK_WEBHOOK_URL"
+          }
+      
+          DURATION=${DURATION:-"알 수 없음"}
+          
+          if [ -n "${{ github.event.pull_request.title }}" ]; then
+            PR_TITLE="${{ github.event.pull_request.title }}"
+          else
+            PR_TITLE="${{ github.event.head_commit.message }}"
+          fi
+          
+          ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      
+          if [ "$JOB_STATUS" = "success" ]; then
+            send_slack_notification "success"
+          else
+            send_slack_notification "failure"
+          fi
+            
