@@ -43,7 +43,7 @@ jobs:
 
       - name: Build with Gradle
         env:
-
+          DUMMY: true
         run: ./gradlew clean build -x test
 
       - name: Calculate Duration
