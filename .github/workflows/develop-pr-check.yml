@@ -138,4 +138,3 @@ jobs:
           else
             send_slack_notification "failure"
           fi
-            
