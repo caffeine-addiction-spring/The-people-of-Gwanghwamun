@@ -36,13 +36,15 @@ jobs:
 
       - name: Build and push Docker image
         env:
-          IMAGE: ghcr.io/${{ github.repository }}/myapp:latest
+          REGISTRY: ghcr.io
+          IMAGE_NAME: caffeine-addiction-spring/the-people-of-gwanghwamun
+          VERSION: latest
         run: |
+          IMAGE=$REGISTRY/$IMAGE_NAME:$VERSION
           docker build -t $IMAGE .
           docker push $IMAGE
           echo "IMAGE_URI=$IMAGE" >> $GITHUB_ENV
 
-      # 🔹 EC2에 접속 후 배포
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
