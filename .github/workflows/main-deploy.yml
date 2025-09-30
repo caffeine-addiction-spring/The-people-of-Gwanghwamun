@@ -27,29 +27,39 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build -x test
 
-      - name: Copy files to EC2
-        uses: appleboy/scp-action@v0.1.7
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          source: "."
-          target: "~/app"
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Deploy on EC2
+      - name: Build and push Docker image
+        env:
+          IMAGE: ghcr.io/${{ github.repository }}/myapp:latest
+        run: |
+          docker build -t $IMAGE .
+          docker push $IMAGE
+          echo "IMAGE_URI=$IMAGE" >> $GITHUB_ENV
+
+      # 🔹 EC2에 접속 후 배포
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/app
-            echo "✅ 컨테이너 중지 및 제거"
+            echo "✅ 배포 시작"
             sudo docker stop myapp || true
             sudo docker rm myapp || true
+            sudo docker rmi ${{ env.IMAGE_URI }} || true
 
-            echo "📦 도커 빌드 시작"
-            sudo docker build -t myapp:latest .
+            echo "📦 GHCR 로그인"
+            echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            echo "📥 이미지 Pull"
+            sudo docker pull ${{ env.IMAGE_URI }}
 
             echo "🚀 컨테이너 실행"
-            sudo docker run -d --name myapp -p 8080:8080 myapp:latest
+            sudo docker run -d --name myapp -p 8080:8080 ${{ env.IMAGE_URI }}
