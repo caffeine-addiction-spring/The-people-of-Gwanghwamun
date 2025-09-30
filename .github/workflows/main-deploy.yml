@@ -27,28 +27,29 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build -x test
 
-      - name: Build Docker Image
-        run: docker build -t myapp:latest .
+      - name: Copy files to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "."
+          target: "~/app"
 
-      - name: Deploy to EC2
+      - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            echo "✅ SSH 연결 테스트 중..."
-            hostname
-            uptime
-
+            cd ~/app
+            echo "✅ 컨테이너 중지 및 제거"
             docker stop myapp || true
             docker rm myapp || true
-            docker rmi myapp:latest || true
 
-            cd ~/app
-            rm -rf *
-
-            echo "📦 Docker 빌드 시작!"
+            echo "📦 도커 빌드 시작"
             docker build -t myapp:latest .
-            echo "🚀 컨테이너 실행!"
+
+            echo "🚀 컨테이너 실행"
             docker run -d --name myapp -p 8080:8080 myapp:latest
