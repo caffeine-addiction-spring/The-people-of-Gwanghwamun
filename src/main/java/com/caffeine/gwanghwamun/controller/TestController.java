@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TestController {
 
-    private final TestRepository testRepository;
+	private final TestRepository testRepository;
 
-    @GetMapping("/test")
-    public ExampleEntity test() {
-        ExampleEntity entity = new ExampleEntity("test content");
-        ExampleEntity saved = testRepository.save(entity);
+	@GetMapping("/test")
+	public ExampleEntity test() {
+		ExampleEntity entity = new ExampleEntity("test content");
+		ExampleEntity saved = testRepository.save(entity);
 
-        System.out.println("Created By: " + saved.getCreatedBy());
-        System.out.println("Created Date: " + saved.getCreatedDate());
-        System.out.println("Last Modified By: " + saved.getLastModifiedBy());
-        System.out.println("Last Modified Date: " + saved.getLastModifiedDate());
+		System.out.println("Created By: " + saved.getCreatedBy());
+		System.out.println("Created Date: " + saved.getCreatedDate());
+		System.out.println("Last Modified By: " + saved.getLastModifiedBy());
+		System.out.println("Last Modified Date: " + saved.getLastModifiedDate());
 
-        return saved;
-    }
+		return saved;
+	}
 }

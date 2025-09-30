@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ExampleEntity extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String content;
+	private String content;
 
-    public ExampleEntity(String content) {
-        this.content = content;
-    }
+	public ExampleEntity(String content) {
+		this.content = content;
+	}
 }
