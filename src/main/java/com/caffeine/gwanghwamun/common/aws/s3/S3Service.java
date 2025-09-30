@@ -2,10 +2,13 @@ package com.caffeine.gwanghwamun.common.aws.s3;
 
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.S3Client;
 
 @Service
+@ConditionalOnBean(S3Client.class)
 public class S3Service {
 
 	private final S3Util s3Util;
