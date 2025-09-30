@@ -28,6 +28,11 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    //AWS
+    implementation 'software.amazon.awssdk:s3:2.20.162'
+    implementation 'software.amazon.awssdk:auth:2.20.162'
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
