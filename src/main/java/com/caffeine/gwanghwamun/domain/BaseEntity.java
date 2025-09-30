@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun;
+package com.caffeine.gwanghwamun.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

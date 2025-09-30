@@ -1,9 +1,7 @@
-package com.caffeine.gwanghwamun;
+package com.caffeine.gwanghwamun.common.config.auditing;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

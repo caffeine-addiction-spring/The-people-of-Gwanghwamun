@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun;
+package com.caffeine.gwanghwamun.common.config.auditing;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
