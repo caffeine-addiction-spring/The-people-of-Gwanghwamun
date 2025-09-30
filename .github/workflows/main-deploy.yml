@@ -45,11 +45,11 @@ jobs:
           script: |
             cd ~/app
             echo "✅ 컨테이너 중지 및 제거"
-            docker stop myapp || true
-            docker rm myapp || true
+            sudo docker stop myapp || true
+            sudo docker rm myapp || true
 
             echo "📦 도커 빌드 시작"
-            docker build -t myapp:latest .
+            sudo docker build -t myapp:latest .
 
             echo "🚀 컨테이너 실행"
-            docker run -d --name myapp -p 8080:8080 myapp:latest
+            sudo docker run -d --name myapp -p 8080:8080 myapp:latest
