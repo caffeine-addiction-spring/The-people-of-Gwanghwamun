@@ -2,6 +2,7 @@ package com.caffeine.gwanghwamun.common.aws.s3;
 
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -9,6 +10,7 @@ import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Component
+@ConditionalOnBean(S3Client.class)
 public class S3Util {
 
 	private final S3Client s3Client;
