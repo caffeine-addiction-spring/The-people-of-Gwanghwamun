@@ -45,3 +45,6 @@ out/
 
 ### Database ###
 postgres-data/
+
+### querydsl ###
+generated/
