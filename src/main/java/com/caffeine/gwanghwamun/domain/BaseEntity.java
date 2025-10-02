@@ -21,12 +21,14 @@ public abstract class BaseEntity {
 	private LocalDateTime createAt;
 
 	@Column(name = "updated_at")
-	@LastModifiedDate private LocalDateTime lastUpdatedAt;
+	@LastModifiedDate
+	private LocalDateTime lastUpdatedAt;
 
 	@CreatedBy
 	@Column(name = "created_by", updatable = false)
 	private String createdBy;
 
 	@Column(name = "updated_by")
-	@LastModifiedBy private String lastUpdatedBy;
+	@LastModifiedBy
+	private String lastUpdatedBy;
 }
