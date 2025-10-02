@@ -9,9 +9,9 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum SuccessCode {
 
-    // 회원 (user)
-    USER_SAVE_SUCCESS(HttpStatus.CREATED, "회원가입 성공");
+	// 회원 (user)
+	USER_SAVE_SUCCESS(HttpStatus.CREATED, "회원가입 성공");
 
-    private final HttpStatus httpStatus;
-    private final String message;
+	private final HttpStatus httpStatus;
+	private final String message;
 }
