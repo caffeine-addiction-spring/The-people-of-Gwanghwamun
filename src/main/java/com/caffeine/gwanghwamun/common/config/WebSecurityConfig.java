@@ -1,6 +1,5 @@
 package com.caffeine.gwanghwamun.common.config;
 
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,13 +26,13 @@ public class WebSecurityConfig {
 		http.authorizeHttpRequests(
 						(authorizeHttpRequests) ->
 								authorizeHttpRequests
-//										.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-//										.permitAll()
-//										.requestMatchers("/v1/auth/**")
-//										.permitAll()
+										//
+										//	.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+										//										.permitAll()
+										//										.requestMatchers("/v1/auth/**")
+										//										.permitAll()
 										.anyRequest()
 										.permitAll()) // 개발 중 모든 접근 허용
-
 				.formLogin(form -> form.disable())
 				.httpBasic(httpBasic -> httpBasic.disable());
 
