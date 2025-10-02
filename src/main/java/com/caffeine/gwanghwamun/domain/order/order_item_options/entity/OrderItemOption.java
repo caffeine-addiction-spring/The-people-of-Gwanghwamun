@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.order.entity;
+package com.caffeine.gwanghwamun.domain.order.order_item_options.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import jakarta.persistence.*;
@@ -12,9 +12,9 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@Table(name = "p_order")
+@Table(name = "p_order_item_option")
 @NoArgsConstructor
-public class Order extends BaseEntity {
+public class OrderItemOption extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -23,9 +23,6 @@ public class Order extends BaseEntity {
     private int totalPrice;
 
     private String requests;
-
-    @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
 
     private String deliveryAddress;
 
