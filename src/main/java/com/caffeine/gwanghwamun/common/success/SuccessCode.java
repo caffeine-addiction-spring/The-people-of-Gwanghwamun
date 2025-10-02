@@ -1,0 +1,20 @@
+package com.caffeine.gwanghwamun.common.success;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+
+/* 필요 시 성공코드 추가 후 사용 */
+@Getter
+@RequiredArgsConstructor
+public enum SuccessCode {
+
+    // 회원 (user)
+    USER_SAVE_SUCCESS(HttpStatus.CREATED, "회원 등록 성공"),
+    USER_UPDATE_SUCCESS(HttpStatus.OK, "회원 수정 성공"),
+    USER_LOGIN_SUCCESS(HttpStatus.OK, "로그인 성공"),
+    USER_LOGOUT_SUCCESS(HttpStatus.OK, "로그아웃 성공");
+
+    private final HttpStatus httpStatus;
+    private final String message;
+}
