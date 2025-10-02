@@ -9,13 +9,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler(CustomException.class)
-    protected ResponseEntity<ApiResponse<Void>> handleCustomException(CustomException e) {
-        ErrorCode errorCode = e.getErrorCode();
-        return ResponseUtil.failureResponse(
-                errorCode.getMessage(),
-                errorCode.name(),
-                errorCode.getHttpStatus()
-        );
-    }
+	@ExceptionHandler(CustomException.class)
+	protected ResponseEntity<ApiResponse<Void>> handleCustomException(CustomException e) {
+		ErrorCode errorCode = e.getErrorCode();
+		return ResponseUtil.failureResponse(
+				errorCode.getMessage(), errorCode.name(), errorCode.getHttpStatus());
+	}
 }

@@ -9,12 +9,12 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
-    // 회원 (user)
-    FORBIDDEN(HttpStatus.FORBIDDEN, "인가 실패"),
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증 실패"),
-    LOGIN_FAIL(HttpStatus.UNAUTHORIZED, "로그인 실패"),
-    LOGOUT_FAIL(HttpStatus.UNAUTHORIZED, "로그아웃 실패");
+	// 회원 (user)
+	FORBIDDEN(HttpStatus.FORBIDDEN, "인가 실패"),
+	UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증 실패"),
+	LOGIN_FAIL(HttpStatus.UNAUTHORIZED, "로그인 실패"),
+	LOGOUT_FAIL(HttpStatus.UNAUTHORIZED, "로그아웃 실패");
 
-    private final HttpStatus httpStatus;
-    private final String message;
+	private final HttpStatus httpStatus;
+	private final String message;
 }
