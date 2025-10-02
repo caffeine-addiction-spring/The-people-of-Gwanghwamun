@@ -1,7 +1,7 @@
-package com.caffeine.gwanghwamun.controller;
+package com.caffeine.gwanghwamun.domain.test.controller;
 
-import com.caffeine.gwanghwamun.domain.ExampleEntity;
-import com.caffeine.gwanghwamun.repository.TestRepository;
+import com.caffeine.gwanghwamun.domain.test.entity.TestEntity;
+import com.caffeine.gwanghwamun.domain.test.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,9 +13,9 @@ public class TestController {
 	private final TestRepository testRepository;
 
 	@GetMapping("/test")
-	public ExampleEntity test() {
-		ExampleEntity entity = new ExampleEntity("test content");
-		ExampleEntity saved = testRepository.save(entity);
+	public TestEntity test() {
+		TestEntity entity = new TestEntity("test content");
+		TestEntity saved = testRepository.save(entity);
 
 		System.out.println("Created By: " + saved.getCreatedBy());
 		System.out.println("Created Date: " + saved.getCreatedDate());

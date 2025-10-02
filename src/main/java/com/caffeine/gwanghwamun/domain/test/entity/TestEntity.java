@@ -1,5 +1,6 @@
-package com.caffeine.gwanghwamun.domain;
+package com.caffeine.gwanghwamun.domain.test.entity;
 
+import com.caffeine.gwanghwamun.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class ExampleEntity extends BaseEntity {
+public class TestEntity extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +19,7 @@ public class ExampleEntity extends BaseEntity {
 
 	private String content;
 
-	public ExampleEntity(String content) {
+	public TestEntity(String content) {
 		this.content = content;
 	}
 }
