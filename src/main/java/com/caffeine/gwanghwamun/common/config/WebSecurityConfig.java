@@ -2,13 +2,15 @@ package com.caffeine.gwanghwamun.common.config;
 
 import com.caffeine.gwanghwamun.domain.user.jwt.JwtUtil;
 import com.caffeine.gwanghwamun.domain.user.security.JwtAuthenticationFilter;
-// import com.caffeine.gwanghwamun.domain.user.security.JwtAuthorizationFilter;
+import com.caffeine.gwanghwamun.domain.user.security.JwtAuthorizationFilter;
 import com.caffeine.gwanghwamun.domain.user.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true) // @PreAuthorize 활성화
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
@@ -37,19 +40,21 @@ public class WebSecurityConfig {
 		http.authorizeHttpRequests(
 						(authorizeHttpRequests) ->
 								authorizeHttpRequests
-										//
-										//	.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-										//										.permitAll()
-										//										.requestMatchers("/v1/auth/**")
-										//										.permitAll()
+										.requestMatchers("/v1/auth/**")
+										.permitAll()
+										.requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
+										.permitAll()
+										.requestMatchers("/v1/test/public")
+										.permitAll()
+										.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+										.permitAll()
 										.anyRequest()
-										.permitAll()) // 개발 중 모든 접근 허용
+										.authenticated())
 				.formLogin(form -> form.disable())
 				.httpBasic(httpBasic -> httpBasic.disable());
 
-		// 필터 관리
-		//		http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterAfter(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
 
 		return http.build();
 	}
@@ -72,8 +77,8 @@ public class WebSecurityConfig {
 		return filter;
 	}
 
-	//	@Bean
-	//	public JwtAuthorizationFilter jwtAuthorizationFilter() {
-	//		return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
-	//	}
+	@Bean
+	public JwtAuthorizationFilter jwtAuthorizationFilter() {
+		return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
+	}
 }

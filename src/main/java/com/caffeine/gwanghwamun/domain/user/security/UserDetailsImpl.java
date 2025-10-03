@@ -1,9 +1,8 @@
 package com.caffeine.gwanghwamun.domain.user.security;
 
 import com.caffeine.gwanghwamun.domain.user.entity.User;
-import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,14 +31,7 @@ public class UserDetailsImpl implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		UserRoleEnum role = user.getRole();
-		String authority = role.getAuthority();
-
-		SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);
-		Collection<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(simpleGrantedAuthority);
-
-		return authorities;
+		return List.of(new SimpleGrantedAuthority(user.getRole().getAuthority()));
 	}
 
 	@Override
