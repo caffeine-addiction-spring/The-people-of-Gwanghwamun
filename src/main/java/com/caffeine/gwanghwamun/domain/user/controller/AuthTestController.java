@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/test")
 public class AuthTestController {
 
+	// 인증 토큰 필요 없는 경우
 	@GetMapping("/public")
 	public ResponseEntity<Map<String, String>> publicEndpoint() {
 		Map<String, String> response = new HashMap<>();
@@ -24,6 +25,7 @@ public class AuthTestController {
 		return ResponseEntity.ok(response);
 	}
 
+	// 인증 객체 사용하는 경우
 	@GetMapping("/protected")
 	public ResponseEntity<Map<String, Object>> protectedEndpoint(
 			@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -42,6 +44,7 @@ public class AuthTestController {
 		return ResponseEntity.ok(response);
 	}
 
+	// ROLE_CUSTOMER
 	@GetMapping("/customer")
 	@PreAuthorize("hasRole('CUSTOMER')")
 	public ResponseEntity<Map<String, String>> customerOnly() {
@@ -50,6 +53,7 @@ public class AuthTestController {
 		return ResponseEntity.ok(response);
 	}
 
+	// ROLE_MANAGER
 	@GetMapping("/manager")
 	@PreAuthorize("hasRole('MANAGER')")
 	public ResponseEntity<Map<String, String>> managerOnly() {
@@ -58,6 +62,7 @@ public class AuthTestController {
 		return ResponseEntity.ok(response);
 	}
 
+	// ROLE_OWNER
 	@GetMapping("/owner")
 	@PreAuthorize("hasRole('OWNER')")
 	public ResponseEntity<Map<String, String>> ownerOnly() {
@@ -66,6 +71,7 @@ public class AuthTestController {
 		return ResponseEntity.ok(response);
 	}
 
+	// ROLE_MASTER
 	@GetMapping("/master")
 	@PreAuthorize("hasRole('MASTER')")
 	public ResponseEntity<Map<String, String>> masterOnly() {
