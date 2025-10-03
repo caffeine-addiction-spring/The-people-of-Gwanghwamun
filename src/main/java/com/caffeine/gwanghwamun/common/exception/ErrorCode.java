@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
+	// 공통
+	VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "요청 값이 유효하지 않습니다."),
+
 	// 회원 (user)
 	FORBIDDEN(HttpStatus.FORBIDDEN, "인가 실패"),
 	UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증 실패"),
