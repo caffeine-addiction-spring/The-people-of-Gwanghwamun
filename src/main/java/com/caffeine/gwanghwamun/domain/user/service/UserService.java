@@ -7,6 +7,7 @@ import com.caffeine.gwanghwamun.domain.user.dto.SignupReqDTO;
 import com.caffeine.gwanghwamun.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
 	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	@Transactional
 	public void signUp(SignupReqDTO requestDto) {
@@ -23,7 +25,7 @@ public class UserService {
 						user -> {
 							throw new CustomException(DUPLICATED);
 						});
-
-		userRepository.save(requestDto.toUser());
+		String encodedPassword = passwordEncoder.encode(requestDto.password());
+		userRepository.save(requestDto.toUser(encodedPassword));
 	}
 }
