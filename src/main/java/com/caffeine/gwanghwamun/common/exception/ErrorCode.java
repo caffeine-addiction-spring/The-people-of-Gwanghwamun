@@ -13,6 +13,7 @@ public enum ErrorCode {
 	VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "요청 값이 유효하지 않습니다."),
 
 	// 회원 (user)
+	DUPLICATED(HttpStatus.CONFLICT, "회원가입 실패"),
 	FORBIDDEN(HttpStatus.FORBIDDEN, "인가 실패"),
 	UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증 실패"),
 	LOGIN_FAIL(HttpStatus.UNAUTHORIZED, "로그인 실패"),
