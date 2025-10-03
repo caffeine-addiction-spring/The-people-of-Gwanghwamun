@@ -3,9 +3,11 @@ package com.caffeine.gwanghwamun.domain.user.entity;
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor
 @Table(name = "p_users")
 public class User extends BaseEntity {

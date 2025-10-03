@@ -10,7 +10,8 @@ import org.springframework.http.HttpStatus;
 public enum SuccessCode {
 
 	// 회원 (user)
-	USER_SAVE_SUCCESS(HttpStatus.CREATED, "회원가입 성공");
+	USER_SAVE_SUCCESS(HttpStatus.CREATED, "회원가입 성공"),
+	USER_LOGIN_SUCCESS(HttpStatus.OK, "로그인 성공");
 
 	private final HttpStatus httpStatus;
 	private final String message;
