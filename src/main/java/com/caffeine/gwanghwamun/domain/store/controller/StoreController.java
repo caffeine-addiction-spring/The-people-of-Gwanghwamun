@@ -22,11 +22,9 @@ public class StoreController {
 
 	@Operation(summary = "가게 등록 API")
 	@PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MASTER')")
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<StoreCreateResDTO> createStore(
-            @RequestBody StoreCreateReqDTO request,
-			@AuthenticationPrincipal UserDetailsImpl user
-			) {
+			@RequestBody StoreCreateReqDTO request, @AuthenticationPrincipal UserDetailsImpl user) {
 
 		StoreCreateResDTO response = storeService.createStore(request, user.getUser());
 

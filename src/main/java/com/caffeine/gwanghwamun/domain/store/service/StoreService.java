@@ -15,8 +15,7 @@ public class StoreService {
 
 	private final StoreRepository storeRepository;
 
-	public StoreCreateResDTO createStore(
-			StoreCreateReqDTO req, User user) {
+	public StoreCreateResDTO createStore(StoreCreateReqDTO req, User user) {
 		Store store = new Store();
 		store.setName(req.getName());
 		store.setAddress(req.getAddress());
@@ -34,7 +33,6 @@ public class StoreService {
 
 		storeRepository.save(store);
 
-		return new StoreCreateResDTO(
-				store.getStoreId(), store.getName(), store.getStoreCategory());
+		return new StoreCreateResDTO(store.getStoreId(), store.getName(), store.getStoreCategory());
 	}
 }
