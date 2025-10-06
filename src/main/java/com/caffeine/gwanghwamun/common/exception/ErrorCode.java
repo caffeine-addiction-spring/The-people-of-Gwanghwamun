@@ -17,7 +17,11 @@ public enum ErrorCode {
 	FORBIDDEN(HttpStatus.FORBIDDEN, "인가 실패"),
 	UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증 실패"),
 	LOGIN_FAIL(HttpStatus.UNAUTHORIZED, "로그인 실패"),
-	LOGOUT_FAIL(HttpStatus.UNAUTHORIZED, "로그아웃 실패");
+	LOGOUT_FAIL(HttpStatus.UNAUTHORIZED, "로그아웃 실패"),
+
+	// 메뉴 옵션 (menuOption)
+	MENU_OPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "메뉴 옵션을 찾을 수 없습니다."),
+	MENU_OPTION_MENU_MISMATCH(HttpStatus.BAD_REQUEST, "옵션이 해당 메뉴에 속하지 않습니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;
