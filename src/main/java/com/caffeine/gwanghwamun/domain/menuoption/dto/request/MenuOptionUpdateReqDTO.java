@@ -7,4 +7,5 @@ public record MenuOptionUpdateReqDTO(
 		@Size(max = 100) String optionName,
 		@PositiveOrZero Integer price,
 		@Size(max = 2000) String content,
-		Boolean isHidden) {}
+		Boolean isHidden,
+		Boolean isSoldOut) {}

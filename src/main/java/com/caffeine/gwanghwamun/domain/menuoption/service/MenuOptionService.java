@@ -70,16 +70,20 @@ public class MenuOptionService {
 	@Transactional
 	public MenuOptionResDTO updateOption(
 			UUID storeId, UUID menuId, UUID optionId, MenuOptionUpdateReqDTO req) {
+
 		MenuOption option =
 				menuOptionRepository
 						.findByIdAndNotDeleted(optionId)
 						.orElseThrow(() -> new CustomException(ErrorCode.MENU_OPTION_NOT_FOUND));
+
 		if (!option.getMenuId().equals(menuId)) {
 			throw new CustomException(ErrorCode.MENU_STORE_MISMATCH);
 		}
-		option.update(req.optionName(), req.price(), req.content(), req.isHidden());
+
+		option.update(req.optionName(), req.price(), req.content(), req.isHidden(), req.isSoldOut());
 		return new MenuOptionResDTO(option);
 	}
+
 
 	@Transactional
 	public void deleteOption(UUID storeId, UUID menuId, UUID optionId, String deleter) {
@@ -91,6 +95,26 @@ public class MenuOptionService {
 			throw new CustomException(ErrorCode.MENU_STORE_MISMATCH);
 		}
 		option.softDelete(deleter);
+	}
+
+	@Transactional
+	public MenuOptionResDTO updateOptionVisibility(UUID storeId, UUID menuId, UUID optionId, Boolean hidden) {
+		MenuOption option =
+				menuOptionRepository
+						.findByIdAndNotDeleted(optionId)
+						.orElseThrow(() -> new CustomException(ErrorCode.MENU_OPTION_NOT_FOUND));
+
+		if (!option.getMenuId().equals(menuId)) {
+			throw new CustomException(ErrorCode.MENU_STORE_MISMATCH);
+		}
+
+		if (Boolean.TRUE.equals(hidden)) {
+			option.hideOption();
+		} else {
+			option.showOption();
+		}
+
+		return new MenuOptionResDTO(option);
 	}
 
 	@Transactional

@@ -6,10 +6,10 @@ import com.caffeine.gwanghwamun.common.success.SuccessCode;
 import com.caffeine.gwanghwamun.domain.menuoption.dto.request.MenuOptionCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.menuoption.dto.request.MenuOptionSoldOutReqDTO;
 import com.caffeine.gwanghwamun.domain.menuoption.dto.request.MenuOptionUpdateReqDTO;
+import com.caffeine.gwanghwamun.domain.menuoption.dto.request.MenuOptionVisibilityReqDTO;
 import com.caffeine.gwanghwamun.domain.menuoption.dto.response.MenuOptionResDTO;
 import com.caffeine.gwanghwamun.domain.menuoption.service.MenuOptionService;
 import io.swagger.v3.oas.annotations.Operation;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +18,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/v1/stores/{storeId}/menus/{menuId}/options")
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class MenuOptionController {
 
 	private final MenuOptionService menuOptionService;
 
+	//TODO 권한 설정 @AuthenticationPricipal , @PreAuthorize
 	@Operation(summary = "옵션 등록", description = "메뉴 옵션을 등록한다.")
 	@PostMapping
 	public ResponseEntity<ApiResponse<MenuOptionResDTO>> createOption(
@@ -82,6 +85,18 @@ public class MenuOptionController {
 		menuOptionService.deleteOption(storeId, menuId, optionId, null);
 		return ResponseUtil.successResponse(SuccessCode.MENU_OPTION_DELETE_SUCCESS);
 	}
+
+	@Operation(summary = "옵션 숨김/복구", description = "옵션을 숨기거나 다시 보이게 할 수 있다.")
+	@PostMapping("/{optionId}/visibility")
+	public ResponseEntity<ApiResponse<MenuOptionResDTO>> updateOptionVisibility(
+			@PathVariable UUID storeId,
+			@PathVariable UUID menuId,
+			@PathVariable UUID optionId,
+			@RequestBody MenuOptionVisibilityReqDTO req) {
+		MenuOptionResDTO res = menuOptionService.updateOptionVisibility(storeId, menuId, optionId, req.hidden());
+		return ResponseUtil.successResponse(SuccessCode.MENU_OPTION_VISIBILITY_UPDATE_SUCCESS, res);
+	}
+
 
 	@Operation(summary = "옵션 품절/복구", description = "메뉴 옵션 품절 여부를 변경한다.")
 	@PostMapping("/{optionId}/soldout")
