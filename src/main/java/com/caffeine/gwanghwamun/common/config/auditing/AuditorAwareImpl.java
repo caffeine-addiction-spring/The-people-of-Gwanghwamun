@@ -13,9 +13,7 @@ public class AuditorAwareImpl implements AuditorAware<String> {
 	@Override
 	@NonNull
 	public Optional<String> getCurrentAuditor() {
-		Authentication authentication = SecurityContextHolder
-				.getContext()
-				.getAuthentication();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		if (authentication == null || !authentication.isAuthenticated()) {
 			return Optional.empty();
@@ -23,7 +21,7 @@ public class AuditorAwareImpl implements AuditorAware<String> {
 
 		return Optional.of(authentication.getName());
 
-//		// 임시: Spring Security 미구현으로 고정값 사용
-//		return Optional.of("Test");
+		//		// 임시: Spring Security 미구현으로 고정값 사용
+		//		return Optional.of("Test");
 	}
 }
