@@ -6,7 +6,7 @@ import static com.caffeine.gwanghwamun.common.exception.ErrorCode.USER_NOT_FOUND
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.domain.user.dto.SignupReqDTO;
 import com.caffeine.gwanghwamun.domain.user.dto.UserInfoResDTO;
-import com.caffeine.gwanghwamun.domain.user.dto.UserInfoUpdateResDTO;
+import com.caffeine.gwanghwamun.domain.user.dto.UserInfoUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -42,7 +42,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public UserInfoResDTO updateUserInfo(User authenticatedUser, UserInfoUpdateResDTO requestDto) {
+	public UserInfoResDTO updateUserInfo(User authenticatedUser, UserInfoUpdateReqDTO requestDto) {
 		User user =
 				userRepository
 						.findById(authenticatedUser.getUserId())
