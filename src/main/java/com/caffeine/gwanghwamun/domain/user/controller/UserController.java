@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,5 +51,12 @@ public class UserController {
 
 		userService.updatePassword(userDetails.getUser(), requestDto);
 		return ResponseUtil.successResponse(SuccessCode.PASSWORD_UPDATE_SUCCESS);
+	}
+
+	@DeleteMapping("/{userId}")
+	@PreAuthorize("hasRole('MASTER')")
+	public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Long userId) {
+		userService.deleteUser(userId);
+		return ResponseUtil.successResponse(SuccessCode.USER_DELETE_SUCCESS);
 	}
 }

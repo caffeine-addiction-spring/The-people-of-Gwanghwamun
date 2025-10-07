@@ -66,4 +66,16 @@ public class UserService {
 		String encodedPassword = passwordEncoder.encode(requestDto.newPassword());
 		user.updatePassword(encodedPassword);
 	}
+
+	@Transactional
+	public void deleteUser(Long userId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+
+		if (user.isDeleted()) {
+			throw new CustomException(ALREADY_DELETED_USER);
+		}
+
+		user.markAsDeleted();
+	}
 }

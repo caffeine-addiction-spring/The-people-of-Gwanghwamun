@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -32,6 +34,9 @@ public class User extends BaseEntity {
 	@Enumerated(value = EnumType.STRING)
 	private UserRoleEnum role;
 
+	@Column(name = "deleted_at")
+	private LocalDateTime deletedAt;
+
 	@Builder
 	public User(String email, String password, String name, String phone, UserRoleEnum role) {
 		this.email = email;
@@ -48,5 +53,14 @@ public class User extends BaseEntity {
 
 	public void updatePassword(String encodedPassword) {
 		this.password = encodedPassword;
+	}
+
+
+	public void markAsDeleted() {
+		this.deletedAt = LocalDateTime.now();
+	}
+
+	public boolean isDeleted() {
+		return this.deletedAt != null;
 	}
 }
