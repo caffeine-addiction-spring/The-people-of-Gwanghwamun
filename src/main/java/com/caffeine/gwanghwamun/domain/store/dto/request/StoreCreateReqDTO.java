@@ -22,6 +22,7 @@ public class StoreCreateReqDTO {
 
 	@NotNull(message = "카테고리는 필수 선택 항목입니다.")
 	private StoreCategoryEnum storeCategory;
+
 	private String content;
 	private Integer minDeliveryPrice;
 	private Integer deliveryTip;

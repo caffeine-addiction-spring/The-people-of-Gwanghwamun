@@ -8,6 +8,7 @@ import com.caffeine.gwanghwamun.domain.store.service.StoreService;
 import com.caffeine.gwanghwamun.domain.user.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -16,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/stores")
@@ -53,11 +52,10 @@ public class StoreController {
 		return ResponseEntity.ok(stores);
 	}
 
-    @Operation(summary = "가게 상세 조회 API")
-    @GetMapping("/{storeId}")
-    public ResponseEntity<StoreDetailResDTO> getStoreDetail(@PathVariable UUID storeId) {
-        StoreDetailResDTO response = storeService.getStoreDetail(storeId);
-        return ResponseEntity.ok(response);
-    }
-
+	@Operation(summary = "가게 상세 조회 API")
+	@GetMapping("/{storeId}")
+	public ResponseEntity<StoreDetailResDTO> getStoreDetail(@PathVariable UUID storeId) {
+		StoreDetailResDTO response = storeService.getStoreDetail(storeId);
+		return ResponseEntity.ok(response);
+	}
 }
