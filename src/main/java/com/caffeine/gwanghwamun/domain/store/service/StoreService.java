@@ -2,11 +2,14 @@ package com.caffeine.gwanghwamun.domain.store.service;
 
 import com.caffeine.gwanghwamun.domain.store.dto.request.StoreCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.response.StoreCreateResDTO;
+import com.caffeine.gwanghwamun.domain.store.dto.response.StoreListResDTO;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import java.math.BigDecimal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,5 +37,28 @@ public class StoreService {
 		storeRepository.save(store);
 
 		return new StoreCreateResDTO(store.getStoreId(), store.getName(), store.getStoreCategory());
+	}
+
+	public Page<StoreListResDTO> getStoreList(int page, int size, String sortBy, String direction) {
+		Sort sort =
+				direction.equalsIgnoreCase("asc")
+						? Sort.by(sortBy).ascending()
+						: Sort.by(sortBy).descending();
+
+		Pageable pageable = PageRequest.of(page, size, sort);
+		Page<Store> storePage = storeRepository.findAll(pageable);
+
+		List<StoreListResDTO> dtoList =
+				storePage.getContent().stream()
+						.map(
+								store ->
+										new StoreListResDTO(
+												store.getStoreId(),
+												store.getName(),
+												store.getStoreCategory(),
+												store.getAddress()))
+						.toList();
+
+		return new PageImpl<>(dtoList, pageable, storePage.getTotalElements());
 	}
 }
