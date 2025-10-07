@@ -2,11 +2,10 @@ package com.caffeine.gwanghwamun.domain.user.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -54,7 +53,6 @@ public class User extends BaseEntity {
 	public void updatePassword(String encodedPassword) {
 		this.password = encodedPassword;
 	}
-
 
 	public void markAsDeleted() {
 		this.deletedAt = LocalDateTime.now();
