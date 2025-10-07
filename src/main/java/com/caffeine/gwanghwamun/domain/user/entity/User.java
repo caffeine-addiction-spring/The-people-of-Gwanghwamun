@@ -45,4 +45,8 @@ public class User extends BaseEntity {
 		if (name != null && !name.isBlank()) this.name = name;
 		if (phone != null && !phone.isBlank()) this.phone = phone;
 	}
+
+	public void updatePassword(String encodedPassword) {
+		this.password = encodedPassword;
+	}
 }

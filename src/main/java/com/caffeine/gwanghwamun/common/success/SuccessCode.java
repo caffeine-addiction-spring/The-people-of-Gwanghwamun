@@ -13,7 +13,8 @@ public enum SuccessCode {
 	USER_SAVE_SUCCESS(HttpStatus.CREATED, "회원가입 성공"),
 	USER_LOGIN_SUCCESS(HttpStatus.OK, "로그인 성공"),
 	USER_READ_SUCCESS(HttpStatus.OK, "회원 정보 조회 성공"),
-	USER_UPDATE_SUCCESS(HttpStatus.OK, "회원 정보 수정 성공");
+	USER_UPDATE_SUCCESS(HttpStatus.OK, "회원 정보 수정 성공"),
+	PASSWORD_UPDATE_SUCCESS(HttpStatus.OK, "비밀번호 수정 성공");
 
 	private final HttpStatus httpStatus;
 	private final String message;

@@ -1,9 +1,9 @@
 package com.caffeine.gwanghwamun.domain.user.service;
 
-import static com.caffeine.gwanghwamun.common.exception.ErrorCode.DUPLICATED;
-import static com.caffeine.gwanghwamun.common.exception.ErrorCode.USER_NOT_FOUND;
+import static com.caffeine.gwanghwamun.common.exception.ErrorCode.*;
 
 import com.caffeine.gwanghwamun.common.exception.CustomException;
+import com.caffeine.gwanghwamun.domain.user.dto.PasswordChangeReqDTO;
 import com.caffeine.gwanghwamun.domain.user.dto.SignupReqDTO;
 import com.caffeine.gwanghwamun.domain.user.dto.UserInfoResDTO;
 import com.caffeine.gwanghwamun.domain.user.dto.UserInfoUpdateReqDTO;
@@ -50,5 +50,20 @@ public class UserService {
 
 		user.update(requestDto.name(), requestDto.phone());
 		return UserInfoResDTO.from(user);
+	}
+
+	@Transactional
+	public void updatePassword(User authenticatedUser, PasswordChangeReqDTO requestDto) {
+		User user =
+				userRepository
+						.findById(authenticatedUser.getUserId())
+						.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+
+		if (!passwordEncoder.matches(requestDto.currentPassword(), user.getPassword())) {
+			throw new CustomException(INVALID_PASSWORD);
+		}
+
+		String encodedPassword = passwordEncoder.encode(requestDto.newPassword());
+		user.updatePassword(encodedPassword);
 	}
 }
