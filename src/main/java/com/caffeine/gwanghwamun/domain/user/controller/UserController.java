@@ -53,6 +53,7 @@ public class UserController {
 		return ResponseUtil.successResponse(SuccessCode.PASSWORD_UPDATE_SUCCESS);
 	}
 
+	@Operation(summary = "회원 삭제 API")
 	@DeleteMapping("/{userId}")
 	@PreAuthorize("hasRole('MASTER')")
 	public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Long userId) {
