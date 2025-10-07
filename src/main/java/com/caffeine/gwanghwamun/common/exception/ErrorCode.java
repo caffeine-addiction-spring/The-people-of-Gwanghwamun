@@ -17,7 +17,8 @@ public enum ErrorCode {
 	FORBIDDEN(HttpStatus.FORBIDDEN, "인가 실패"),
 	UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증 실패"),
 	LOGIN_FAIL(HttpStatus.UNAUTHORIZED, "로그인 실패"),
-	LOGOUT_FAIL(HttpStatus.UNAUTHORIZED, "로그아웃 실패");
+	LOGOUT_FAIL(HttpStatus.UNAUTHORIZED, "로그아웃 실패"),
+	USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자 조회 실패");
 
 	private final HttpStatus httpStatus;
 	private final String message;
