@@ -66,7 +66,7 @@ public class MenuService {
 		if (!menu.getStoreId().equals(storeId)) {
 			throw new CustomException(ErrorCode.MENU_STORE_MISMATCH);
 		}
-		menu.updateMenu(req.name(), req.content(), req.price(), null, req.isHidden());
+		menu.updateMenu(req.name(), req.content(), req.price(), req.isSoldOut(), req.isHidden());
 		return new MenuResDTO(menu);
 	}
 

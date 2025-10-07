@@ -9,5 +9,6 @@ public record MenuUpdateReqDTO(
 		@PositiveOrZero Integer price,
 		@Size(max = 2000) String content,
 		Boolean isHidden,
+		Boolean isSoldOut,
 		MenuCategory menuCategory,
 		Long imageGroupId) {}
