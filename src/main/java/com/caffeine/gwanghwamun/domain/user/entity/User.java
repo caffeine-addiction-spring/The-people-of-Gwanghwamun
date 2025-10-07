@@ -40,4 +40,9 @@ public class User extends BaseEntity {
 		this.phone = phone;
 		this.role = role;
 	}
+
+	public void update(String name, String phone) {
+		if (name != null && !name.isBlank()) this.name = name;
+		if (phone != null && !phone.isBlank()) this.phone = phone;
+	}
 }

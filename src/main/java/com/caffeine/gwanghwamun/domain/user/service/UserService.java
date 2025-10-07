@@ -6,6 +6,7 @@ import static com.caffeine.gwanghwamun.common.exception.ErrorCode.USER_NOT_FOUND
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.domain.user.dto.SignupReqDTO;
 import com.caffeine.gwanghwamun.domain.user.dto.UserInfoResDTO;
+import com.caffeine.gwanghwamun.domain.user.dto.UserInfoUpdateResDTO;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -37,6 +38,17 @@ public class UserService {
 				.findById(user.getUserId())
 				.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
+		return UserInfoResDTO.from(user);
+	}
+
+	@Transactional
+	public UserInfoResDTO updateUserInfo(User authenticatedUser, UserInfoUpdateResDTO requestDto) {
+		User user =
+				userRepository
+						.findById(authenticatedUser.getUserId())
+						.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+
+		user.update(requestDto.name(), requestDto.phone());
 		return UserInfoResDTO.from(user);
 	}
 }
