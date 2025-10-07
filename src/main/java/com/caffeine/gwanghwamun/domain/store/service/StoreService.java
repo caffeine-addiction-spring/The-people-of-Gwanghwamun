@@ -1,16 +1,21 @@
 package com.caffeine.gwanghwamun.domain.store.service;
 
+import com.caffeine.gwanghwamun.common.exception.CustomException;
+import com.caffeine.gwanghwamun.common.exception.ErrorCode;
 import com.caffeine.gwanghwamun.domain.store.dto.request.StoreCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.response.StoreCreateResDTO;
+import com.caffeine.gwanghwamun.domain.store.dto.response.StoreDetailResDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.response.StoreListResDTO;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
-import java.math.BigDecimal;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -61,4 +66,24 @@ public class StoreService {
 
 		return new PageImpl<>(dtoList, pageable, storePage.getTotalElements());
 	}
+
+    public StoreDetailResDTO getStoreDetail(UUID storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+
+        return new StoreDetailResDTO(
+                store.getStoreId(),
+                store.getName(),
+                store.getStoreCategory(),
+                store.getAddress(),
+                store.getPhone(),
+                store.getContent(),
+                store.getMinDeliveryPrice(),
+                store.getDeliveryTip(),
+                store.getOperationHours(),
+                store.getClosedDays(),
+                store.getRating().doubleValue(),
+                store.getReviewCount()
+        );
+    }
 }

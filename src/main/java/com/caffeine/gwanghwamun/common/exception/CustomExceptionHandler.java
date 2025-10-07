@@ -37,4 +37,13 @@ public class CustomExceptionHandler {
 				ErrorCode.VALIDATION_ERROR.name(),
 				ErrorCode.VALIDATION_ERROR.getHttpStatus());
 	}
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected ResponseEntity<ApiResponse<Void>> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ResponseUtil.failureResponse(
+                e.getMessage(),
+                ErrorCode.STORE_NOT_FOUND.name(),
+                ErrorCode.STORE_NOT_FOUND.getHttpStatus());
+    }
+
 }
