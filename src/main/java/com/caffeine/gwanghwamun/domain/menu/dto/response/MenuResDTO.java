@@ -26,7 +26,7 @@ public record MenuResDTO(
 				menu.getIsHidden(),
 				menu.getIsSoldOut(),
 				menu.getMenuCategory(),
-				menu.getCreatedDate(),
-				menu.getLastModifiedDate());
+				menu.getCreateAt(),
+				menu.getLastUpdatedAt());
 	}
 }

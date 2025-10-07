@@ -9,6 +9,7 @@ import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuVisibilityReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuResDTO;
 import com.caffeine.gwanghwamun.domain.menu.service.MenuService;
+import com.caffeine.gwanghwamun.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -28,11 +31,11 @@ public class MenuController {
 	private final MenuService menuService;
 
 	//TODO 권한 설정 해야함 (회원 연동 후)
-	//@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
+	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
 	@Operation(summary = "메뉴 생성", description = "메뉴를 생성한다.")
 	@PostMapping
 	public ResponseEntity<ApiResponse<MenuResDTO>> createMenu(
-			@PathVariable("storeId") UUID storeId, @RequestBody MenuCreateReqDTO menuCreateReqDTO) {
+			@PathVariable("storeId") UUID storeId, @RequestBody MenuCreateReqDTO menuCreateReqDTO, @AuthenticationPrincipal User user) {
 		MenuResDTO menuResDTO = menuService.saveMenu(storeId, menuCreateReqDTO);
 		return ResponseUtil.successResponse(SuccessCode.MENU_SAVE_SUCCESS, menuResDTO);
 	}
