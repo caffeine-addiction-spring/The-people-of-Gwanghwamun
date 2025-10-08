@@ -2,6 +2,7 @@ package com.caffeine.gwanghwamun.domain.user.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,9 @@ public class User extends BaseEntity {
 	@Enumerated(value = EnumType.STRING)
 	private UserRoleEnum role;
 
+	@Column(name = "deleted_at")
+	private LocalDateTime deletedAt;
+
 	@Builder
 	public User(String email, String password, String name, String phone, UserRoleEnum role) {
 		this.email = email;
@@ -39,5 +43,22 @@ public class User extends BaseEntity {
 		this.name = name;
 		this.phone = phone;
 		this.role = role;
+	}
+
+	public void update(String name, String phone) {
+		if (name != null && !name.isBlank()) this.name = name;
+		if (phone != null && !phone.isBlank()) this.phone = phone;
+	}
+
+	public void updatePassword(String encodedPassword) {
+		this.password = encodedPassword;
+	}
+
+	public void markAsDeleted() {
+		this.deletedAt = LocalDateTime.now();
+	}
+
+	public boolean isDeleted() {
+		return this.deletedAt != null;
 	}
 }
