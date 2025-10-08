@@ -42,7 +42,7 @@ public class StoreService {
 		store.setOperationHours(req.getOperationHours());
 		store.setClosedDays(req.getClosedDays());
 
-		store.setUserId(user.getUserId());
+        store.setUser(user);
 		store.setRating(BigDecimal.ZERO);
 		store.setReviewCount(0);
 
@@ -112,9 +112,9 @@ public class StoreService {
 						.findById(storeId)
 						.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
-		if (user.getRole() == UserRoleEnum.OWNER && !store.getUserId().equals(user.getUserId())) {
-			throw new CustomException(ErrorCode.FORBIDDEN);
-		}
+        if (user.getRole() == UserRoleEnum.OWNER && !store.getUser().getUserId().equals(user.getUserId())) {
+            throw new CustomException(ErrorCode.FORBIDDEN);
+        }
 
 		if (req.getName() != null) store.setName(req.getName());
 		if (req.getAddress() != null) store.setAddress(req.getAddress());
@@ -143,9 +143,9 @@ public class StoreService {
 						.findById(storeId)
 						.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
-		if (user.getRole() == UserRoleEnum.OWNER && !store.getUserId().equals(user.getUserId())) {
-			throw new CustomException(ErrorCode.FORBIDDEN);
-		}
+        if (user.getRole() == UserRoleEnum.OWNER && !store.getUser().getUserId().equals(user.getUserId())) {
+            throw new CustomException(ErrorCode.FORBIDDEN);
+        }
 
 		if (store.getDeletedAt() != null) {
 			throw new CustomException(ErrorCode.ALREADY_DELETED);

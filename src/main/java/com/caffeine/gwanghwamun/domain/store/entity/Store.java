@@ -1,13 +1,15 @@
 package com.caffeine.gwanghwamun.domain.store.entity;
 
+import com.caffeine.gwanghwamun.domain.user.entity.User;
 import jakarta.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "p_Stores")
@@ -20,10 +22,11 @@ public class Store {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID storeId;
 
-	@Column(nullable = false)
-	private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-	// @Column(nullable = false)
+    // @Column(nullable = false)
 	private Long groupId;
 
 	@Column(nullable = false, length = 255)
