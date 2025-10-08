@@ -2,13 +2,12 @@ package com.caffeine.gwanghwamun.domain.menu.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "p_menu")
@@ -49,9 +48,9 @@ public class Menu extends BaseEntity {
 	@Column(name = "deleted_at")
 	private LocalDateTime deletedAt;
 
-	//@ManyToOne(fetch = FetchType.LAZY)
-	//@JoinColumn(name = "store_id", nullable = false)
-	//private Store store;
+	// @ManyToOne(fetch = FetchType.LAZY)
+	// @JoinColumn(name = "store_id", nullable = false)
+	// private Store store;
 
 	@Builder
 	public Menu(

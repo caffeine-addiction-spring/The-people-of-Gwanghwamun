@@ -34,7 +34,9 @@ public class MenuController {
 	@Operation(summary = "메뉴 생성", description = "메뉴를 생성한다.")
 	@PostMapping
 	public ResponseEntity<ApiResponse<MenuResDTO>> createMenu(
-			@PathVariable("storeId") UUID storeId, @RequestBody MenuCreateReqDTO menuCreateReqDTO, @AuthenticationPrincipal User user) {
+			@PathVariable("storeId") UUID storeId,
+			@RequestBody MenuCreateReqDTO menuCreateReqDTO,
+			@AuthenticationPrincipal User user) {
 		MenuResDTO menuResDTO = menuService.saveMenu(storeId, menuCreateReqDTO);
 		return ResponseUtil.successResponse(SuccessCode.MENU_SAVE_SUCCESS, menuResDTO);
 	}
@@ -42,7 +44,9 @@ public class MenuController {
 	@Operation(summary = "메뉴 상세 조회", description = "메뉴를 상세 조회할 수 있다.")
 	@GetMapping("/{menuId}")
 	public ResponseEntity<ApiResponse<MenuResDTO>> getMenu(
-			@PathVariable("storeId") UUID storeId, @PathVariable("menuId") UUID menuId, @AuthenticationPrincipal User user) {
+			@PathVariable("storeId") UUID storeId,
+			@PathVariable("menuId") UUID menuId,
+			@AuthenticationPrincipal User user) {
 		MenuResDTO menuResDTO = menuService.findMenuById(storeId, menuId);
 		return ResponseUtil.successResponse(SuccessCode.MENU_FIND_SUCCESS, menuResDTO);
 	}
@@ -79,7 +83,9 @@ public class MenuController {
 	@Operation(summary = "메뉴 삭제", description = "메뉴를 삭제할 수 있다.")
 	@DeleteMapping("/{menuId}")
 	public ResponseEntity<ApiResponse<Void>> deleteMenu(
-			@PathVariable("storeId") UUID storeId, @PathVariable("menuId") UUID menuId, @AuthenticationPrincipal User user) {
+			@PathVariable("storeId") UUID storeId,
+			@PathVariable("menuId") UUID menuId,
+			@AuthenticationPrincipal User user) {
 		menuService.deleteMenu(storeId, menuId);
 		return ResponseUtil.successResponse(SuccessCode.MENU_DELETE_SUCCESS);
 	}
