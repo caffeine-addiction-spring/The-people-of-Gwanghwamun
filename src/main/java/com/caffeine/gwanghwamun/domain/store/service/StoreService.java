@@ -58,7 +58,7 @@ public class StoreService {
 						: Sort.by(sortBy).descending();
 
 		Pageable pageable = PageRequest.of(page, size, sort);
-		Page<Store> storePage = storeRepository.findAll(pageable);
+		Page<Store> storePage = storeRepository.findAllActiveStores(pageable);
 
 		List<StoreListResDTO> dtoList =
 				storePage.getContent().stream()
@@ -78,7 +78,7 @@ public class StoreService {
 	public StoreDetailResDTO getStoreDetail(UUID storeId, String sort, String order) {
 		Store store =
 				storeRepository
-						.findById(storeId)
+						.findActiveById(storeId)
 						.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
 		Sort.Direction direction =
@@ -109,7 +109,7 @@ public class StoreService {
 	public StoreUpdateResDTO updateStore(UUID storeId, StoreUpdateReqDTO req, User user) {
 		Store store =
 				storeRepository
-						.findById(storeId)
+						.findActiveById(storeId)
 						.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
 		if (user.getRole() == UserRoleEnum.OWNER
