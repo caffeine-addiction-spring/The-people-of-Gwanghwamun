@@ -3,18 +3,22 @@ package com.caffeine.gwanghwamun.domain.store.service;
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
 import com.caffeine.gwanghwamun.domain.store.dto.request.StoreCreateReqDTO;
+import com.caffeine.gwanghwamun.domain.store.dto.request.StoreUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.response.StoreCreateResDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.response.StoreDetailResDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.response.StoreListResDTO;
+import com.caffeine.gwanghwamun.domain.store.dto.response.StoreUpdateResDTO;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
+import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -85,5 +89,36 @@ public class StoreService {
 				store.getClosedDays(),
 				store.getRating().doubleValue(),
 				store.getReviewCount());
+	}
+
+	@Transactional
+	public StoreUpdateResDTO updateStore(UUID storeId, StoreUpdateReqDTO req, User user) {
+		Store store =
+				storeRepository
+						.findById(storeId)
+						.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+
+		if (user.getRole() == UserRoleEnum.OWNER && !store.getUserId().equals(user.getUserId())) {
+			throw new CustomException(ErrorCode.FORBIDDEN);
+		}
+
+		if (req.getName() != null) store.setName(req.getName());
+		if (req.getAddress() != null) store.setAddress(req.getAddress());
+		if (req.getPhone() != null) store.setPhone(req.getPhone());
+		if (req.getStoreCategory() != null) store.setStoreCategory(req.getStoreCategory());
+		if (req.getContent() != null) store.setContent(req.getContent());
+		if (req.getMinDeliveryPrice() != null) store.setMinDeliveryPrice(req.getMinDeliveryPrice());
+		if (req.getDeliveryTip() != null) store.setDeliveryTip(req.getDeliveryTip());
+		if (req.getOperationHours() != null) store.setOperationHours(req.getOperationHours());
+		if (req.getClosedDays() != null) store.setClosedDays(req.getClosedDays());
+
+		storeRepository.save(store);
+
+		return new StoreUpdateResDTO(
+				store.getStoreId(),
+				store.getName(),
+				store.getStoreCategory(),
+				store.getAddress(),
+				store.getPhone());
 	}
 }

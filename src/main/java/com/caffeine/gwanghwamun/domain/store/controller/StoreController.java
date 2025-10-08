@@ -1,9 +1,11 @@
 package com.caffeine.gwanghwamun.domain.store.controller;
 
 import com.caffeine.gwanghwamun.domain.store.dto.request.StoreCreateReqDTO;
+import com.caffeine.gwanghwamun.domain.store.dto.request.StoreUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.response.StoreCreateResDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.response.StoreDetailResDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.response.StoreListResDTO;
+import com.caffeine.gwanghwamun.domain.store.dto.response.StoreUpdateResDTO;
 import com.caffeine.gwanghwamun.domain.store.service.StoreService;
 import com.caffeine.gwanghwamun.domain.user.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,6 +58,17 @@ public class StoreController {
 	@GetMapping("/{storeId}")
 	public ResponseEntity<StoreDetailResDTO> getStoreDetail(@PathVariable UUID storeId) {
 		StoreDetailResDTO response = storeService.getStoreDetail(storeId);
+		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "가게 수정 API")
+	@PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MASTER')")
+	@PutMapping("/{storeId}")
+	public ResponseEntity<StoreUpdateResDTO> updateStore(
+			@PathVariable UUID storeId,
+			@RequestBody @Valid StoreUpdateReqDTO request,
+			@AuthenticationPrincipal UserDetailsImpl user) {
+		StoreUpdateResDTO response = storeService.updateStore(storeId, request, user.getUser());
 		return ResponseEntity.ok(response);
 	}
 }
