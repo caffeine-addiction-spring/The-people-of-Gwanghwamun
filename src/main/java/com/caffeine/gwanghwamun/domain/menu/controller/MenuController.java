@@ -58,7 +58,7 @@ public class MenuController {
 			size = 10;
 		}
 
-		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createAt"));
 		Page<MenuResDTO> menuResDTOPage = menuService.findMenuListByStore(storeId, pageable);
 		return ResponseUtil.successResponse(SuccessCode.MENU_LIST_SUCCESS, menuResDTOPage);
 	}
