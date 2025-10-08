@@ -2,6 +2,8 @@ package com.caffeine.gwanghwamun.domain.store.service;
 
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
+import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuResDTO;
+import com.caffeine.gwanghwamun.domain.menu.repository.MenuRepository;
 import com.caffeine.gwanghwamun.domain.store.dto.request.StoreCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.request.StoreUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.response.StoreCreateResDTO;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class StoreService {
 
 	private final StoreRepository storeRepository;
+	private final MenuRepository menuRepository;
 
 	public StoreCreateResDTO createStore(StoreCreateReqDTO req, User user) {
 		Store store = new Store();
@@ -70,25 +73,35 @@ public class StoreService {
 		return new PageImpl<>(dtoList, pageable, storePage.getTotalElements());
 	}
 
-	public StoreDetailResDTO getStoreDetail(UUID storeId) {
+	@Transactional(readOnly = true)
+	public StoreDetailResDTO getStoreDetail(UUID storeId, String sort, String order) {
 		Store store =
 				storeRepository
 						.findById(storeId)
 						.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
-		return new StoreDetailResDTO(
-				store.getStoreId(),
-				store.getName(),
-				store.getStoreCategory(),
-				store.getAddress(),
-				store.getPhone(),
-				store.getContent(),
-				store.getMinDeliveryPrice(),
-				store.getDeliveryTip(),
-				store.getOperationHours(),
-				store.getClosedDays(),
-				store.getRating().doubleValue(),
-				store.getReviewCount());
+		Sort.Direction direction =
+				"desc".equalsIgnoreCase(order) ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+		Sort sortOption =
+				switch (sort) {
+					case "price" -> Sort.by(direction, "price");
+					case "name" -> Sort.by(direction, "name");
+					default -> Sort.by(Sort.Direction.ASC, "name");
+				};
+
+		Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE, sortOption);
+
+		List<MenuResDTO> menus =
+				menuRepository
+						.findByStoreIdAndNotDeletedAndNotHidden(storeId, pageable)
+						.getContent()
+						.stream()
+						.filter(menu -> !menu.getIsSoldOut())
+						.map(MenuResDTO::new)
+						.toList();
+
+		return new StoreDetailResDTO(store, menus);
 	}
 
 	@Transactional

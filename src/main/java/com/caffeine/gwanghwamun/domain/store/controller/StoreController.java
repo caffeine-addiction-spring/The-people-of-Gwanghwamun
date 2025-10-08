@@ -56,8 +56,11 @@ public class StoreController {
 
 	@Operation(summary = "가게 상세 조회 API")
 	@GetMapping("/{storeId}")
-	public ResponseEntity<StoreDetailResDTO> getStoreDetail(@PathVariable UUID storeId) {
-		StoreDetailResDTO response = storeService.getStoreDetail(storeId);
+	public ResponseEntity<StoreDetailResDTO> getStoreDetail(
+			@PathVariable UUID storeId,
+			@RequestParam(defaultValue = "name") String sort,
+			@RequestParam(defaultValue = "asc") String order) {
+		StoreDetailResDTO response = storeService.getStoreDetail(storeId, sort, order);
 		return ResponseEntity.ok(response);
 	}
 
