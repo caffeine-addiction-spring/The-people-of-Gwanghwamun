@@ -15,6 +15,7 @@ import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -133,5 +134,24 @@ public class StoreService {
 				store.getStoreCategory(),
 				store.getAddress(),
 				store.getPhone());
+	}
+
+	@Transactional
+	public void deleteStore(UUID storeId, User user) {
+		Store store =
+				storeRepository
+						.findById(storeId)
+						.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+
+		if (user.getRole() == UserRoleEnum.OWNER && !store.getUserId().equals(user.getUserId())) {
+			throw new CustomException(ErrorCode.FORBIDDEN);
+		}
+
+		if (store.getDeletedAt() != null) {
+			throw new CustomException(ErrorCode.ALREADY_DELETED);
+		}
+
+		store.setDeletedAt(LocalDateTime.now());
+		storeRepository.save(store);
 	}
 }

@@ -24,7 +24,10 @@ public enum SuccessCode {
 	MENU_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 수정 성공"),
 	MENU_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "메뉴 삭제 성공"),
 	MENU_VISIBILITY_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 숨김 상태 변경 성공"),
-	MENU_SOLDOUT_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 품절 상태 변경 성공");
+	MENU_SOLDOUT_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 품절 상태 변경 성공"),
+
+	// 가게 (store)
+	STORE_DELETE_SUCCESS(HttpStatus.OK, "가게 삭제 완료");
 
 	private final HttpStatus httpStatus;
 	private final String message;

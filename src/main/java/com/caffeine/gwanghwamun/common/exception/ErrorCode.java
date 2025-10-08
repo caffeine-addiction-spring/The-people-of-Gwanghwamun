@@ -27,7 +27,8 @@ public enum ErrorCode {
 	MENU_STORE_MISMATCH(HttpStatus.FORBIDDEN, "해당 가게의 메뉴가 아닙니다."),
 
 	// 가게 (store)
-	STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 가게를 찾을 수 없습니다.");
+	STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 가게를 찾을 수 없습니다."),
+	ALREADY_DELETED(HttpStatus.BAD_REQUEST, "이미 삭제된 가게입니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;

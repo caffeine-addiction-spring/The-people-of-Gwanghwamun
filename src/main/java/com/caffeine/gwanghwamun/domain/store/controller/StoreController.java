@@ -1,5 +1,8 @@
 package com.caffeine.gwanghwamun.domain.store.controller;
 
+import com.caffeine.gwanghwamun.common.response.ApiResponse;
+import com.caffeine.gwanghwamun.common.response.ResponseUtil;
+import com.caffeine.gwanghwamun.common.success.SuccessCode;
 import com.caffeine.gwanghwamun.domain.store.dto.request.StoreCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.request.StoreUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.response.StoreCreateResDTO;
@@ -73,5 +76,14 @@ public class StoreController {
 			@AuthenticationPrincipal UserDetailsImpl user) {
 		StoreUpdateResDTO response = storeService.updateStore(storeId, request, user.getUser());
 		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "가게 삭제 API")
+	@PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MASTER')")
+	@DeleteMapping("/{storeId}")
+	public ResponseEntity<ApiResponse<Void>> deleteStore(
+			@PathVariable UUID storeId, @AuthenticationPrincipal UserDetailsImpl user) {
+		storeService.deleteStore(storeId, user.getUser());
+		return ResponseUtil.successResponse(SuccessCode.STORE_DELETE_SUCCESS);
 	}
 }
