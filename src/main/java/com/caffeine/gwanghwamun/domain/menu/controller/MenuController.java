@@ -30,7 +30,6 @@ public class MenuController {
 
 	private final MenuService menuService;
 
-	//TODO 권한 설정 해야함 (회원 연동 후)
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
 	@Operation(summary = "메뉴 생성", description = "메뉴를 생성한다.")
 	@PostMapping
@@ -43,7 +42,7 @@ public class MenuController {
 	@Operation(summary = "메뉴 상세 조회", description = "메뉴를 상세 조회할 수 있다.")
 	@GetMapping("/{menuId}")
 	public ResponseEntity<ApiResponse<MenuResDTO>> getMenu(
-			@PathVariable("storeId") UUID storeId, @PathVariable("menuId") UUID menuId) {
+			@PathVariable("storeId") UUID storeId, @PathVariable("menuId") UUID menuId, @AuthenticationPrincipal User user) {
 		MenuResDTO menuResDTO = menuService.findMenuById(storeId, menuId);
 		return ResponseUtil.successResponse(SuccessCode.MENU_FIND_SUCCESS, menuResDTO);
 	}
@@ -64,45 +63,48 @@ public class MenuController {
 		return ResponseUtil.successResponse(SuccessCode.MENU_LIST_SUCCESS, menuResDTOPage);
 	}
 
-	//@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
+	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
 	@Operation(summary = "메뉴 수정", description = "메뉴를 수정할 수 있다.")
 	@PatchMapping("/{menuId}")
 	public ResponseEntity<ApiResponse<MenuResDTO>> updateMenu(
 			@PathVariable("storeId") UUID storeId,
 			@PathVariable("menuId") UUID menuId,
-			@RequestBody MenuUpdateReqDTO menuUpdateReqDTO) {
+			@RequestBody MenuUpdateReqDTO menuUpdateReqDTO,
+			@AuthenticationPrincipal User user) {
 		MenuResDTO menuResDTO = menuService.updateMenu(storeId, menuId, menuUpdateReqDTO);
 		return ResponseUtil.successResponse(SuccessCode.MENU_UPDATE_SUCCESS, menuResDTO);
 	}
 
-	//@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
+	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
 	@Operation(summary = "메뉴 삭제", description = "메뉴를 삭제할 수 있다.")
 	@DeleteMapping("/{menuId}")
 	public ResponseEntity<ApiResponse<Void>> deleteMenu(
-			@PathVariable("storeId") UUID storeId, @PathVariable("menuId") UUID menuId) {
+			@PathVariable("storeId") UUID storeId, @PathVariable("menuId") UUID menuId, @AuthenticationPrincipal User user) {
 		menuService.deleteMenu(storeId, menuId);
 		return ResponseUtil.successResponse(SuccessCode.MENU_DELETE_SUCCESS);
 	}
 
-	//@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
+	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
 	@Operation(summary = "메뉴 숨김", description = "메뉴를 숨길 수 있다.")
 	@PostMapping("/{menuId}/visibility")
 	public ResponseEntity<ApiResponse<MenuResDTO>> updateMenuVisibility(
 			@PathVariable("storeId") UUID storeId,
 			@PathVariable("menuId") UUID menuId,
-			@RequestBody MenuVisibilityReqDTO menuVisibilityReqDTO) {
+			@RequestBody MenuVisibilityReqDTO menuVisibilityReqDTO,
+			@AuthenticationPrincipal User user) {
 		MenuResDTO menuResDTO =
 				menuService.updateMenuVisibility(storeId, menuId, menuVisibilityReqDTO.hidden());
 		return ResponseUtil.successResponse(SuccessCode.MENU_VISIBILITY_UPDATE_SUCCESS, menuResDTO);
 	}
 
-	//@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
+	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
 	@Operation(summary = "메뉴 품절", description = "메뉴 품절 여부를 표시한다.")
 	@PostMapping("/{menuId}/soldout")
 	public ResponseEntity<ApiResponse<MenuResDTO>> updateMenuSoldOut(
 			@PathVariable("storeId") UUID storeId,
 			@PathVariable("menuId") UUID menuId,
-			@RequestBody MenuSoldOutReqDTO menuSoldOutReqDTO) {
+			@RequestBody MenuSoldOutReqDTO menuSoldOutReqDTO,
+			@AuthenticationPrincipal User user) {
 		MenuResDTO menuResDTO =
 				menuService.updateMenuSoldOut(storeId, menuId, menuSoldOutReqDTO.isSoldOut());
 		return ResponseUtil.successResponse(SuccessCode.MENU_SOLDOUT_UPDATE_SUCCESS, menuResDTO);
