@@ -1,9 +1,13 @@
 package com.caffeine.gwanghwamun.domain.user.service;
 
-import static com.caffeine.gwanghwamun.common.exception.ErrorCode.DUPLICATED;
+import static com.caffeine.gwanghwamun.common.exception.ErrorCode.*;
 
 import com.caffeine.gwanghwamun.common.exception.CustomException;
+import com.caffeine.gwanghwamun.domain.user.dto.PasswordChangeReqDTO;
 import com.caffeine.gwanghwamun.domain.user.dto.SignupReqDTO;
+import com.caffeine.gwanghwamun.domain.user.dto.UserInfoResDTO;
+import com.caffeine.gwanghwamun.domain.user.dto.UserInfoUpdateReqDTO;
+import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +31,51 @@ public class UserService {
 						});
 		String encodedPassword = passwordEncoder.encode(requestDto.password());
 		userRepository.save(requestDto.toUser(encodedPassword));
+	}
+
+	public UserInfoResDTO findUserInfo(User user) {
+		userRepository
+				.findById(user.getUserId())
+				.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+
+		return UserInfoResDTO.from(user);
+	}
+
+	@Transactional
+	public UserInfoResDTO updateUserInfo(User authenticatedUser, UserInfoUpdateReqDTO requestDto) {
+		User user =
+				userRepository
+						.findById(authenticatedUser.getUserId())
+						.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+
+		user.update(requestDto.name(), requestDto.phone());
+		return UserInfoResDTO.from(user);
+	}
+
+	@Transactional
+	public void updatePassword(User authenticatedUser, PasswordChangeReqDTO requestDto) {
+		User user =
+				userRepository
+						.findById(authenticatedUser.getUserId())
+						.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+
+		if (!passwordEncoder.matches(requestDto.currentPassword(), user.getPassword())) {
+			throw new CustomException(INVALID_PASSWORD);
+		}
+
+		String encodedPassword = passwordEncoder.encode(requestDto.newPassword());
+		user.updatePassword(encodedPassword);
+	}
+
+	@Transactional
+	public void deleteUser(Long userId) {
+		User user =
+				userRepository.findById(userId).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+
+		if (user.isDeleted()) {
+			throw new CustomException(ALREADY_DELETED_USER);
+		}
+
+		user.markAsDeleted();
 	}
 }
