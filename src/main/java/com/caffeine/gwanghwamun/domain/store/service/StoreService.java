@@ -156,4 +156,31 @@ public class StoreService {
 		store.setDeletedAt(LocalDateTime.now());
 		storeRepository.save(store);
 	}
+
+	@Transactional(readOnly = true)
+	public Page<StoreListResDTO> searchStores(
+			String keyword, int page, int size, String sortBy, String direction) {
+
+		Sort sort =
+				direction.equalsIgnoreCase("asc")
+						? Sort.by(sortBy).ascending()
+						: Sort.by(sortBy).descending();
+
+		Pageable pageable = PageRequest.of(page, size, sort);
+
+		Page<Store> storePage = storeRepository.searchActiveStores(keyword, pageable);
+
+		List<StoreListResDTO> dtoList =
+				storePage.getContent().stream()
+						.map(
+								store ->
+										new StoreListResDTO(
+												store.getStoreId(),
+												store.getName(),
+												store.getStoreCategory(),
+												store.getAddress()))
+						.toList();
+
+		return new PageImpl<>(dtoList, pageable, storePage.getTotalElements());
+	}
 }

@@ -86,4 +86,18 @@ public class StoreController {
 		storeService.deleteStore(storeId, user.getUser());
 		return ResponseUtil.successResponse(SuccessCode.STORE_DELETE_SUCCESS);
 	}
+
+	@Operation(summary = "가게 검색 API")
+	@GetMapping("/search")
+	public ResponseEntity<Page<StoreListResDTO>> searchStores(
+			@RequestParam String keyword,
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size,
+			@RequestParam(defaultValue = "name") String sortBy,
+			@RequestParam(defaultValue = "asc") String direction) {
+
+		Page<StoreListResDTO> result =
+				storeService.searchStores(keyword, page, size, sortBy, direction);
+		return ResponseEntity.ok(result);
+	}
 }
