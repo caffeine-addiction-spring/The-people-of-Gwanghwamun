@@ -9,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class StoreUpdateResDTO {
 	private UUID storeId;
-	private String name;
+	private String storeName;
 	private StoreCategoryEnum category;
 	private String address;
 	private String phone;

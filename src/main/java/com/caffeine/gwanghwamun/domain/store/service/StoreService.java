@@ -141,7 +141,7 @@ public class StoreService {
 	public void deleteStore(UUID storeId, User user) {
 		Store store =
 				storeRepository
-						.findById(storeId)
+						.findActiveById(storeId)
 						.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
 		if (user.getRole() == UserRoleEnum.OWNER

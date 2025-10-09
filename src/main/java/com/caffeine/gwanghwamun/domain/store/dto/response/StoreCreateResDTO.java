@@ -13,6 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class StoreCreateResDTO {
 	private UUID storeId;
-	private String name;
+	private String storeName;
 	private StoreCategoryEnum storeCategory;
 }
