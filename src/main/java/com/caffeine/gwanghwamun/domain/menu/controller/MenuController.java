@@ -11,7 +11,6 @@ import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuResDTO;
 import com.caffeine.gwanghwamun.domain.menu.service.MenuService;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/stores/{storeId}/menus")
@@ -55,7 +56,8 @@ public class MenuController {
 	public ResponseEntity<ApiResponse<Page<MenuResDTO>>> getMenuList(
 			@PathVariable("storeId") UUID storeId,
 			@RequestParam(name = "page", defaultValue = "0") int page,
-			@RequestParam(name = "size", defaultValue = "10") int size) {
+			@RequestParam(name = "size", defaultValue = "10") int size,
+			@AuthenticationPrincipal User user) {
 
 		if (size != 10 && size != 30 && size != 50) {
 			size = 10;

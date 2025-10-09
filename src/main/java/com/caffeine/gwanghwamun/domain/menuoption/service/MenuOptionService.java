@@ -2,19 +2,21 @@ package com.caffeine.gwanghwamun.domain.menuoption.service;
 
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
+import com.caffeine.gwanghwamun.domain.menu.repository.MenuRepository;
 import com.caffeine.gwanghwamun.domain.menuoption.dto.request.MenuOptionCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.menuoption.dto.request.MenuOptionSoldOutReqDTO;
 import com.caffeine.gwanghwamun.domain.menuoption.dto.request.MenuOptionUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.menuoption.dto.response.MenuOptionResDTO;
 import com.caffeine.gwanghwamun.domain.menuoption.entity.MenuOption;
 import com.caffeine.gwanghwamun.domain.menuoption.repository.MenuOptionRepository;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
