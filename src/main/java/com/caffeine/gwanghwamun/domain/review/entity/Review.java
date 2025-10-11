@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -16,16 +18,16 @@ public class Review extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "review_id")
-    private Long reviewId;
+    private UUID reviewId;
 
     @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private UUID userId;
 
     @Column(name = "store_id", nullable = false)
-    private Long storeId;
+    private UUID storeId;
 
     @Column(name = "order_id", nullable = false)
-    private Long orderId;
+    private UUID orderId;
 
     @Column(name = "group_id")
     private Long groupId;
@@ -40,7 +42,7 @@ public class Review extends BaseEntity {
     private ReviewReply reply;
 
     @Builder
-    public Review(Long userId, Long storeId, Long orderId, Long groupId, Long rating, String content) {
+    public Review(UUID userId, UUID storeId, UUID orderId, Long groupId, Long rating, String content) {
         this.userId = userId;
         this.storeId = storeId;
         this.orderId = orderId;
