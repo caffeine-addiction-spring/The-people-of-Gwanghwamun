@@ -1,11 +1,13 @@
 package com.caffeine.gwanghwamun.domain.region.controller;
 
 import com.caffeine.gwanghwamun.domain.region.dto.request.RegionCreateReqDTO;
+import com.caffeine.gwanghwamun.domain.region.dto.request.RegionUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.region.dto.response.RegionResDTO;
 import com.caffeine.gwanghwamun.domain.region.service.RegionService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,5 +35,14 @@ public class RegionController {
 			@Valid @RequestBody RegionCreateReqDTO regionReqDTO) {
 		RegionResDTO response = regionService.createRegion(regionReqDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
+
+	@Operation(summary = "지역 수정 API")
+	@PreAuthorize("hasAnyRole('MANAGER', 'MASTER')")
+	@PutMapping("/{addressId}")
+	public ResponseEntity<RegionResDTO> updateRegion(
+			@PathVariable UUID addressId, @RequestBody RegionUpdateReqDTO request) {
+		RegionResDTO response = regionService.updateRegion(addressId, request);
+		return ResponseEntity.ok(response);
 	}
 }
