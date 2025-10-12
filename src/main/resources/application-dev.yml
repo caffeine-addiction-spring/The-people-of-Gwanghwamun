@@ -46,5 +46,9 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.springframework.jdbc.core: DEBUG
 
+jwt:
+  secret:
+    key: ${JWT_SECRET}
+
 server:
   port: ${SERVER_PORT}
