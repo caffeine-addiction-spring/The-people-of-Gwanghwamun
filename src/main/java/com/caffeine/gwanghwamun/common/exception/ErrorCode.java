@@ -28,7 +28,11 @@ public enum ErrorCode {
 
 	// 가게 (store)
 	STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 가게를 찾을 수 없습니다."),
-	ALREADY_DELETED(HttpStatus.BAD_REQUEST, "이미 삭제된 가게입니다.");
+	ALREADY_DELETED(HttpStatus.BAD_REQUEST, "이미 삭제된 가게입니다."),
+
+	// 지역 (region)
+	REGION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 지역을 찾을 수 없습니다."),
+	REGION_DUPLICATED(HttpStatus.CONFLICT, "이미 존재하는 지역명입니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;
