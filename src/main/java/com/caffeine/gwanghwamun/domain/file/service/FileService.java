@@ -108,22 +108,20 @@ public class FileService {
 	public List<FileInfoResDTO> getList(String gid, String location, FileStatus status) {
 		status = Objects.requireNonNullElse(status, FileStatus.ALL);
 
-        List<FileInfo> files;
+		List<FileInfo> files;
 
-        if (status == FileStatus.ALL) {
-            if (StringUtils.hasText(location)) {
-                files = fileInfoRepository.findByGidAndLocation(gid, location);
-            } else {
-                files = fileInfoRepository.findByGid(gid);
-            }
-        } else {
-            boolean done = (status == FileStatus.DONE);
-            files = fileInfoRepository.findByGidAndLocationAndDone(gid, location, done);
-        }
+		if (status == FileStatus.ALL) {
+			if (StringUtils.hasText(location)) {
+				files = fileInfoRepository.findByGidAndLocation(gid, location);
+			} else {
+				files = fileInfoRepository.findByGid(gid);
+			}
+		} else {
+			boolean done = (status == FileStatus.DONE);
+			files = fileInfoRepository.findByGidAndLocationAndDone(gid, location, done);
+		}
 
-        return files.stream()
-                .map(FileInfoResDTO::fromItem)
-                .toList();
+		return files.stream().map(FileInfoResDTO::fromItem).toList();
 	}
 
 	// 파일 등록번호로 삭제
