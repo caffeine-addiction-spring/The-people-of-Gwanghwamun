@@ -1,5 +1,7 @@
 package com.caffeine.gwanghwamun.domain.region.service;
 
+import com.caffeine.gwanghwamun.common.exception.CustomException;
+import com.caffeine.gwanghwamun.common.exception.ErrorCode;
 import com.caffeine.gwanghwamun.domain.region.dto.request.RegionReqDTO;
 import com.caffeine.gwanghwamun.domain.region.dto.response.RegionResDTO;
 import com.caffeine.gwanghwamun.domain.region.entity.Address;
@@ -25,6 +27,9 @@ public class RegionService {
 	}
 
 	public RegionResDTO createRegion(RegionReqDTO request) {
+		if (regionRepository.existsByName(request.getName())) {
+			throw new CustomException(ErrorCode.REGION_DUPLICATED);
+		}
 		Address address = Address.create(request.getName());
 		regionRepository.save(address);
 
@@ -33,7 +38,13 @@ public class RegionService {
 
 	@Transactional
 	public RegionResDTO updateRegion(UUID regionId, RegionReqDTO request) {
-		Address address = regionRepository.getReferenceById(regionId);
+		Address address =
+				regionRepository
+						.findById(regionId)
+						.orElseThrow(() -> new CustomException(ErrorCode.REGION_NOT_FOUND));
+		if (regionRepository.existsByName(request.getName())) {
+			throw new CustomException(ErrorCode.REGION_DUPLICATED);
+		}
 		address.setName(request.getName());
 		regionRepository.save(address);
 

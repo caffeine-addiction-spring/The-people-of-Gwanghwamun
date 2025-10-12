@@ -4,4 +4,6 @@ import com.caffeine.gwanghwamun.domain.region.entity.Address;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RegionRepository extends JpaRepository<Address, UUID> {}
+public interface RegionRepository extends JpaRepository<Address, UUID> {
+	boolean existsByName(String name);
+}
