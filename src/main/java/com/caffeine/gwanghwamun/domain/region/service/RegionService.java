@@ -1,6 +1,6 @@
 package com.caffeine.gwanghwamun.domain.region.service;
 
-import com.caffeine.gwanghwamun.domain.region.dto.RegionListResDTO;
+import com.caffeine.gwanghwamun.domain.region.dto.RegionResDTO;
 import com.caffeine.gwanghwamun.domain.region.entity.Address;
 import com.caffeine.gwanghwamun.domain.region.repository.RegionRepository;
 import java.util.List;
@@ -13,11 +13,11 @@ public class RegionService {
 
 	private final RegionRepository regionRepository;
 
-	public List<RegionListResDTO> getAllRegion() {
+	public List<RegionResDTO> getAllRegion() {
 		List<Address> addressList = regionRepository.findAll();
 
 		return addressList.stream()
-				.map(address -> new RegionListResDTO(address.getAddressId(), address.getName()))
+				.map(address -> new RegionResDTO(address.getAddressId(), address.getName()))
 				.toList();
 	}
 }

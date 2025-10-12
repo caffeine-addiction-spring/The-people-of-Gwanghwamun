@@ -1,6 +1,6 @@
 package com.caffeine.gwanghwamun.domain.region.controller;
 
-import com.caffeine.gwanghwamun.domain.region.dto.RegionListResDTO;
+import com.caffeine.gwanghwamun.domain.region.dto.RegionResDTO;
 import com.caffeine.gwanghwamun.domain.region.service.RegionService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
@@ -19,8 +19,8 @@ public class RegionController {
 
 	@Operation(summary = "지역 목록 조회 API")
 	@GetMapping
-	public ResponseEntity<List<RegionListResDTO>> getRegion() {
-		List<RegionListResDTO> response = regionService.getAllRegion();
+	public ResponseEntity<List<RegionResDTO>> getRegion() {
+		List<RegionResDTO> response = regionService.getAllRegion();
 		return ResponseEntity.ok(response);
 	}
 }

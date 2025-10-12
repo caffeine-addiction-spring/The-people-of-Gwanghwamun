@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class RegionListResDTO {
+public class RegionResDTO {
 	private UUID regionId;
 	private String name;
 }
