@@ -31,6 +31,17 @@ spring:
     open-in-view: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 60MB
+      file-size-threshold: 20MB
+
+file:
+  upload:
+    url: ${FILE_URL}
+    path: ${FILE_PATH}
+
 aws:
   s3:
     enabled: ${AWS_S3_ENABLED}
