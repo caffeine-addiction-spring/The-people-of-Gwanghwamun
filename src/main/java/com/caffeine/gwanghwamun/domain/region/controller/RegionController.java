@@ -39,7 +39,7 @@ public class RegionController {
 	@PreAuthorize("hasAnyRole('MANAGER', 'MASTER')")
 	@PutMapping("/{addressId}")
 	public ResponseEntity<RegionResDTO> updateRegion(
-			@PathVariable UUID addressId, @RequestBody RegionReqDTO request) {
+			@PathVariable UUID addressId, @Valid @RequestBody RegionReqDTO request) {
 		RegionResDTO response = regionService.updateRegion(addressId, request);
 		return ResponseEntity.ok(response);
 	}
