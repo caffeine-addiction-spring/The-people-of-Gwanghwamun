@@ -20,4 +20,10 @@ public class Address {
 
 	@Column(nullable = false)
 	private String name;
+
+	public static Address create(String name) {
+		Address address = new Address();
+		address.setName(name);
+		return address;
+	}
 }
