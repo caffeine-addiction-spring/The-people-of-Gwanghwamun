@@ -1,7 +1,6 @@
 package com.caffeine.gwanghwamun.domain.region.controller;
 
-import com.caffeine.gwanghwamun.domain.region.dto.request.RegionCreateReqDTO;
-import com.caffeine.gwanghwamun.domain.region.dto.request.RegionUpdateReqDTO;
+import com.caffeine.gwanghwamun.domain.region.dto.request.RegionReqDTO;
 import com.caffeine.gwanghwamun.domain.region.dto.response.RegionResDTO;
 import com.caffeine.gwanghwamun.domain.region.service.RegionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,8 +30,7 @@ public class RegionController {
 	@Operation(summary = "지역 생성 API")
 	@PreAuthorize("hasAnyRole('MANAGER', 'MASTER')")
 	@PostMapping
-	public ResponseEntity<RegionResDTO> createRegion(
-			@Valid @RequestBody RegionCreateReqDTO regionReqDTO) {
+	public ResponseEntity<RegionResDTO> createRegion(@Valid @RequestBody RegionReqDTO regionReqDTO) {
 		RegionResDTO response = regionService.createRegion(regionReqDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
@@ -41,7 +39,7 @@ public class RegionController {
 	@PreAuthorize("hasAnyRole('MANAGER', 'MASTER')")
 	@PutMapping("/{addressId}")
 	public ResponseEntity<RegionResDTO> updateRegion(
-			@PathVariable UUID addressId, @RequestBody RegionUpdateReqDTO request) {
+			@PathVariable UUID addressId, @RequestBody RegionReqDTO request) {
 		RegionResDTO response = regionService.updateRegion(addressId, request);
 		return ResponseEntity.ok(response);
 	}
