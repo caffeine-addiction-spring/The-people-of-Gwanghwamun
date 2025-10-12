@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.region.dto;
+package com.caffeine.gwanghwamun.domain.region.dto.response;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;
