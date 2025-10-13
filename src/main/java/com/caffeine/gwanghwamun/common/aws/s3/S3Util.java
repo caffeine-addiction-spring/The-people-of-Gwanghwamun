@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Component
@@ -28,11 +27,7 @@ public class S3Util {
 		String key = folder + "/" + fileName;
 
 		PutObjectRequest putObjectRequest =
-				PutObjectRequest.builder()
-						.bucket(bucketName)
-						.key(key)
-						.contentType(contentType)
-						.build();
+				PutObjectRequest.builder().bucket(bucketName).key(key).contentType(contentType).build();
 
 		s3Client.putObject(putObjectRequest, RequestBody.fromBytes(fileBytes));
 
