@@ -23,7 +23,8 @@ public enum ErrorCode {
 	ALREADY_DELETED_USER(HttpStatus.CONFLICT, "회원 삭제 실패"),
 
 	// 주소 (address)
-	ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "회원 주소 조회 실패");
+	ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "회원 주소 조회 실패"),
+	ALREADY_DELETED_ADDRESS(HttpStatus.CONFLICT, "회원 주소 삭제 실패");
 
 	private final HttpStatus httpStatus;
 	private final String message;

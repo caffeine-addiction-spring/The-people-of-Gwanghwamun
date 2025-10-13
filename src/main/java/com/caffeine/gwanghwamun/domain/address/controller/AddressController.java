@@ -5,6 +5,7 @@ import com.caffeine.gwanghwamun.common.response.ResponseUtil;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
 import com.caffeine.gwanghwamun.domain.address.dto.request.CreateAddressReqDTO;
 import com.caffeine.gwanghwamun.domain.address.dto.request.UpdateAddressReqDTO;
+import com.caffeine.gwanghwamun.domain.address.dto.response.DeleteAddressResDTO;
 import com.caffeine.gwanghwamun.domain.address.service.AddressService;
 import com.caffeine.gwanghwamun.domain.user.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,5 +45,14 @@ public class AddressController {
 			@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		addressService.updateAddress(userDetails.getUser(), addressId, requestDto);
 		return ResponseUtil.successResponse(SuccessCode.ADDRESS_UPDATE_SUCCESS);
+	}
+
+	@Operation(summary = "주소 삭제 API")
+	@DeleteMapping("/{addressId}")
+	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
+	public ResponseEntity<ApiResponse<DeleteAddressResDTO>> deleteAddress(
+			@PathVariable UUID addressId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		DeleteAddressResDTO response = addressService.deleteAddress(userDetails.getUser(), addressId);
+		return ResponseUtil.successResponse(SuccessCode.ADDRESS_DELETE_SUCCESS, response);
 	}
 }

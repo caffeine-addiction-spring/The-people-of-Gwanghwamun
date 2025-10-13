@@ -5,6 +5,7 @@ import static com.caffeine.gwanghwamun.common.exception.ErrorCode.*;
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.domain.address.dto.request.CreateAddressReqDTO;
 import com.caffeine.gwanghwamun.domain.address.dto.request.UpdateAddressReqDTO;
+import com.caffeine.gwanghwamun.domain.address.dto.response.DeleteAddressResDTO;
 import com.caffeine.gwanghwamun.domain.address.entity.Address;
 import com.caffeine.gwanghwamun.domain.address.repository.AddressRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
@@ -55,5 +56,30 @@ public class AddressService {
 				requestDto.recipient(),
 				requestDto.postalCode(),
 				requestDto.isDefault());
+	}
+
+	@Transactional
+	public DeleteAddressResDTO deleteAddress(User authenticatedUser, UUID addressId) {
+		User user =
+				userRepository
+						.findById(authenticatedUser.getUserId())
+						.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+
+		Address address =
+				addressRepository
+						.findById(addressId)
+						.orElseThrow(() -> new CustomException(ADDRESS_NOT_FOUND));
+
+		if (!address.getUser().equals(user)) {
+			throw new CustomException(FORBIDDEN);
+		}
+
+		if (address.isDeleted()) {
+			throw new CustomException(ALREADY_DELETED_ADDRESS);
+		}
+
+		address.markAsDeleted();
+
+		return new DeleteAddressResDTO(address.getAddressId(), address.getDeletedAt());
 	}
 }
