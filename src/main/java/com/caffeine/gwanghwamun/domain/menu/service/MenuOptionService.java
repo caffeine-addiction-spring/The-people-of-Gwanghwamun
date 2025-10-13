@@ -14,6 +14,7 @@ import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
+import com.caffeine.gwanghwamun.domain.user.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -33,10 +34,20 @@ public class MenuOptionService {
 	private final MenuRepository menuRepository;
 	private final StoreRepository storeRepository;
 
-	private void validateStoreOwnership(UUID storeId, User user) {
-		Store store = storeRepository
-				.findActiveById(storeId)
-				.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+	private User requireAuthenticatedUser(UserDetailsImpl principal) {
+		if (principal == null || principal.getUser() == null) {
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
+		}
+		return principal.getUser();
+	}
+
+	private void validateStoreOwnership(UUID storeId, UserDetailsImpl principal) {
+		User user = requireAuthenticatedUser(principal);
+
+		Store store =
+				storeRepository
+						.findActiveById(storeId)
+						.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
 		if (user.getRole() == UserRoleEnum.OWNER
 				&& !store.getUser().getUserId().equals(user.getUserId())) {
@@ -45,28 +56,30 @@ public class MenuOptionService {
 	}
 
 	private void validateMenuBelongsToStore(UUID storeId, UUID menuId) {
-		Menu menu = menuRepository
-				.findByIdAndNotDeleted(menuId)
-				.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
-
+		Menu menu =
+				menuRepository
+						.findByIdAndNotDeleted(menuId)
+						.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 		if (!menu.getStoreId().equals(storeId)) {
 			throw new CustomException(ErrorCode.MENU_STORE_MISMATCH);
 		}
 	}
 
 	@Transactional
-	public MenuOptionResDTO saveOption(UUID storeId, UUID menuId, MenuOptionCreateReqDTO req, User user) {
-		validateStoreOwnership(storeId, user);
+	public MenuOptionResDTO saveOption(
+			UUID storeId, UUID menuId, MenuOptionCreateReqDTO req, UserDetailsImpl principal) {
+		validateStoreOwnership(storeId, principal);
 		validateMenuBelongsToStore(storeId, menuId);
 
-		MenuOption option = MenuOption.builder()
-				.menuId(menuId)
-				.optionName(req.optionName())
-				.price(req.price())
-				.content(req.content())
-				.isHidden(req.isHidden())
-				.isSoldOut(req.isSoldOut())
-				.build();
+		MenuOption option =
+				MenuOption.builder()
+						.menuId(menuId)
+						.optionName(req.optionName())
+						.price(req.price())
+						.content(req.content())
+						.isHidden(req.isHidden())
+						.isSoldOut(req.isSoldOut())
+						.build();
 
 		return new MenuOptionResDTO(menuOptionRepository.save(option));
 	}
@@ -78,21 +91,24 @@ public class MenuOptionService {
 			Boolean soldOut,
 			String optionName,
 			Pageable pageable,
-			User user) {
-		validateStoreOwnership(storeId, user);
+			UserDetailsImpl principal) {
+		validateStoreOwnership(storeId, principal);
 		validateMenuBelongsToStore(storeId, menuId);
 
-		Page<MenuOption> page = menuOptionRepository.searchOptions(menuId, includeHidden, soldOut, optionName, pageable);
+		Page<MenuOption> page =
+				menuOptionRepository.searchOptions(menuId, includeHidden, soldOut, optionName, pageable);
 		return page.map(MenuOptionResDTO::new);
 	}
 
-	public MenuOptionResDTO findOption(UUID storeId, UUID menuId, UUID optionId, User user) {
-		validateStoreOwnership(storeId, user);
+	public MenuOptionResDTO findOption(
+			UUID storeId, UUID menuId, UUID optionId, UserDetailsImpl principal) {
+		validateStoreOwnership(storeId, principal);
 		validateMenuBelongsToStore(storeId, menuId);
 
-		MenuOption option = menuOptionRepository
-				.findByIdAndNotDeleted(optionId)
-				.orElseThrow(() -> new CustomException(ErrorCode.MENU_OPTION_NOT_FOUND));
+		MenuOption option =
+				menuOptionRepository
+						.findByIdAndNotDeleted(optionId)
+						.orElseThrow(() -> new CustomException(ErrorCode.MENU_OPTION_NOT_FOUND));
 		if (!option.getMenuId().equals(menuId)) {
 			throw new CustomException(ErrorCode.MENU_STORE_MISMATCH);
 		}
@@ -101,13 +117,18 @@ public class MenuOptionService {
 
 	@Transactional
 	public MenuOptionResDTO updateOption(
-			UUID storeId, UUID menuId, UUID optionId, MenuOptionUpdateReqDTO req, User user) {
-		validateStoreOwnership(storeId, user);
+			UUID storeId,
+			UUID menuId,
+			UUID optionId,
+			MenuOptionUpdateReqDTO req,
+			UserDetailsImpl principal) {
+		validateStoreOwnership(storeId, principal);
 		validateMenuBelongsToStore(storeId, menuId);
 
-		MenuOption option = menuOptionRepository
-				.findByIdAndNotDeleted(optionId)
-				.orElseThrow(() -> new CustomException(ErrorCode.MENU_OPTION_NOT_FOUND));
+		MenuOption option =
+				menuOptionRepository
+						.findByIdAndNotDeleted(optionId)
+						.orElseThrow(() -> new CustomException(ErrorCode.MENU_OPTION_NOT_FOUND));
 
 		if (!option.getMenuId().equals(menuId)) {
 			throw new CustomException(ErrorCode.MENU_STORE_MISMATCH);
@@ -118,13 +139,15 @@ public class MenuOptionService {
 	}
 
 	@Transactional
-	public void deleteOption(UUID storeId, UUID menuId, UUID optionId, String deleter, User user) {
-		validateStoreOwnership(storeId, user);
+	public void deleteOption(
+			UUID storeId, UUID menuId, UUID optionId, String deleter, UserDetailsImpl principal) {
+		validateStoreOwnership(storeId, principal);
 		validateMenuBelongsToStore(storeId, menuId);
 
-		MenuOption option = menuOptionRepository
-				.findByIdAndNotDeleted(optionId)
-				.orElseThrow(() -> new CustomException(ErrorCode.MENU_OPTION_NOT_FOUND));
+		MenuOption option =
+				menuOptionRepository
+						.findByIdAndNotDeleted(optionId)
+						.orElseThrow(() -> new CustomException(ErrorCode.MENU_OPTION_NOT_FOUND));
 		if (!option.getMenuId().equals(menuId)) {
 			throw new CustomException(ErrorCode.MENU_STORE_MISMATCH);
 		}
@@ -132,44 +155,45 @@ public class MenuOptionService {
 	}
 
 	@Transactional
-	public MenuOptionResDTO updateOptionVisibility(UUID storeId, UUID menuId, UUID optionId, Boolean hidden, User user) {
-		validateStoreOwnership(storeId, user);
+	public MenuOptionResDTO updateOptionVisibility(
+			UUID storeId, UUID menuId, UUID optionId, Boolean hidden, UserDetailsImpl principal) {
+		validateStoreOwnership(storeId, principal);
 		validateMenuBelongsToStore(storeId, menuId);
 
-		MenuOption option = menuOptionRepository
-				.findByIdAndNotDeleted(optionId)
-				.orElseThrow(() -> new CustomException(ErrorCode.MENU_OPTION_NOT_FOUND));
-
+		MenuOption option =
+				menuOptionRepository
+						.findByIdAndNotDeleted(optionId)
+						.orElseThrow(() -> new CustomException(ErrorCode.MENU_OPTION_NOT_FOUND));
 		if (!option.getMenuId().equals(menuId)) {
 			throw new CustomException(ErrorCode.MENU_STORE_MISMATCH);
 		}
 
-		if (Boolean.TRUE.equals(hidden)) {
-			option.hideOption();
-		} else {
-			option.showOption();
-		}
+		if (Boolean.TRUE.equals(hidden)) option.hideOption();
+		else option.showOption();
 
 		return new MenuOptionResDTO(option);
 	}
 
 	@Transactional
 	public MenuOptionResDTO updateSoldOut(
-			UUID storeId, UUID menuId, UUID optionId, MenuOptionSoldOutReqDTO req, User user) {
-		validateStoreOwnership(storeId, user);
+			UUID storeId,
+			UUID menuId,
+			UUID optionId,
+			MenuOptionSoldOutReqDTO req,
+			UserDetailsImpl principal) {
+		validateStoreOwnership(storeId, principal);
 		validateMenuBelongsToStore(storeId, menuId);
 
-		MenuOption option = menuOptionRepository
-				.findByIdAndNotDeleted(optionId)
-				.orElseThrow(() -> new CustomException(ErrorCode.MENU_OPTION_NOT_FOUND));
+		MenuOption option =
+				menuOptionRepository
+						.findByIdAndNotDeleted(optionId)
+						.orElseThrow(() -> new CustomException(ErrorCode.MENU_OPTION_NOT_FOUND));
 		if (!option.getMenuId().equals(menuId)) {
 			throw new CustomException(ErrorCode.MENU_STORE_MISMATCH);
 		}
-		if (Boolean.TRUE.equals(req.isSoldOut())) {
-			option.markSoldOut();
-		} else {
-			option.markAvailable();
-		}
+		if (Boolean.TRUE.equals(req.isSoldOut())) option.markSoldOut();
+		else option.markAvailable();
+
 		return new MenuOptionResDTO(option);
 	}
 }

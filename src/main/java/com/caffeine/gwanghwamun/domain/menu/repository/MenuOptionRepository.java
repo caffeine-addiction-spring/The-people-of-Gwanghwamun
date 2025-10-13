@@ -20,13 +20,14 @@ public interface MenuOptionRepository extends JpaRepository<MenuOption, UUID> {
 
 	@Query(
 			"""
-				SELECT o FROM MenuOption o
-				WHERE o.menuId = :menuId
-				AND o.deletedAt IS NULL
-				AND (:includeHidden IS NULL OR o.isHidden = :includeHidden)
-				AND (:soldOut IS NULL OR o.isSoldOut = :soldOut)
-				AND (:optionName IS NULL OR LOWER(o.optionName) LIKE LOWER(CONCAT('%', :optionName, '%')))
-				""")
+	SELECT o FROM MenuOption o
+	WHERE o.menuId = :menuId
+		AND o.deletedAt IS NULL
+		AND (:includeHidden IS NULL OR o.isHidden = :includeHidden)
+		AND (:soldOut IS NULL OR o.isSoldOut = :soldOut)
+		AND (:optionName IS NULL OR LOWER(o.optionName) LIKE LOWER(CONCAT('%', :optionName, '%')))
+	ORDER BY o.createAt DESC
+""")
 	Page<MenuOption> searchOptions(
 			@Param("menuId") UUID menuId,
 			@Param("includeHidden") Boolean includeHidden,

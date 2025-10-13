@@ -2,15 +2,13 @@ package com.caffeine.gwanghwamun.domain.menu.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
-import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "p_menu")
@@ -23,9 +21,8 @@ public class Menu extends BaseEntity {
 	@Column(name = "menu_id")
 	private UUID menuId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "store_id", nullable = false)
-	private Store store;
+	@Column(name = "store_id", nullable = false)
+	private UUID storeId;
 
 	@Column(name = "group_id", nullable = false)
 	private Long groupId;
@@ -52,6 +49,10 @@ public class Menu extends BaseEntity {
 	@Column(name = "deleted_at")
 	private LocalDateTime deletedAt;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "store_id", nullable = false, insertable = false, updatable = false)
+	private Store store;
+
 	@Builder
 	public Menu(
 			UUID storeId,
@@ -61,21 +62,15 @@ public class Menu extends BaseEntity {
 			String menuContent,
 			Integer price,
 			Boolean isSoldOut,
-			Boolean isHidden,
-			StoreRepository storeRepository) {
-		this.store = storeRepository.findActiveById(storeId)
-				.orElseThrow(() -> new IllegalArgumentException("Store not found for id: " + storeId));
+			Boolean isHidden) {
+		this.storeId = storeId;
 		this.groupId = groupId;
 		this.menuCategory = menuCategory;
 		this.name = name;
 		this.menuContent = menuContent;
 		this.price = price;
-		this.isSoldOut = isSoldOut;
-		this.isHidden = isHidden;
-	}
-
-	public UUID getStoreId() {
-		return this.store != null ? this.store.getStoreId() : null;
+		this.isSoldOut = isSoldOut != null ? isSoldOut : false;
+		this.isHidden = isHidden != null ? isHidden : false;
 	}
 
 	public void updateMenu(

@@ -2,13 +2,12 @@ package com.caffeine.gwanghwamun.domain.menu.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "p_menu_option")
@@ -66,8 +65,7 @@ public class MenuOption extends BaseEntity {
 	}
 
 	public void update(
-			String optionName, Integer price, String content,
-			Boolean isHidden, Boolean isSoldOut) {
+			String optionName, Integer price, String content, Boolean isHidden, Boolean isSoldOut) {
 		if (optionName != null) {
 			this.optionName = optionName;
 		}
