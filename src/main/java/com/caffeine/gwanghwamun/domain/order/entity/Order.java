@@ -2,8 +2,8 @@ package com.caffeine.gwanghwamun.domain.order.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import com.caffeine.gwanghwamun.domain.cart.entity.Cart;
-import com.caffeine.gwanghwamun.domain.order.order_items.entity.OrderItem;
-import com.caffeine.gwanghwamun.domain.order.order_status_log.entity.OrderStatusLog;
+import com.caffeine.gwanghwamun.domain.order_items.entity.OrderItem;
+import com.caffeine.gwanghwamun.domain.order_status_log.entity.OrderStatusLog;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import jakarta.persistence.*;

@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface OrderRepository extends JpaRepository<Order, UUID> {
-    Page<Order> findByUserIdAndDeletedDateIsNull(Long userId, Pageable pageable);
+    Page<Order> findByUser_UserIdAndDeletedDateIsNull(Long userId, Pageable pageable);
 }

@@ -1,6 +1,6 @@
-package com.caffeine.gwanghwamun.domain.order.order_items.dto;
+package com.caffeine.gwanghwamun.domain.order_items.dto;
 
-import com.caffeine.gwanghwamun.domain.order.order_items.entity.OrderItem;
+import com.caffeine.gwanghwamun.domain.order_items.entity.OrderItem;
 
 import java.util.UUID;
 

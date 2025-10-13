@@ -2,7 +2,7 @@ package com.caffeine.gwanghwamun.domain.order.dto;
 
 import com.caffeine.gwanghwamun.domain.order.entity.Order;
 import com.caffeine.gwanghwamun.domain.order.entity.OrderStatus;
-import com.caffeine.gwanghwamun.domain.order.order_items.dto.OrderItemResDTO;
+import com.caffeine.gwanghwamun.domain.order_items.dto.OrderItemResDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,7 +20,7 @@ public record OrderResDTO(
         OrderStatus status,
         LocalDateTime createdAt
 ) {
-    public OrderResDTO (Order order, List<OrderItemResDTO> orderItemResDTOList) {
+    public OrderResDTO(Order order, List<OrderItemResDTO> orderItemResDTOList) {
         this(
                 order.getOrderId(),
                 order.getUser().getUserId(),
