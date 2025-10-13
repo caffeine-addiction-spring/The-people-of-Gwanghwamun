@@ -26,30 +26,14 @@ public class AddressService {
 
 	@Transactional
 	public void createAddress(User authenticatedUser, CreateAddressReqDTO requestDto) {
-		User user =
-				userRepository
-						.findById(authenticatedUser.getUserId())
-						.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
-
+		User user = getUserOrThrow(authenticatedUser);
 		addressRepository.save(requestDto.toAddress(user));
 	}
 
 	@Transactional
-	public void updateAddress(
-			User authenticatedUser, UUID addressId, UpdateAddressReqDTO requestDto) {
-		User user =
-				userRepository
-						.findById(authenticatedUser.getUserId())
-						.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
-
-		Address address =
-				addressRepository
-						.findById(addressId)
-						.orElseThrow(() -> new CustomException(ADDRESS_NOT_FOUND));
-
-		if (!address.getUser().equals(user)) {
-			throw new CustomException(FORBIDDEN);
-		}
+	public void updateAddress(User authenticatedUser, UUID addressId, UpdateAddressReqDTO requestDto) {
+		User user = getUserOrThrow(authenticatedUser);
+		Address address = getAddressOrThrow(user, addressId);
 
 		address.update(
 				requestDto.address(),
@@ -57,41 +41,27 @@ public class AddressService {
 				requestDto.phone(),
 				requestDto.recipient(),
 				requestDto.postalCode(),
-				requestDto.isDefault());
+				requestDto.isDefault()
+		);
 	}
 
 	@Transactional
 	public DeleteAddressResDTO deleteAddress(User authenticatedUser, UUID addressId) {
-		User user =
-				userRepository
-						.findById(authenticatedUser.getUserId())
-						.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
-
-		Address address =
-				addressRepository
-						.findById(addressId)
-						.orElseThrow(() -> new CustomException(ADDRESS_NOT_FOUND));
-
-		if (!address.getUser().equals(user)) {
-			throw new CustomException(FORBIDDEN);
-		}
+		User user = getUserOrThrow(authenticatedUser);
+		Address address = getAddressOrThrow(user, addressId);
 
 		if (address.isDeleted()) {
 			throw new CustomException(ALREADY_DELETED_ADDRESS);
 		}
 
 		address.markAsDeleted();
-
 		return new DeleteAddressResDTO(address.getAddressId(), address.getDeletedAt());
 	}
 
+
 	@Transactional(readOnly = true)
 	public List<GetAddressListResDTO> getUserAddresses(User authenticatedUser) {
-		User user =
-				userRepository
-						.findById(authenticatedUser.getUserId())
-						.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
-
+		User user = getUserOrThrow(authenticatedUser);
 		return addressRepository.findAllByUserAndDeletedAtIsNull(user).stream()
 				.map(GetAddressListResDTO::from)
 				.toList();
@@ -99,49 +69,39 @@ public class AddressService {
 
 	@Transactional(readOnly = true)
 	public GetAddressListResDTO getUserAddress(User authenticatedUser, UUID addressId) {
-		User user =
-				userRepository
-						.findById(authenticatedUser.getUserId())
-						.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
-
-		Address address =
-				addressRepository
-						.findById(addressId)
-						.orElseThrow(() -> new CustomException(ADDRESS_NOT_FOUND));
-
-		if (!address.getUser().equals(user)) {
-			throw new CustomException(FORBIDDEN);
-		}
-
+		User user = getUserOrThrow(authenticatedUser);
+		Address address = getAddressOrThrow(user, addressId);
 		return GetAddressListResDTO.from(address);
 	}
 
+
+	@Transactional
 	public void setDefaultAddress(User authenticatedUser, UUID addressId) {
-		User user =
-				userRepository
-						.findById(authenticatedUser.getUserId())
-						.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+		User user = getUserOrThrow(authenticatedUser);
+		Address newDefault = getAddressOrThrow(user, addressId);
 
-		Address address =
-				addressRepository
-						.findById(addressId)
-						.orElseThrow(() -> new CustomException(ADDRESS_NOT_FOUND));
-
-		if (!address.getUser().equals(user)) {
-			throw new CustomException(FORBIDDEN);
-		}
-
-		if (address.isDeleted()) {
+		if (newDefault.isDeleted()) {
 			throw new CustomException(ADDRESS_NOT_FOUND);
 		}
 
-		Address currentDefaultAddress = addressRepository
-				.findByUserAndIsDefaultTrue(user)
-				.orElse(null);
+		addressRepository.findByUserAndIsDefaultTrue(user)
+				.filter(current -> !current.equals(newDefault))
+				.ifPresent(Address::unsetDefault);
 
-		if (currentDefaultAddress != null && !currentDefaultAddress.equals(address)) {
-			currentDefaultAddress.update(null, null, null, null, null, false);
+		newDefault.setDefault();
+	}
+
+	private User getUserOrThrow(User authenticatedUser) {
+		return userRepository.findById(authenticatedUser.getUserId())
+				.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+	}
+
+	private Address getAddressOrThrow(User user, UUID addressId) {
+		Address address = addressRepository.findById(addressId)
+				.orElseThrow(() -> new CustomException(ADDRESS_NOT_FOUND));
+		if (!address.getUser().equals(user)) {
+			throw new CustomException(FORBIDDEN);
 		}
-		address.update(null, null, null, null, null, true);
+		return address;
 	}
 }

@@ -83,4 +83,12 @@ public class Address extends BaseEntity {
 		if (postalCode != null) this.postalCode = postalCode;
 		if (isDefault != null) this.isDefault = isDefault;
 	}
+
+	public void setDefault() {
+		this.isDefault = true;
+	}
+
+	public void unsetDefault() {
+		this.isDefault = false;
+	}
 }
