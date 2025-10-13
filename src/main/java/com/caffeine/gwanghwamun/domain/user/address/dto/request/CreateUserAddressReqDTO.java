@@ -1,11 +1,11 @@
-package com.caffeine.gwanghwamun.domain.address.dto.request;
+package com.caffeine.gwanghwamun.domain.user.address.dto.request;
 
-import com.caffeine.gwanghwamun.domain.address.entity.Address;
+import com.caffeine.gwanghwamun.domain.user.address.entity.UserAddress;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public record CreateAddressReqDTO(
+public record CreateUserAddressReqDTO(
 		@NotBlank(message = "주소 별칭은 필수 입력값입니다.") String label,
 		@NotBlank(message = "수령인은 필수 입력값입니다.") String recipient,
 		@NotBlank(message = "전화번호는 필수 입력값입니다.")
@@ -17,8 +17,8 @@ public record CreateAddressReqDTO(
 				String postalCode,
 		Boolean isDefault) {
 
-	public Address toAddress(User user) {
-		return Address.builder()
+	public UserAddress toAddress(User user) {
+		return UserAddress.builder()
 				.user(user)
 				.label(label)
 				.recipient(recipient)

@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.address.entity;
+package com.caffeine.gwanghwamun.domain.user.address.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
@@ -11,7 +11,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_user_addresses")
-public class Address extends BaseEntity {
+public class UserAddress extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -44,7 +44,7 @@ public class Address extends BaseEntity {
 	private LocalDateTime deletedAt;
 
 	@Builder
-	public Address(
+	public UserAddress(
 			User user,
 			String address,
 			String label,
