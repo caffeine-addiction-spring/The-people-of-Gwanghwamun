@@ -77,7 +77,7 @@ public class AddressController {
 		return ResponseUtil.successResponse(SuccessCode.ADDRESS_FETCH_SUCCESS, response);
 	}
 
-	@Operation(summary = "주소 상세 조회 API")
+	@Operation(summary = "기본 배송지 주소 설정 API")
 	@PostMapping("/{addressId}")
 	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
 	public ResponseEntity<ApiResponse<Void>> setDefaultAddress(
