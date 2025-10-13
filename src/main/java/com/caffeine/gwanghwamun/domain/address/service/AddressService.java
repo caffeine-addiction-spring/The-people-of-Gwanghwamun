@@ -6,10 +6,12 @@ import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.domain.address.dto.request.CreateAddressReqDTO;
 import com.caffeine.gwanghwamun.domain.address.dto.request.UpdateAddressReqDTO;
 import com.caffeine.gwanghwamun.domain.address.dto.response.DeleteAddressResDTO;
+import com.caffeine.gwanghwamun.domain.address.dto.response.GetAddressListResDTO;
 import com.caffeine.gwanghwamun.domain.address.entity.Address;
 import com.caffeine.gwanghwamun.domain.address.repository.AddressRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.repository.UserRepository;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -81,5 +83,16 @@ public class AddressService {
 		address.markAsDeleted();
 
 		return new DeleteAddressResDTO(address.getAddressId(), address.getDeletedAt());
+	}
+
+	public List<GetAddressListResDTO> getUserAddresses(User authenticatedUser) {
+		User user =
+				userRepository
+						.findById(authenticatedUser.getUserId())
+						.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+
+		return addressRepository.findAllByUserAndDeletedAtIsNull(user).stream()
+				.map(GetAddressListResDTO::from)
+				.toList();
 	}
 }

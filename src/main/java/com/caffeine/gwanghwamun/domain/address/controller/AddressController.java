@@ -6,10 +6,12 @@ import com.caffeine.gwanghwamun.common.success.SuccessCode;
 import com.caffeine.gwanghwamun.domain.address.dto.request.CreateAddressReqDTO;
 import com.caffeine.gwanghwamun.domain.address.dto.request.UpdateAddressReqDTO;
 import com.caffeine.gwanghwamun.domain.address.dto.response.DeleteAddressResDTO;
+import com.caffeine.gwanghwamun.domain.address.dto.response.GetAddressListResDTO;
 import com.caffeine.gwanghwamun.domain.address.service.AddressService;
 import com.caffeine.gwanghwamun.domain.user.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,5 +56,14 @@ public class AddressController {
 			@PathVariable UUID addressId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		DeleteAddressResDTO response = addressService.deleteAddress(userDetails.getUser(), addressId);
 		return ResponseUtil.successResponse(SuccessCode.ADDRESS_DELETE_SUCCESS, response);
+	}
+
+	@Operation(summary = "주소 목록 조회 API")
+	@DeleteMapping("")
+	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
+	public ResponseEntity<ApiResponse<List<GetAddressListResDTO>>> deleteAddress(
+			@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		List<GetAddressListResDTO> response = addressService.getUserAddresses(userDetails.getUser());
+		return ResponseUtil.successResponse(SuccessCode.ADDRESS_LIST_FETCH_SUCCESS, response);
 	}
 }
