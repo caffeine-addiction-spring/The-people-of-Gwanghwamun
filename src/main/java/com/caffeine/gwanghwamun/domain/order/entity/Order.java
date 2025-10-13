@@ -1,16 +1,20 @@
 package com.caffeine.gwanghwamun.domain.order.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
+import com.caffeine.gwanghwamun.domain.cart.entity.Cart;
 import com.caffeine.gwanghwamun.domain.order.order_items.entity.OrderItem;
 import com.caffeine.gwanghwamun.domain.order.order_status_log.entity.OrderStatusLog;
+import com.caffeine.gwanghwamun.domain.store.entity.Store;
+import com.caffeine.gwanghwamun.domain.user.entity.User;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -19,37 +23,64 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Order extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID orderId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.UUID)
+	@Column(name = "order_id", nullable = false)
+	private UUID orderId;
 
-    private int totalPrice;
+	@Column(name = "total_price", nullable = false)
+	private int totalPrice;
 
-    private String requests;
+	@Column(name = "requests", nullable = false)
+	private String requests;
 
-    @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+	@Column(name = "order_status", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private OrderStatus orderStatus;
 
-    private String deliveryAddress;
+	@Column(name = "delivery_address", nullable = false)
+	private String deliveryAddress;
 
-    private String deliveryContent;
+	@Column(name = "delivery_content", nullable = false)
+	private String deliveryContent;
 
-    private LocalDateTime deletedDate;
+	@Column(name = "deleted_date", nullable = true)
+	private LocalDateTime deletedDate;
 
-    private String deletedBy;
+	@Column(name = "deleted_by", nullable = true)
+	private String deletedBy;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "store_id")
-//    private Store store;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private User user;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cart_id")
+	private Cart cart;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> orderItems;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "store_id")
+	private Store store;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderStatusLog> statusLogs;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<OrderItem> orderItems;
+
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<OrderStatusLog> statusLogs;
+
+	@Builder
+	public Order(
+			Store store,
+			List<OrderItem> orderItems,
+			OrderStatus orderStatus,
+			int totalPrice,
+			String deliveryAddress,
+			String requests) {
+		this.store = store;
+		this.orderItems = orderItems != null ? orderItems : new ArrayList<>();
+		this.orderStatus = orderStatus;
+		this.totalPrice = totalPrice;
+		this.requests = requests;
+		this.deliveryAddress = deliveryAddress;
+	}
 }

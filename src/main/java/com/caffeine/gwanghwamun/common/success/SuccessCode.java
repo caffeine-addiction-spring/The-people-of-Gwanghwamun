@@ -27,7 +27,13 @@ public enum SuccessCode {
 	MENU_SOLDOUT_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 품절 상태 변경 성공"),
 
 	// 가게 (store)
-	STORE_DELETE_SUCCESS(HttpStatus.OK, "가게 삭제 완료");
+	STORE_DELETE_SUCCESS(HttpStatus.OK, "가게 삭제 완료"),
+
+	// 장바구니 (cart)
+	CART_SAVE_SUCCESS(HttpStatus.OK, "장바구니 추가 성공"),
+	CART_LIST_SUCCESS(HttpStatus.OK, "장바구니 목록 조회 성공"),
+	CART_UPDATE_SUCCESS(HttpStatus.OK, "장바구니 항목 수정 성공"),
+	CART_DELETE_SUCCESS(HttpStatus.OK, "장바구니 삭제 성공");
 
 	private final HttpStatus httpStatus;
 	private final String message;
