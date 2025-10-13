@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AddressRepository extends JpaRepository<Address, UUID> {
 	List<Address> findAllByUserAndDeletedAtIsNull(User user);
-	Optional<Address> findByUserAndIsDefaultTrue(User user);
+	Optional<Address> findByUserAndIsDefaultTrueAndDeletedAtIsNull(User user);
 }
