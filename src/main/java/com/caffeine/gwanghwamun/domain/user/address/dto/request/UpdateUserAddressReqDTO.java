@@ -1,9 +1,9 @@
-package com.caffeine.gwanghwamun.domain.address.dto.request;
+package com.caffeine.gwanghwamun.domain.user.address.dto.request;
 
 import jakarta.validation.constraints.Pattern;
 import org.springframework.lang.Nullable;
 
-public record UpdateAddressReqDTO(
+public record UpdateUserAddressReqDTO(
 		@Nullable String label,
 		@Nullable String recipient,
 		@Nullable @Pattern(regexp = "^010\\d{8}$", message = "유효한 휴대폰 번호 형식(010으로 시작, 11자리 숫자)이 아닙니다.")
