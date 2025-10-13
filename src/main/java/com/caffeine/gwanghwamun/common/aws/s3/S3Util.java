@@ -32,7 +32,6 @@ public class S3Util {
 						.bucket(bucketName)
 						.key(key)
 						.contentType(contentType)
-						.acl(ObjectCannedACL.PUBLIC_READ)
 						.build();
 
 		s3Client.putObject(putObjectRequest, RequestBody.fromBytes(fileBytes));
