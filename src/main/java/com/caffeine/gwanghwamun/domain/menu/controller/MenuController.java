@@ -55,7 +55,8 @@ public class MenuController {
 	public ResponseEntity<ApiResponse<Page<MenuResDTO>>> getMenuList(
 			@PathVariable("storeId") UUID storeId,
 			@RequestParam(name = "page", defaultValue = "0") int page,
-			@RequestParam(name = "size", defaultValue = "10") int size) {
+			@RequestParam(name = "size", defaultValue = "10") int size,
+			@AuthenticationPrincipal User user) {
 
 		if (size != 10 && size != 30 && size != 50) {
 			size = 10;
