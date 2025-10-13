@@ -29,7 +29,8 @@ public class AddressService {
 		User user = getUserOrThrow(authenticatedUser);
 
 		if (requestDto.isDefault() != null && requestDto.isDefault()) {
-			addressRepository.findByUserAndIsDefaultTrueAndDeletedAtIsNull(user)
+			addressRepository
+					.findByUserAndIsDefaultTrueAndDeletedAtIsNull(user)
 					.ifPresent(Address::unsetDefault);
 		}
 
@@ -37,12 +38,14 @@ public class AddressService {
 	}
 
 	@Transactional
-	public void updateAddress(User authenticatedUser, UUID addressId, UpdateAddressReqDTO requestDto) {
+	public void updateAddress(
+			User authenticatedUser, UUID addressId, UpdateAddressReqDTO requestDto) {
 		User user = getUserOrThrow(authenticatedUser);
 		Address address = getAddressOrThrow(user, addressId);
 
 		if (requestDto.isDefault() != null && requestDto.isDefault() && !address.isDefault()) {
-			addressRepository.findByUserAndIsDefaultTrueAndDeletedAtIsNull(user)
+			addressRepository
+					.findByUserAndIsDefaultTrueAndDeletedAtIsNull(user)
 					.ifPresent(Address::unsetDefault);
 		}
 
@@ -52,8 +55,7 @@ public class AddressService {
 				requestDto.phone(),
 				requestDto.recipient(),
 				requestDto.postalCode(),
-				requestDto.isDefault()
-		);
+				requestDto.isDefault());
 	}
 
 	@Transactional
@@ -68,7 +70,6 @@ public class AddressService {
 		address.markAsDeleted();
 		return new DeleteAddressResDTO(address.getAddressId(), address.getDeletedAt());
 	}
-
 
 	@Transactional(readOnly = true)
 	public List<GetAddressListResDTO> getUserAddresses(User authenticatedUser) {
@@ -85,7 +86,6 @@ public class AddressService {
 		return GetAddressListResDTO.from(address);
 	}
 
-
 	@Transactional
 	public void setDefaultAddress(User authenticatedUser, UUID addressId) {
 		User user = getUserOrThrow(authenticatedUser);
@@ -95,7 +95,8 @@ public class AddressService {
 			throw new CustomException(ADDRESS_NOT_FOUND);
 		}
 
-		addressRepository.findByUserAndIsDefaultTrueAndDeletedAtIsNull(user)
+		addressRepository
+				.findByUserAndIsDefaultTrueAndDeletedAtIsNull(user)
 				.filter(current -> !current.equals(newDefault))
 				.ifPresent(Address::unsetDefault);
 
@@ -103,13 +104,16 @@ public class AddressService {
 	}
 
 	private User getUserOrThrow(User authenticatedUser) {
-		return userRepository.findById(authenticatedUser.getUserId())
+		return userRepository
+				.findById(authenticatedUser.getUserId())
 				.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 	}
 
 	private Address getAddressOrThrow(User user, UUID addressId) {
-		Address address = addressRepository.findById(addressId)
-				.orElseThrow(() -> new CustomException(ADDRESS_NOT_FOUND));
+		Address address =
+				addressRepository
+						.findById(addressId)
+						.orElseThrow(() -> new CustomException(ADDRESS_NOT_FOUND));
 		if (!address.getUser().equals(user)) {
 			throw new CustomException(FORBIDDEN);
 		}

@@ -71,8 +71,7 @@ public class AddressController {
 	@GetMapping("/{addressId}")
 	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
 	public ResponseEntity<ApiResponse<GetAddressListResDTO>> getAddress(
-			@PathVariable UUID addressId,
-			@AuthenticationPrincipal UserDetailsImpl userDetails) {
+			@PathVariable UUID addressId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		GetAddressListResDTO response = addressService.getUserAddress(userDetails.getUser(), addressId);
 		return ResponseUtil.successResponse(SuccessCode.ADDRESS_FETCH_SUCCESS, response);
 	}
@@ -81,8 +80,7 @@ public class AddressController {
 	@PostMapping("/{addressId}")
 	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
 	public ResponseEntity<ApiResponse<Void>> setDefaultAddress(
-			@PathVariable UUID addressId,
-			@AuthenticationPrincipal UserDetailsImpl userDetails) {
+			@PathVariable UUID addressId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		addressService.setDefaultAddress(userDetails.getUser(), addressId);
 		return ResponseUtil.successResponse(SuccessCode.DEFAULT_ADDRESS_SAVE_SUCCESS);
 	}
