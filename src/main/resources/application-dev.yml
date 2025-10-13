@@ -37,11 +37,6 @@ spring:
       max-request-size: 60MB
       file-size-threshold: 20MB
 
-file:
-  upload:
-    url: ${FILE_URL}
-    path: ${FILE_PATH}
-
 aws:
   s3:
     enabled: ${AWS_S3_ENABLED}
