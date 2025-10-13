@@ -68,4 +68,19 @@ public class Address extends BaseEntity {
 	public boolean isDeleted() {
 		return this.deletedAt != null;
 	}
+
+	public void update(
+			String address,
+			String label,
+			String phone,
+			String recipient,
+			String postalCode,
+			Boolean isDefault) {
+		if (address != null) this.address = address;
+		if (label != null) this.label = label;
+		if (phone != null) this.phone = phone;
+		if (recipient != null) this.recipient = recipient;
+		if (postalCode != null) this.postalCode = postalCode;
+		if (isDefault != null) this.isDefault = isDefault;
+	}
 }
