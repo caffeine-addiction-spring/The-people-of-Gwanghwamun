@@ -9,6 +9,7 @@ import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuOptionResDTO;
 import com.caffeine.gwanghwamun.domain.menu.entity.MenuOption;
 import com.caffeine.gwanghwamun.domain.menu.repository.MenuOptionRepository;
 import com.caffeine.gwanghwamun.domain.menu.repository.MenuRepository;
+import com.caffeine.gwanghwamun.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,7 +29,7 @@ public class MenuOptionService {
 	private final MenuRepository menuRepository;
 
 	@Transactional
-	public MenuOptionResDTO saveOption(UUID storeId, UUID menuId, MenuOptionCreateReqDTO req) {
+	public MenuOptionResDTO saveOption(UUID storeId, UUID menuId, MenuOptionCreateReqDTO req, User user) {
 		menuRepository
 				.findByIdAndNotDeleted(menuId)
 				.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
