@@ -95,4 +95,22 @@ public class AddressService {
 				.map(GetAddressListResDTO::from)
 				.toList();
 	}
+
+	public GetAddressListResDTO getUserAddress(User authenticatedUser, UUID addressId) {
+		User user =
+				userRepository
+						.findById(authenticatedUser.getUserId())
+						.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+
+		Address address =
+				addressRepository
+						.findById(addressId)
+						.orElseThrow(() -> new CustomException(ADDRESS_NOT_FOUND));
+
+		if (!address.getUser().equals(user)) {
+			throw new CustomException(FORBIDDEN);
+		}
+
+		return GetAddressListResDTO.from(address);
+	}
 }

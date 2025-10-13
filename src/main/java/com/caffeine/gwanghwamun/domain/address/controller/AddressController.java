@@ -59,11 +59,21 @@ public class AddressController {
 	}
 
 	@Operation(summary = "주소 목록 조회 API")
-	@DeleteMapping("")
+	@GetMapping("")
 	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
-	public ResponseEntity<ApiResponse<List<GetAddressListResDTO>>> deleteAddress(
+	public ResponseEntity<ApiResponse<List<GetAddressListResDTO>>> getAddressList(
 			@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		List<GetAddressListResDTO> response = addressService.getUserAddresses(userDetails.getUser());
 		return ResponseUtil.successResponse(SuccessCode.ADDRESS_LIST_FETCH_SUCCESS, response);
+	}
+
+	@Operation(summary = "주소 상세 조회 API")
+	@GetMapping("/{addressId}")
+	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
+	public ResponseEntity<ApiResponse<GetAddressListResDTO>> getAddress(
+			@PathVariable UUID addressId,
+			@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		GetAddressListResDTO response = addressService.getUserAddress(userDetails.getUser(), addressId);
+		return ResponseUtil.successResponse(SuccessCode.ADDRESS_FETCH_SUCCESS, response);
 	}
 }

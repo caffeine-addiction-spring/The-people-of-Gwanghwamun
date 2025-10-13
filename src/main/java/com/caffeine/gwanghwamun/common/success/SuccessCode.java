@@ -21,7 +21,8 @@ public enum SuccessCode {
 	ADDRESS_SAVE_SUCCESS(HttpStatus.CREATED, "회원 주소 생성 성공"),
 	ADDRESS_UPDATE_SUCCESS(HttpStatus.OK, "회원 주소 수정 성공"),
 	ADDRESS_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "회원 주소 삭제 성공"),
-	ADDRESS_LIST_FETCH_SUCCESS(HttpStatus.OK, "회원 주소 목록 조회 성공");
+	ADDRESS_LIST_FETCH_SUCCESS(HttpStatus.OK, "회원 주소 목록 조회 성공"),
+	ADDRESS_FETCH_SUCCESS(HttpStatus.OK, "회원 주소 상세 조회 성공");
 
 	private final HttpStatus httpStatus;
 	private final String message;
