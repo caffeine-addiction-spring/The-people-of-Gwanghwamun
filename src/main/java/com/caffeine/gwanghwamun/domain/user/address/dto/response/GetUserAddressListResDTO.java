@@ -1,7 +1,6 @@
 package com.caffeine.gwanghwamun.domain.user.address.dto.response;
 
 import com.caffeine.gwanghwamun.domain.user.address.entity.UserAddress;
-
 import java.util.UUID;
 
 public record GetUserAddressListResDTO(

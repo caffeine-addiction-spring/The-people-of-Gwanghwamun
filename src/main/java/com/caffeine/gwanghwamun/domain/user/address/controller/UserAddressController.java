@@ -54,7 +54,8 @@ public class UserAddressController {
 	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
 	public ResponseEntity<ApiResponse<DeleteUserAddressResDTO>> deleteAddress(
 			@PathVariable UUID addressId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-		DeleteUserAddressResDTO response = userAddressService.deleteAddress(userDetails.getUser(), addressId);
+		DeleteUserAddressResDTO response =
+				userAddressService.deleteAddress(userDetails.getUser(), addressId);
 		return ResponseUtil.successResponse(SuccessCode.ADDRESS_DELETE_SUCCESS, response);
 	}
 
@@ -63,7 +64,8 @@ public class UserAddressController {
 	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
 	public ResponseEntity<ApiResponse<List<GetUserAddressListResDTO>>> getAddressList(
 			@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		List<GetUserAddressListResDTO> response = userAddressService.getUserAddresses(userDetails.getUser());
+		List<GetUserAddressListResDTO> response =
+				userAddressService.getUserAddresses(userDetails.getUser());
 		return ResponseUtil.successResponse(SuccessCode.ADDRESS_LIST_FETCH_SUCCESS, response);
 	}
 
@@ -72,7 +74,8 @@ public class UserAddressController {
 	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
 	public ResponseEntity<ApiResponse<GetUserAddressListResDTO>> getAddress(
 			@PathVariable UUID addressId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-		GetUserAddressListResDTO response = userAddressService.getUserAddress(userDetails.getUser(), addressId);
+		GetUserAddressListResDTO response =
+				userAddressService.getUserAddress(userDetails.getUser(), addressId);
 		return ResponseUtil.successResponse(SuccessCode.ADDRESS_FETCH_SUCCESS, response);
 	}
 
