@@ -17,6 +17,14 @@ public enum SuccessCode {
 	PASSWORD_UPDATE_SUCCESS(HttpStatus.OK, "비밀번호 수정 성공"),
 	USER_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "회원 삭제 성공"),
 
+	// 주소 (address)
+	ADDRESS_SAVE_SUCCESS(HttpStatus.CREATED, "회원 주소 생성 성공"),
+	ADDRESS_UPDATE_SUCCESS(HttpStatus.OK, "회원 주소 수정 성공"),
+	ADDRESS_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "회원 주소 삭제 성공"),
+	ADDRESS_LIST_FETCH_SUCCESS(HttpStatus.OK, "회원 주소 목록 조회 성공"),
+	ADDRESS_FETCH_SUCCESS(HttpStatus.OK, "회원 주소 상세 조회 성공"),
+	DEFAULT_ADDRESS_SAVE_SUCCESS(HttpStatus.OK, "기본 배송지 주소 설정 성공"),
+
 	// 메뉴 (menu)
 	MENU_SAVE_SUCCESS(HttpStatus.CREATED, "메뉴 등록 성공"),
 	MENU_FIND_SUCCESS(HttpStatus.OK, "메뉴 조회 성공"),

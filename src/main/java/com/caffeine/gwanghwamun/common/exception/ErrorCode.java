@@ -22,6 +22,10 @@ public enum ErrorCode {
 	INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호 변경 실패"),
 	ALREADY_DELETED_USER(HttpStatus.CONFLICT, "회원 삭제 실패"),
 
+	// 주소 (address)
+	ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "회원 주소 조회 실패"),
+	ALREADY_DELETED_ADDRESS(HttpStatus.CONFLICT, "회원 주소 삭제 실패"),
+
 	// 메뉴 (menu)
 	MENU_NOT_FOUND(HttpStatus.NOT_FOUND, "메뉴를 찾을 수 없습니다."),
 	MENU_STORE_MISMATCH(HttpStatus.FORBIDDEN, "해당 가게의 메뉴가 아닙니다."),
