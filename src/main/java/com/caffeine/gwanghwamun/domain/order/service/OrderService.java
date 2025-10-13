@@ -7,11 +7,11 @@ import com.caffeine.gwanghwamun.domain.menu.repository.MenuRepository;
 import com.caffeine.gwanghwamun.domain.order.dto.*;
 import com.caffeine.gwanghwamun.domain.order.entity.Order;
 import com.caffeine.gwanghwamun.domain.order.entity.OrderStatus;
-import com.caffeine.gwanghwamun.domain.order.order_items.dto.OrderItemResDTO;
-import com.caffeine.gwanghwamun.domain.order.order_items.entity.OrderItem;
-import com.caffeine.gwanghwamun.domain.order.order_items.repository.OrderItemRepository;
-import com.caffeine.gwanghwamun.domain.order.order_status_log.repository.OrderStatusLogRepository;
 import com.caffeine.gwanghwamun.domain.order.repository.OrderRepository;
+import com.caffeine.gwanghwamun.domain.order_items.dto.OrderItemResDTO;
+import com.caffeine.gwanghwamun.domain.order_items.entity.OrderItem;
+import com.caffeine.gwanghwamun.domain.order_items.repository.OrderItemRepository;
+import com.caffeine.gwanghwamun.domain.order_status_log.repository.OrderStatusLogRepository;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
@@ -44,7 +44,7 @@ public class OrderService {
     public Page<OrderListResDTO> findOrderList(Long userId, Pageable pageable) {
 
         Page<Order> orderPage = orderRepository
-                .findByUserIdAndDeletedDateIsNull(userId, pageable);
+                .findByUser_UserIdAndDeletedDateIsNull(userId, pageable);
 
         return orderPage.map(OrderListResDTO::new);
     }
@@ -60,7 +60,7 @@ public class OrderService {
                 .orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
 
         List<OrderItem> orderItemList = orderItemRepository
-                .findByOrderIdAndDeletedDateIsNull(orderId);
+                .findByOrder_OrderIdAndDeletedDateIsNull(orderId);
 
         List<OrderItemResDTO> orderItemResDTOList = orderItemList.stream()
                 .map(OrderItemResDTO::new)
