@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.menuoption.entity;
+package com.caffeine.gwanghwamun.domain.menu.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import jakarta.persistence.*;

@@ -1,8 +1,8 @@
-package com.caffeine.gwanghwamun.domain.menuoption.repository;
+package com.caffeine.gwanghwamun.domain.menu.repository;
 
 import static com.caffeine.gwanghwamun.domain.menuoption.entity.QMenuOption.menuOption;
 
-import com.caffeine.gwanghwamun.domain.menuoption.entity.MenuOption;
+import com.caffeine.gwanghwamun.domain.menu.entity.MenuOption;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.UUID;

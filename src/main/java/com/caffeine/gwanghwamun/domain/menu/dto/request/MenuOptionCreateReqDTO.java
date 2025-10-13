@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.menuoption.dto.request;
+package com.caffeine.gwanghwamun.domain.menu.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

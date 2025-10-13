@@ -1,6 +1,6 @@
-package com.caffeine.gwanghwamun.domain.menuoption.repository;
+package com.caffeine.gwanghwamun.domain.menu.repository;
 
-import com.caffeine.gwanghwamun.domain.menuoption.entity.MenuOption;
+import com.caffeine.gwanghwamun.domain.menu.entity.MenuOption;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

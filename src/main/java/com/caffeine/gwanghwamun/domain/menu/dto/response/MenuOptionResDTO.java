@@ -1,6 +1,6 @@
-package com.caffeine.gwanghwamun.domain.menuoption.dto.response;
+package com.caffeine.gwanghwamun.domain.menu.dto.response;
 
-import com.caffeine.gwanghwamun.domain.menuoption.entity.MenuOption;
+import com.caffeine.gwanghwamun.domain.menu.entity.MenuOption;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
