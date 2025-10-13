@@ -10,14 +10,13 @@ import com.caffeine.gwanghwamun.domain.menu.entity.MenuOption;
 import com.caffeine.gwanghwamun.domain.menu.repository.MenuOptionRepository;
 import com.caffeine.gwanghwamun.domain.menu.repository.MenuRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +28,8 @@ public class MenuOptionService {
 	private final MenuRepository menuRepository;
 
 	@Transactional
-	public MenuOptionResDTO saveOption(UUID storeId, UUID menuId, MenuOptionCreateReqDTO req, User user) {
+	public MenuOptionResDTO saveOption(
+			UUID storeId, UUID menuId, MenuOptionCreateReqDTO req, User user) {
 		menuRepository
 				.findByIdAndNotDeleted(menuId)
 				.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
