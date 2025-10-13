@@ -76,4 +76,14 @@ public class AddressController {
 		GetAddressListResDTO response = addressService.getUserAddress(userDetails.getUser(), addressId);
 		return ResponseUtil.successResponse(SuccessCode.ADDRESS_FETCH_SUCCESS, response);
 	}
+
+	@Operation(summary = "주소 상세 조회 API")
+	@PostMapping("/{addressId}")
+	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
+	public ResponseEntity<ApiResponse<Void>> setDefaultAddress(
+			@PathVariable UUID addressId,
+			@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		addressService.setDefaultAddress(userDetails.getUser(), addressId);
+		return ResponseUtil.successResponse(SuccessCode.DEFAULT_ADDRESS_SAVE_SUCCESS);
+	}
 }

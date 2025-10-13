@@ -85,6 +85,7 @@ public class AddressService {
 		return new DeleteAddressResDTO(address.getAddressId(), address.getDeletedAt());
 	}
 
+	@Transactional(readOnly = true)
 	public List<GetAddressListResDTO> getUserAddresses(User authenticatedUser) {
 		User user =
 				userRepository
@@ -96,6 +97,7 @@ public class AddressService {
 				.toList();
 	}
 
+	@Transactional(readOnly = true)
 	public GetAddressListResDTO getUserAddress(User authenticatedUser, UUID addressId) {
 		User user =
 				userRepository
@@ -112,5 +114,34 @@ public class AddressService {
 		}
 
 		return GetAddressListResDTO.from(address);
+	}
+
+	public void setDefaultAddress(User authenticatedUser, UUID addressId) {
+		User user =
+				userRepository
+						.findById(authenticatedUser.getUserId())
+						.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+
+		Address address =
+				addressRepository
+						.findById(addressId)
+						.orElseThrow(() -> new CustomException(ADDRESS_NOT_FOUND));
+
+		if (!address.getUser().equals(user)) {
+			throw new CustomException(FORBIDDEN);
+		}
+
+		if (address.isDeleted()) {
+			throw new CustomException(ADDRESS_NOT_FOUND);
+		}
+
+		Address currentDefaultAddress = addressRepository
+				.findByUserAndIsDefaultTrue(user)
+				.orElse(null);
+
+		if (currentDefaultAddress != null && !currentDefaultAddress.equals(address)) {
+			currentDefaultAddress.update(null, null, null, null, null, false);
+		}
+		address.update(null, null, null, null, null, true);
 	}
 }
