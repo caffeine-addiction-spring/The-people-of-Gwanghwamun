@@ -27,6 +27,12 @@ public class AddressService {
 	@Transactional
 	public void createAddress(User authenticatedUser, CreateAddressReqDTO requestDto) {
 		User user = getUserOrThrow(authenticatedUser);
+
+		if (requestDto.isDefault() != null && requestDto.isDefault()) {
+			addressRepository.findByUserAndIsDefaultTrueAndDeletedAtIsNull(user)
+					.ifPresent(Address::unsetDefault);
+		}
+
 		addressRepository.save(requestDto.toAddress(user));
 	}
 
@@ -34,6 +40,11 @@ public class AddressService {
 	public void updateAddress(User authenticatedUser, UUID addressId, UpdateAddressReqDTO requestDto) {
 		User user = getUserOrThrow(authenticatedUser);
 		Address address = getAddressOrThrow(user, addressId);
+
+		if (requestDto.isDefault() != null && requestDto.isDefault() && !address.isDefault()) {
+			addressRepository.findByUserAndIsDefaultTrueAndDeletedAtIsNull(user)
+					.ifPresent(Address::unsetDefault);
+		}
 
 		address.update(
 				requestDto.address(),
@@ -84,7 +95,7 @@ public class AddressService {
 			throw new CustomException(ADDRESS_NOT_FOUND);
 		}
 
-		addressRepository.findByUserAndIsDefaultTrue(user)
+		addressRepository.findByUserAndIsDefaultTrueAndDeletedAtIsNull(user)
 				.filter(current -> !current.equals(newDefault))
 				.ifPresent(Address::unsetDefault);
 
