@@ -1,8 +1,11 @@
 package com.caffeine.gwanghwamun.domain.order.entity;
 
 public enum OrderStatus {
-	FAILED,
-	ACCEPTED,
-	DELIVERING,
-	DELIVERED
+    CANCELLED,
+    FAILED,
+    ACCEPTED,
+    DELIVERING,
+    DELIVERY_COMPLETED,
+    REJECTED,
+    COOKING_COMPLETED
 }

@@ -1,7 +1,12 @@
 package com.caffeine.gwanghwamun.domain.order.repository;
 
 import com.caffeine.gwanghwamun.domain.order.entity.Order;
-import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrderRepository extends JpaRepository<Order, UUID> {}
+import java.util.UUID;
+
+public interface OrderRepository extends JpaRepository<Order, UUID> {
+    Page<Order> findByUserIdAndDeletedDateIsNull(Long userId, Pageable pageable);
+}
