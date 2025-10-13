@@ -31,21 +31,7 @@ public class StoreService {
 	private final MenuRepository menuRepository;
 
 	public StoreCreateResDTO createStore(StoreCreateReqDTO req, User user) {
-		Store store = new Store();
-		store.setName(req.getName());
-		store.setAddress(req.getAddress());
-		store.setPhone(req.getPhone());
-		store.setStoreCategory(req.getStoreCategory());
-		store.setContent(req.getContent());
-		store.setMinDeliveryPrice(req.getMinDeliveryPrice() != null ? req.getMinDeliveryPrice() : 0);
-		store.setDeliveryTip(req.getDeliveryTip() != null ? req.getDeliveryTip() : 0);
-		store.setOperationHours(req.getOperationHours());
-		store.setClosedDays(req.getClosedDays());
-
-		store.setUser(user);
-		store.setRating(BigDecimal.ZERO);
-		store.setReviewCount(0);
-
+		Store store = Store.create(req, user);
 		storeRepository.save(store);
 
 		return new StoreCreateResDTO(store.getStoreId(), store.getName(), store.getStoreCategory());
