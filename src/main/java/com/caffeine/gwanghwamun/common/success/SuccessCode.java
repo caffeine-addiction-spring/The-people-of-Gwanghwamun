@@ -23,7 +23,28 @@ public enum SuccessCode {
 	ADDRESS_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "회원 주소 삭제 성공"),
 	ADDRESS_LIST_FETCH_SUCCESS(HttpStatus.OK, "회원 주소 목록 조회 성공"),
 	ADDRESS_FETCH_SUCCESS(HttpStatus.OK, "회원 주소 상세 조회 성공"),
-	DEFAULT_ADDRESS_SAVE_SUCCESS(HttpStatus.OK, "기본 배송지 주소 설정 성공");
+	DEFAULT_ADDRESS_SAVE_SUCCESS(HttpStatus.OK, "기본 배송지 주소 설정 성공"),
+
+	// 메뉴 (menu)
+	MENU_SAVE_SUCCESS(HttpStatus.CREATED, "메뉴 등록 성공"),
+	MENU_FIND_SUCCESS(HttpStatus.OK, "메뉴 조회 성공"),
+	MENU_LIST_SUCCESS(HttpStatus.OK, "메뉴 목록 조회 성공"),
+	MENU_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 수정 성공"),
+	MENU_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "메뉴 삭제 성공"),
+	MENU_VISIBILITY_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 숨김 상태 변경 성공"),
+	MENU_SOLDOUT_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 품절 상태 변경 성공"),
+
+	// 가게 (store)
+	STORE_DELETE_SUCCESS(HttpStatus.OK, "가게 삭제 완료"),
+
+	// 메뉴 옵션 (menuOption)
+	MENU_OPTION_SAVE_SUCCESS(HttpStatus.CREATED, "메뉴 옵션 생성 성공"),
+	MENU_OPTION_FIND_SUCCESS(HttpStatus.OK, "메뉴 옵션 조회 성공"),
+	MENU_OPTION_LIST_SUCCESS(HttpStatus.OK, "메뉴 옵션 목록 조회 성공"),
+	MENU_OPTION_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 옵션 수정 성공"),
+	MENU_OPTION_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "메뉴 옵션 삭제 성공"),
+	MENU_OPTION_VISIBILITY_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 숨김 상태 변경 성공"),
+	MENU_OPTION_SOLDOUT_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 옵션 품절 상태 변경 성공");
 
 	private final HttpStatus httpStatus;
 	private final String message;
