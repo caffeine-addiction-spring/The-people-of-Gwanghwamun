@@ -11,6 +11,7 @@ import com.caffeine.gwanghwamun.domain.menuoption.dto.response.MenuOptionResDTO;
 import com.caffeine.gwanghwamun.domain.menuoption.service.MenuOptionService;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,8 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/stores/{storeId}/menus/{menuId}/options")
@@ -67,7 +66,10 @@ public class MenuOptionController {
 	@Operation(summary = "옵션 상세 조회", description = "메뉴 옵션을 상세 조회한다.")
 	@GetMapping("/{optionId}")
 	public ResponseEntity<ApiResponse<MenuOptionResDTO>> getOption(
-			@PathVariable UUID storeId, @PathVariable UUID menuId, @PathVariable UUID optionId, @AuthenticationPrincipal User user) {
+			@PathVariable UUID storeId,
+			@PathVariable UUID menuId,
+			@PathVariable UUID optionId,
+			@AuthenticationPrincipal User user) {
 		MenuOptionResDTO res = menuOptionService.findOption(storeId, menuId, optionId);
 		return ResponseUtil.successResponse(SuccessCode.MENU_OPTION_FIND_SUCCESS, res);
 	}
@@ -89,7 +91,10 @@ public class MenuOptionController {
 	@Operation(summary = "옵션 삭제", description = "메뉴 옵션을 삭제한다.")
 	@DeleteMapping("/{optionId}")
 	public ResponseEntity<ApiResponse<Void>> deleteOption(
-			@PathVariable UUID storeId, @PathVariable UUID menuId, @PathVariable UUID optionId, @AuthenticationPrincipal User user) {
+			@PathVariable UUID storeId,
+			@PathVariable UUID menuId,
+			@PathVariable UUID optionId,
+			@AuthenticationPrincipal User user) {
 		menuOptionService.deleteOption(storeId, menuId, optionId, null);
 		return ResponseUtil.successResponse(SuccessCode.MENU_OPTION_DELETE_SUCCESS);
 	}
@@ -103,7 +108,8 @@ public class MenuOptionController {
 			@PathVariable UUID optionId,
 			@RequestBody MenuOptionVisibilityReqDTO req,
 			@AuthenticationPrincipal User user) {
-		MenuOptionResDTO res = menuOptionService.updateOptionVisibility(storeId, menuId, optionId, req.hidden());
+		MenuOptionResDTO res =
+				menuOptionService.updateOptionVisibility(storeId, menuId, optionId, req.hidden());
 		return ResponseUtil.successResponse(SuccessCode.MENU_OPTION_VISIBILITY_UPDATE_SUCCESS, res);
 	}
 

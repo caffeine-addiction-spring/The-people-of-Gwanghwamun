@@ -9,14 +9,13 @@ import com.caffeine.gwanghwamun.domain.menuoption.dto.request.MenuOptionUpdateRe
 import com.caffeine.gwanghwamun.domain.menuoption.dto.response.MenuOptionResDTO;
 import com.caffeine.gwanghwamun.domain.menuoption.entity.MenuOption;
 import com.caffeine.gwanghwamun.domain.menuoption.repository.MenuOptionRepository;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -86,7 +85,6 @@ public class MenuOptionService {
 		return new MenuOptionResDTO(option);
 	}
 
-
 	@Transactional
 	public void deleteOption(UUID storeId, UUID menuId, UUID optionId, String deleter) {
 		MenuOption option =
@@ -100,7 +98,8 @@ public class MenuOptionService {
 	}
 
 	@Transactional
-	public MenuOptionResDTO updateOptionVisibility(UUID storeId, UUID menuId, UUID optionId, Boolean hidden) {
+	public MenuOptionResDTO updateOptionVisibility(
+			UUID storeId, UUID menuId, UUID optionId, Boolean hidden) {
 		MenuOption option =
 				menuOptionRepository
 						.findByIdAndNotDeleted(optionId)

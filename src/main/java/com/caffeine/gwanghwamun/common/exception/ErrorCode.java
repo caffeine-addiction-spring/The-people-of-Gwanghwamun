@@ -30,11 +30,15 @@ public enum ErrorCode {
 	STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 가게를 찾을 수 없습니다."),
 	ALREADY_DELETED(HttpStatus.BAD_REQUEST, "이미 삭제된 가게입니다."),
 
+	// 지역 (region)
+	REGION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 지역을 찾을 수 없습니다."),
+	REGION_DUPLICATED(HttpStatus.CONFLICT, "이미 존재하는 지역명입니다."),
+	ALREADY_DELETED(HttpStatus.BAD_REQUEST, "이미 삭제된 가게입니다."),
+
 	// 메뉴 옵션 (menuOption)
 	MENU_OPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "메뉴 옵션을 찾을 수 없습니다."),
 	MENU_OPTION_MENU_MISMATCH(HttpStatus.BAD_REQUEST, "옵션이 해당 메뉴에 속하지 않습니다."),
 	MENU_OPTION_VISIBILITY_UPDATE_SUCCESS(HttpStatus.OK, "옵션 숨김 상태가 변경되었습니다.");
-
 
 	private final HttpStatus httpStatus;
 	private final String message;
