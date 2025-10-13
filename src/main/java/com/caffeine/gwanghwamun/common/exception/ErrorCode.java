@@ -33,7 +33,6 @@ public enum ErrorCode {
 	// 지역 (region)
 	REGION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 지역을 찾을 수 없습니다."),
 	REGION_DUPLICATED(HttpStatus.CONFLICT, "이미 존재하는 지역명입니다."),
-	ALREADY_DELETED(HttpStatus.BAD_REQUEST, "이미 삭제된 가게입니다."),
 
 	// 메뉴 옵션 (menuOption)
 	MENU_OPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "메뉴 옵션을 찾을 수 없습니다."),
