@@ -24,6 +24,10 @@ public class MenuOption extends BaseEntity {
 	@Column(name = "menu_id", nullable = false)
 	private UUID menuId;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "menu_id", nullable = false, insertable = false, updatable = false)
+	private Menu menu;
+
 	@Column(name = "option_name", nullable = false, length = 100)
 	private String optionName;
 

@@ -11,7 +11,6 @@ import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuResDTO;
 import com.caffeine.gwanghwamun.domain.menu.service.MenuService;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/stores/{storeId}/menus")
@@ -36,7 +37,7 @@ public class MenuController {
 			@PathVariable("storeId") UUID storeId,
 			@RequestBody MenuCreateReqDTO menuCreateReqDTO,
 			@AuthenticationPrincipal User user) {
-		MenuResDTO menuResDTO = menuService.saveMenu(storeId, menuCreateReqDTO);
+		MenuResDTO menuResDTO = menuService.saveMenu(storeId, menuCreateReqDTO, user);
 		return ResponseUtil.successResponse(SuccessCode.MENU_SAVE_SUCCESS, menuResDTO);
 	}
 
@@ -46,7 +47,7 @@ public class MenuController {
 			@PathVariable("storeId") UUID storeId,
 			@PathVariable("menuId") UUID menuId,
 			@AuthenticationPrincipal User user) {
-		MenuResDTO menuResDTO = menuService.findMenuById(storeId, menuId);
+		MenuResDTO menuResDTO = menuService.findMenuById(storeId, menuId, user);
 		return ResponseUtil.successResponse(SuccessCode.MENU_FIND_SUCCESS, menuResDTO);
 	}
 
@@ -62,8 +63,8 @@ public class MenuController {
 			size = 10;
 		}
 
-		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createAt"));
-		Page<MenuResDTO> menuResDTOPage = menuService.findMenuListByStore(storeId, pageable);
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+		Page<MenuResDTO> menuResDTOPage = menuService.findMenuListByStore(storeId, pageable, user);
 		return ResponseUtil.successResponse(SuccessCode.MENU_LIST_SUCCESS, menuResDTOPage);
 	}
 
@@ -75,7 +76,7 @@ public class MenuController {
 			@PathVariable("menuId") UUID menuId,
 			@RequestBody MenuUpdateReqDTO menuUpdateReqDTO,
 			@AuthenticationPrincipal User user) {
-		MenuResDTO menuResDTO = menuService.updateMenu(storeId, menuId, menuUpdateReqDTO);
+		MenuResDTO menuResDTO = menuService.updateMenu(storeId, menuId, menuUpdateReqDTO, user);
 		return ResponseUtil.successResponse(SuccessCode.MENU_UPDATE_SUCCESS, menuResDTO);
 	}
 
@@ -86,7 +87,7 @@ public class MenuController {
 			@PathVariable("storeId") UUID storeId,
 			@PathVariable("menuId") UUID menuId,
 			@AuthenticationPrincipal User user) {
-		menuService.deleteMenu(storeId, menuId);
+		menuService.deleteMenu(storeId, menuId, user);
 		return ResponseUtil.successResponse(SuccessCode.MENU_DELETE_SUCCESS);
 	}
 
@@ -99,7 +100,7 @@ public class MenuController {
 			@RequestBody MenuVisibilityReqDTO menuVisibilityReqDTO,
 			@AuthenticationPrincipal User user) {
 		MenuResDTO menuResDTO =
-				menuService.updateMenuVisibility(storeId, menuId, menuVisibilityReqDTO.hidden());
+				menuService.updateMenuVisibility(storeId, menuId, menuVisibilityReqDTO.hidden(), user);
 		return ResponseUtil.successResponse(SuccessCode.MENU_VISIBILITY_UPDATE_SUCCESS, menuResDTO);
 	}
 
@@ -112,7 +113,7 @@ public class MenuController {
 			@RequestBody MenuSoldOutReqDTO menuSoldOutReqDTO,
 			@AuthenticationPrincipal User user) {
 		MenuResDTO menuResDTO =
-				menuService.updateMenuSoldOut(storeId, menuId, menuSoldOutReqDTO.isSoldOut());
+				menuService.updateMenuSoldOut(storeId, menuId, menuSoldOutReqDTO.isSoldOut(), user);
 		return ResponseUtil.successResponse(SuccessCode.MENU_SOLDOUT_UPDATE_SUCCESS, menuResDTO);
 	}
 }
