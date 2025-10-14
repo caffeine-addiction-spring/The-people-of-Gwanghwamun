@@ -43,7 +43,7 @@ jobs:
 
       - name: Build with Gradle
         env:
-          DUMMY: true
+          SPRING_PROFILES_ACTIVE: prod
         run: ./gradlew clean build -x test
 
       - name: Calculate Duration
