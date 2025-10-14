@@ -52,6 +52,13 @@ public class StoreService {
 		if (user.getRole() == UserRoleEnum.OWNER && req.getOwnerUserId() != null) {
 			throw new CustomException(ErrorCode.INVALID_REQUEST);
 		}
+
+		boolean exists =
+				storeRepository.existsByNameAndAddressAndDeletedAtIsNull(req.getName(), req.getAddress());
+		if (exists) {
+			throw new CustomException(ErrorCode.DUPLICATED_STORE);
+		}
+
 		Store store = Store.create(req, user);
 		storeRepository.save(store);
 
