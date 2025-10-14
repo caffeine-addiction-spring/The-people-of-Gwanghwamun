@@ -27,7 +27,12 @@ public enum SuccessCode {
 	MENU_SOLDOUT_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 품절 상태 변경 성공"),
 
 	// 가게 (store)
-	STORE_DELETE_SUCCESS(HttpStatus.OK, "가게 삭제 완료");
+	STORE_DELETE_SUCCESS(HttpStatus.OK, "가게 삭제 완료"),
+
+	// 파일 (file)
+	FILE_UPLOAD_SUCCESS(HttpStatus.CREATED, "파일 업로드 성공"),
+	FILE_READ_SUCCESS(HttpStatus.OK, "파일 조회 성공"),
+	FILE_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "파일 삭제 성공");
 
 	private final HttpStatus httpStatus;
 	private final String message;
