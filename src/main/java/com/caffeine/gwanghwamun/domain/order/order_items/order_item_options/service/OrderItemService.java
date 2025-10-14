@@ -39,14 +39,14 @@ public class OrderItemService {
       Menu menu = menuRepository.findById(item.menuItemId())
           .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
-      if (menu.getIsSoldOut() || menu.getIsHidden()) {
+      if (menu.isSoldOut() || menu.isHidden()) {
         throw new CustomException(ErrorCode.ORDER_UNABLE_MENU);
       }
 
       List<MenuOption> menuOptions = menuOptionRepository.findAllByMenuOptionIdInAndMenuId(item.menuOptionList(), menu.getMenuId());
 
       for (MenuOption option : menuOptions) {
-        if (option.getIsHidden() || option.getIsSoldOut()) {
+        if (option.isSoldOut() || option.isHidden()) {
           throw new CustomException(ErrorCode.ORDER_UNABLE_MENU_OPTION);
         }
       }
