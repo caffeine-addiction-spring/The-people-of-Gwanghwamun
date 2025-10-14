@@ -30,8 +30,7 @@ public interface MenuRepository extends JpaRepository<Menu, UUID>, QuerydslPredi
 """)
 	Page<Menu> findByStoreIdAndNotDeleted(@Param("storeId") UUID storeId, Pageable pageable);
 
-	default Page<Menu> findByStoreIdAndNotDeletedAndNotHidden(
-			UUID storeId, Pageable pageable) {
+	default Page<Menu> findByStoreIdAndNotDeletedAndNotHidden(UUID storeId, Pageable pageable) {
 		BooleanBuilder builder = new BooleanBuilder();
 		QMenu menu = QMenu.menu;
 		builder.and(menu.storeId.eq(storeId)).and(menu.deletedAt.isNull()).and(menu.isHidden.eq(false));
