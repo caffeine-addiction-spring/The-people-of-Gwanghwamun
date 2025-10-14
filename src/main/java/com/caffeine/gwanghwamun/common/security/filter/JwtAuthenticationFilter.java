@@ -1,8 +1,9 @@
-package com.caffeine.gwanghwamun.domain.user.security;
+package com.caffeine.gwanghwamun.common.security.filter;
 
+import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.domain.user.dto.request.LoginReqDTO;
 import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
-import com.caffeine.gwanghwamun.domain.user.jwt.JwtUtil;
+import com.caffeine.gwanghwamun.common.jwt.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;

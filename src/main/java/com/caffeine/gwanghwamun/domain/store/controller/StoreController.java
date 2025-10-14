@@ -10,7 +10,7 @@ import com.caffeine.gwanghwamun.domain.store.dto.response.StoreDetailResDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.response.StoreListResDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.response.StoreUpdateResDTO;
 import com.caffeine.gwanghwamun.domain.store.service.StoreService;
-import com.caffeine.gwanghwamun.domain.user.security.UserDetailsImpl;
+import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.UUID;

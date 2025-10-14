@@ -8,7 +8,7 @@ import com.caffeine.gwanghwamun.domain.user.address.dto.request.UpdateUserAddres
 import com.caffeine.gwanghwamun.domain.user.address.dto.response.DeleteUserAddressResDTO;
 import com.caffeine.gwanghwamun.domain.user.address.dto.response.GetUserAddressListResDTO;
 import com.caffeine.gwanghwamun.domain.user.address.service.UserAddressService;
-import com.caffeine.gwanghwamun.domain.user.security.UserDetailsImpl;
+import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;

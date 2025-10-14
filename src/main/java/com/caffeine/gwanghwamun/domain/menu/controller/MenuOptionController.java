@@ -9,7 +9,7 @@ import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuOptionUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuOptionVisibilityReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuOptionResDTO;
 import com.caffeine.gwanghwamun.domain.menu.service.MenuOptionService;
-import com.caffeine.gwanghwamun.domain.user.security.UserDetailsImpl;
+import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

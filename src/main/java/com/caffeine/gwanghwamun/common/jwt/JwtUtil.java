@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.user.jwt;
+package com.caffeine.gwanghwamun.common.jwt;
 
 import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
 import io.jsonwebtoken.*;

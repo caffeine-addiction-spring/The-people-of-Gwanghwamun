@@ -1,6 +1,7 @@
-package com.caffeine.gwanghwamun.domain.user.security;
+package com.caffeine.gwanghwamun.common.security.filter;
 
-import com.caffeine.gwanghwamun.domain.user.jwt.JwtUtil;
+import com.caffeine.gwanghwamun.common.jwt.JwtUtil;
+import com.caffeine.gwanghwamun.common.security.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,9 +1,9 @@
-package com.caffeine.gwanghwamun.common.config;
+package com.caffeine.gwanghwamun.common.security;
 
-import com.caffeine.gwanghwamun.domain.user.jwt.JwtUtil;
-import com.caffeine.gwanghwamun.domain.user.security.JwtAuthenticationFilter;
-import com.caffeine.gwanghwamun.domain.user.security.JwtAuthorizationFilter;
-import com.caffeine.gwanghwamun.domain.user.security.UserDetailsServiceImpl;
+import com.caffeine.gwanghwamun.common.jwt.JwtUtil;
+import com.caffeine.gwanghwamun.common.security.filter.JwtAuthenticationFilter;
+import com.caffeine.gwanghwamun.common.security.filter.JwtAuthorizationFilter;
+import com.caffeine.gwanghwamun.common.security.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
-public class WebSecurityConfig {
+public class SecurityConfig {
 
 	private final JwtUtil jwtUtil;
 	private final UserDetailsServiceImpl userDetailsService;
