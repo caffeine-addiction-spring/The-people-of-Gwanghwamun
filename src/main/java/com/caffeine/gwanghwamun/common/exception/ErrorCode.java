@@ -15,6 +15,9 @@ public enum ErrorCode {
 	// 리뷰 (review)
 	REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "리뷰를 찾을 수 없습니다."),
 	REVIEW_DELETE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "리뷰 삭제 권한이 없습니다."),
+	REVIEW_REPLY_CREATE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "답글 생성 권한이 없습니다."),
+	REVIEW_REPLY_DELETE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "답글 삭제 권한이 없습니다."),
+	REVIEW_REPLY_DUPLICATED(HttpStatus.CONFLICT, "이미 답글이 등록되어 있습니다."),
 
 	// 회원 (user)
 	DUPLICATED(HttpStatus.CONFLICT, "회원가입 실패"),
