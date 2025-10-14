@@ -45,7 +45,13 @@ public enum ErrorCode {
 
 	// 파일 (file)
 	FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 파일을 찾을 수 없습니다."),
-	FILE_NOT_UPLOAD(HttpStatus.BAD_REQUEST, "파일을 업로드할 수 없습니다.");
+	FILE_NOT_UPLOAD(HttpStatus.BAD_REQUEST, "파일을 업로드할 수 없습니다."),
+
+	// 주문 (order)
+	ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다."),
+	ORDER_TIME_EXPIRED(HttpStatus.BAD_REQUEST, "취소 가능 시간이 초과되었습니다."),
+	UNAUTHORIZED_ORDER_ACCESS(HttpStatus.FORBIDDEN, "주문에 접근권한이 없습니디."),
+	UNAUTHORIZED_STORE_ACCESS(HttpStatus.FORBIDDEN, "가게에 대한 권한이 없습니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;

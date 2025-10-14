@@ -49,7 +49,23 @@ public enum SuccessCode {
 	// 파일 (file)
 	FILE_UPLOAD_SUCCESS(HttpStatus.CREATED, "파일 업로드 성공"),
 	FILE_READ_SUCCESS(HttpStatus.OK, "파일 조회 성공"),
-	FILE_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "파일 삭제 성공");
+	FILE_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "파일 삭제 성공"),
+
+	// 장바구니 (cart)
+	CART_SAVE_SUCCESS(HttpStatus.OK, "장바구니 추가 성공"),
+	CART_LIST_SUCCESS(HttpStatus.OK, "장바구니 목록 조회 성공"),
+	CART_UPDATE_SUCCESS(HttpStatus.OK, "장바구니 항목 수정 성공"),
+	CART_DELETE_SUCCESS(HttpStatus.OK, "장바구니 삭제 성공"),
+
+	// 주문 (order)
+	ORDER_SAVE_SUCCESS(HttpStatus.OK, "주문 성공"),
+	ORDER_LIST_SUCCESS(HttpStatus.OK, "주문 목록 조회 성공"),
+	ORDER_FIND_SUCCESS(HttpStatus.OK, "주문 상세조회 성공"),
+	ORDER_CANCEL_SUCCESS(HttpStatus.OK, "주문 취소 성공"),
+	ORDER_ACCEPT_SUCCESS(HttpStatus.OK, "주문 수락 성공"),
+	ORDER_REJECT_SUCCESS(HttpStatus.OK, "주문 거절 성공"),
+	ORDER_COOK_COMPLETE_SUCCESS(HttpStatus.OK, "조리 완료"),
+	ORDER_DELIVERY_COMPLETE_SUCCESS(HttpStatus.OK, "배달 완료");
 
 	private final HttpStatus httpStatus;
 	private final String message;
