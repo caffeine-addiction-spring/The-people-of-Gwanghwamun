@@ -11,9 +11,13 @@ public enum SuccessCode {
 
 	// 리뷰 (review)
 	REVIEW_SAVE_SUCCESS(HttpStatus.CREATED, "리뷰 생성 성공"),
+	REVIEW_REPLY_SAVE_SUCCESS(HttpStatus.CREATED, "답글 생성 성공"),
 	REVIEW_FIND_SUCCESS(HttpStatus.OK, "리뷰 단건 조회 생공"),
 	REVIEW_LIST_FIND_SUCCESS(HttpStatus.OK, "리뷰 리스트 조회 성공"),
 	REVIEW_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "리뷰 삭제 성공"),
+	REVIEW_REPLY_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "답글 삭제 성공"),
+
+
 
 	// 회원 (user)
 	USER_SAVE_SUCCESS(HttpStatus.CREATED, "회원가입 성공"),
