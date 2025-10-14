@@ -19,11 +19,11 @@ public class MenuOption extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID menuOptionId;
 
-	@Column(nullable = false)
+	@Column(name = "menu_id", nullable = false)
 	private UUID menuId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "menu_id", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "menu_id", insertable = false, updatable = false)
 	private Menu menu;
 
 	@Column(nullable = false, length = 100)
