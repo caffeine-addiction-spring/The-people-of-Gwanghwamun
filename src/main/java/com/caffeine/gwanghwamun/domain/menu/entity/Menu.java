@@ -3,12 +3,13 @@ package com.caffeine.gwanghwamun.domain.menu.entity;
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
-import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "p_menu")
@@ -37,16 +38,12 @@ public class Menu extends BaseEntity {
 	@Column(name = "menu_content", columnDefinition = "TEXT")
 	private String menuContent;
 
-	@Column(name = "price", nullable = false)
-	private Integer price;
+	private int price;
 
-	@Column(name = "is_sold_out", nullable = false)
-	private Boolean isSoldOut = false;
+	private boolean isSoldOut;;
 
-	@Column(name = "is_hidden", nullable = false)
-	private Boolean isHidden = false;
+	private boolean isHidden;
 
-	@Column(name = "deleted_at")
 	private LocalDateTime deletedAt;
 
 	@ManyToOne(fetch = FetchType.LAZY)

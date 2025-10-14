@@ -14,14 +14,15 @@ import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -98,7 +99,7 @@ public class StoreService {
 						.findByStoreIdAndNotDeletedAndNotHidden(storeId, pageable)
 						.getContent()
 						.stream()
-						.filter(menu -> !menu.getIsSoldOut())
+						.filter(menu -> !menu.isSoldOut())
 						.map(MenuResDTO::new)
 						.toList();
 
