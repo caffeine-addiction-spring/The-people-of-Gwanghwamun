@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -36,6 +37,12 @@ public class OrderItemOption extends BaseEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "menu_option_id", nullable = false)
   private MenuOption menuOption;
+
+  @Column(name = "deleted_date", nullable = true)
+  private LocalDateTime deletedDate;
+
+  @Column(name = "deleted_by", nullable = true)
+  private String deletedBy;
 
   @Builder
   public OrderItemOption(

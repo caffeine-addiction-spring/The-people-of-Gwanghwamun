@@ -12,7 +12,7 @@ import com.caffeine.gwanghwamun.domain.order.entity.Order;
 import com.caffeine.gwanghwamun.domain.order.entity.OrderStatus;
 import com.caffeine.gwanghwamun.domain.order.order_items.dto.OrderItemListResDTO;
 import com.caffeine.gwanghwamun.domain.order.order_items.dto.OrderItemResDTO;
-import com.caffeine.gwanghwamun.domain.order.order_items.dto.OrderMenuItemReqDto;
+import com.caffeine.gwanghwamun.domain.order.order_items.dto.OrderMenuItemReqDTO;
 import com.caffeine.gwanghwamun.domain.order.order_items.entity.OrderItem;
 import com.caffeine.gwanghwamun.domain.order.order_items.order_item_options.entity.OrderItemOption;
 import com.caffeine.gwanghwamun.domain.order.order_items.order_item_options.repository.OrderItemOptionRepository;
@@ -97,6 +97,8 @@ public class OrderService {
         .orderStatus(OrderStatus.ORDER_WAITING)
         .deliveryAddress(req.address())
         .totalPrice(totalPrice)
+        .deliveryContent(req.deliveryContent())
+        .requests(req.requests())
         .build();
 
     orderRepository.save(order);
@@ -210,11 +212,11 @@ public class OrderService {
   }
 
   @Transactional
-  private List<OrderItemListResDTO> saveOrderItem(List<OrderMenuItemReqDto> menuList, Order order) {
+  private List<OrderItemListResDTO> saveOrderItem(List<OrderMenuItemReqDTO> menuList, Order order) {
 
     List<OrderItemListResDTO> orderItemInfoList = new ArrayList<>();
 
-    for (OrderMenuItemReqDto item : menuList) {
+    for (OrderMenuItemReqDTO item : menuList) {
 
       Menu menu = menuRepository.findById(item.menuItemId())
           .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
@@ -223,7 +225,7 @@ public class OrderService {
         throw new CustomException(ErrorCode.ORDER_UNABLE_MENU);
       }
 
-      List<MenuOption> menuOptions = menuOptionRepository.findAllByIdAndMenu(item.menuOptionList(), menu);
+      List<MenuOption> menuOptions = menuOptionRepository.findAllByMenuOptionIdInAndMenuId(item.menuOptionList(), menu.getMenuId());
 
       for (MenuOption option : menuOptions) {
         if (option.getIsHidden() || option.getIsSoldOut()) {
@@ -240,6 +242,7 @@ public class OrderService {
       OrderItem orderItem = OrderItem.builder()
           .order(order)
           .menu(menu)
+          .menuName(menu.getName())
           .quantity(item.quantity())
           .price(menu.getPrice())
           .build();
@@ -248,6 +251,7 @@ public class OrderService {
           .map(option -> OrderItemOption.builder()
               .orderItem(orderItem)
               .menuOption(option)
+              .optionName(option.getOptionName())
               .optionPrice(option.getPrice())
               .build())
           .toList();

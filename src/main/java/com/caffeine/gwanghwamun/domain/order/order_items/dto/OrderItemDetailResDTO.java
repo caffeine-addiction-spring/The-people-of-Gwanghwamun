@@ -9,13 +9,13 @@ public record OrderItemDetailResDTO(
     UUID orderItemId,
     UUID menuId,
     String menuName,
-    List<OrderItemOptionResDto> orderItemOptionList,
+    List<OrderItemOptionResDTO> orderItemOptionList,
     Integer quantity,
     Integer price
 ) {
   public OrderItemDetailResDTO(
       OrderItem orderItem,
-      List<OrderItemOptionResDto> orderItemOptionList,
+      List<OrderItemOptionResDTO> orderItemOptionList,
       Integer itemPrice
   ) {
     this(

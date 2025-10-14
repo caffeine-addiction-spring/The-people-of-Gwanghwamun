@@ -22,10 +22,10 @@ public class OrderItem extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID orderItemId;
 
-  @Column(name = "deleted_date", nullable = false)
+  @Column(name = "deleted_date", nullable = true)
   private LocalDateTime deletedDate;
 
-  @Column(name = "deleted_by", nullable = false)
+  @Column(name = "deleted_by", nullable = true)
   private String deletedBy;
 
   @ManyToOne(fetch = FetchType.LAZY)

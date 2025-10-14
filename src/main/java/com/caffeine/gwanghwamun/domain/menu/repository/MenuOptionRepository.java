@@ -1,6 +1,5 @@
 package com.caffeine.gwanghwamun.domain.menu.repository;
 
-import com.caffeine.gwanghwamun.domain.menu.entity.Menu;
 import com.caffeine.gwanghwamun.domain.menu.entity.MenuOption;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,5 +36,5 @@ public interface MenuOptionRepository extends JpaRepository<MenuOption, UUID> {
       @Param("optionName") String optionName,
       Pageable pageable);
 
-  List<MenuOption> findAllByIdAndMenu(List<UUID> menuOptionIdList, Menu menu);
+  List<MenuOption> findAllByMenuOptionIdInAndMenuId(List<UUID> menuOptionIdList, UUID menuId);
 }

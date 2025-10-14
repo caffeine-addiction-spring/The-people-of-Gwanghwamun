@@ -28,7 +28,7 @@ public class Order extends BaseEntity {
   @Column(name = "total_price", nullable = false)
   private Integer totalPrice;
 
-  @Column(name = "requests", nullable = false)
+  @Column(name = "requests", nullable = true)
   private String requests;
 
   @Column(name = "order_status", nullable = false)
@@ -38,7 +38,7 @@ public class Order extends BaseEntity {
   @Column(name = "delivery_address", nullable = false)
   private String deliveryAddress;
 
-  @Column(name = "delivery_content", nullable = false)
+  @Column(name = "delivery_content", nullable = true)
   private String deliveryContent;
 
   @Column(name = "deleted_date", nullable = true)
@@ -66,6 +66,7 @@ public class Order extends BaseEntity {
       OrderStatus orderStatus,
       int totalPrice,
       String deliveryAddress,
+      String deliveryContent,
       String requests) {
     this.store = store;
     this.user = user;
@@ -73,6 +74,7 @@ public class Order extends BaseEntity {
     this.totalPrice = totalPrice;
     this.requests = requests;
     this.deliveryAddress = deliveryAddress;
+    this.deliveryContent = deliveryContent;
   }
 
   public void cancel() {
