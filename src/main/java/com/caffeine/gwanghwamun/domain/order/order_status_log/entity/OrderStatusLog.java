@@ -2,8 +2,11 @@ package com.caffeine.gwanghwamun.domain.order.order_status_log.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import com.caffeine.gwanghwamun.domain.order.entity.Order;
+import com.caffeine.gwanghwamun.domain.order.entity.OrderStatus;
+import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,9 +32,32 @@ public class OrderStatusLog extends BaseEntity {
   @JoinColumn(name = "user_id")
   private User user;
 
-  private String existingState;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "store_id")
+  private Store store;
 
-  private String currentState;
+  @Enumerated(EnumType.STRING)
+  private OrderStatus existingState;
+
+  @Enumerated(EnumType.STRING)
+  private OrderStatus currentState;
 
   private String reason;
+
+  @Builder
+  public OrderStatusLog(
+      Order order,
+      User user,
+      Store store,
+      OrderStatus existingState,
+      OrderStatus currentState,
+      String reason
+  ) {
+    this.order = order;
+    this.user = user;
+    this.store = store;
+    this.existingState = existingState;
+    this.currentState = currentState;
+    this.reason = reason;
+  }
 }

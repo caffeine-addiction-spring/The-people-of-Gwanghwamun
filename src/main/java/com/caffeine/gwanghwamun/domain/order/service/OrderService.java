@@ -11,6 +11,8 @@ import com.caffeine.gwanghwamun.domain.order.order_items.dto.OrderItemResDTO;
 import com.caffeine.gwanghwamun.domain.order.order_items.entity.OrderItem;
 import com.caffeine.gwanghwamun.domain.order.order_items.order_item_options.service.OrderItemService;
 import com.caffeine.gwanghwamun.domain.order.order_items.repository.OrderItemRepository;
+import com.caffeine.gwanghwamun.domain.order.order_status_log.entity.OrderStatusLog;
+import com.caffeine.gwanghwamun.domain.order.order_status_log.repository.OrderStatusLogRepository;
 import com.caffeine.gwanghwamun.domain.order.repository.OrderRepository;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
@@ -38,6 +40,7 @@ public class OrderService {
   private final CartRepository cartRepository;
   private final OrderItemRepository orderItemRepository;
   private final OrderItemService orderItemService;
+  private final OrderStatusLogRepository orderStatusLogRepository;
 
   public Page<OrderListResDTO> findOrderList(Long userId, Pageable pageable) {
 
@@ -104,6 +107,8 @@ public class OrderService {
 
     order.updateTotalPrice(totalPrice);
 
+    saveOrderStatusLog(order, user, null, "");
+
     return new SaveOrderResDTO(order);
   }
 
@@ -118,7 +123,11 @@ public class OrderService {
     validateOrderAccess(user, order);
     validateOrderTimeLimit(order);
 
+    OrderStatus existingState = order.getOrderStatus();
+
     order.cancel();
+
+    saveOrderStatusLog(order, user, existingState, req.reason());
 
     return new OrderStatusResDTO(order);
   }
@@ -132,7 +141,11 @@ public class OrderService {
 
     validateOrderAccess(user, order);
 
+    OrderStatus existingState = order.getOrderStatus();
+
     order.accept();
+
+    saveOrderStatusLog(order, user, existingState, "주문 수락");
 
     return new OrderStatusResDTO(order);
   }
@@ -146,7 +159,11 @@ public class OrderService {
 
     validateOrderAccess(user, order);
 
+    OrderStatus existingState = order.getOrderStatus();
+
     order.reject();
+
+    saveOrderStatusLog(order, user, existingState, "주문 거절");
 
     return new OrderStatusResDTO(order);
   }
@@ -160,7 +177,11 @@ public class OrderService {
 
     validateOrderAccess(user, order);
 
+    OrderStatus existingState = order.getOrderStatus();
+
     order.completeCooking();
+
+    saveOrderStatusLog(order, user, existingState, "조리완료");
 
     return new OrderStatusResDTO(order);
   }
@@ -174,7 +195,11 @@ public class OrderService {
 
     validateOrderAccess(user, order);
 
+    OrderStatus existingState = order.getOrderStatus();
+
     order.completeDelivery();
+
+    saveOrderStatusLog(order, user, existingState, "배달완료");
 
     return new OrderStatusResDTO(order);
   }
@@ -199,4 +224,18 @@ public class OrderService {
       }
     }
   }
+
+  private void saveOrderStatusLog(Order order, User user, OrderStatus existingState, String reason) {
+    OrderStatusLog log = OrderStatusLog.builder()
+        .order(order)
+        .user(user)
+        .existingState(existingState)
+        .store(order.getStore())
+        .currentState(order.getOrderStatus())
+        .reason(reason)
+        .build();
+
+    orderStatusLogRepository.save(log);
+  }
+
 }

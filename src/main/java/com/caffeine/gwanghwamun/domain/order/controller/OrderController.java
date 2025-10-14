@@ -9,9 +9,9 @@ import com.caffeine.gwanghwamun.domain.user.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -43,14 +43,7 @@ public class OrderController {
   @GetMapping
   public ResponseEntity<ApiResponse<Page<OrderListResDTO>>> findOrderList(
       @AuthenticationPrincipal UserDetailsImpl user,
-      @RequestParam(name = "page", defaultValue = "0") int page,
-      @RequestParam(name = "size", defaultValue = "10") int size) {
-
-    if (size != 10 && size != 30 && size != 50) {
-      size = 10;
-    }
-
-    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createAt"));
+      @PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
     Page<OrderListResDTO> orderPage = orderService.findOrderList(user.getUser().getUserId(), pageable);
     return ResponseUtil.successResponse(SuccessCode.ORDER_LIST_SUCCESS, orderPage);
