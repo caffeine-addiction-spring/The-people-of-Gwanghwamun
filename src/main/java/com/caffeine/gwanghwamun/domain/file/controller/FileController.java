@@ -66,4 +66,15 @@ public class FileController {
 
         return item;
     }
+
+    @Operation(summary = "파일 정보 그룹 삭제")
+    @DeleteMapping({"/deletes/{gid}", "/deletes/{gid}/{location}"})
+    public List<FileInfoResDTO> deleteFileList(
+            @PathVariable("gid") String gid,
+            @PathVariable(name="location", required = false)
+            String location) {
+        List<FileInfoResDTO> items = fileService.deleteFiles(gid, location);
+
+        return items;
+    }
 }
