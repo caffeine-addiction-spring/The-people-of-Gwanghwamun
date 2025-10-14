@@ -65,7 +65,11 @@ public enum SuccessCode {
 	ORDER_ACCEPT_SUCCESS(HttpStatus.OK, "주문 수락 성공"),
 	ORDER_REJECT_SUCCESS(HttpStatus.OK, "주문 거절 성공"),
 	ORDER_COOK_COMPLETE_SUCCESS(HttpStatus.OK, "조리 완료"),
-	ORDER_DELIVERY_COMPLETE_SUCCESS(HttpStatus.OK, "배달 완료");
+	ORDER_DELIVERY_COMPLETE_SUCCESS(HttpStatus.OK, "배달 완료"),
+
+	// 주문 상태 로그 (order_status_log)
+	ORDER_LOG_LIST_SUCCESS(HttpStatus.OK, "주문 상태 목록 조회 성공"),
+	ORDER_LOG_SUCCESS(HttpStatus.OK, "주문 상태 조회 성공");
 
 	private final HttpStatus httpStatus;
 	private final String message;

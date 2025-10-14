@@ -2,14 +2,10 @@ package com.caffeine.gwanghwamun.domain.order.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import com.caffeine.gwanghwamun.domain.cart.entity.Cart;
-import com.caffeine.gwanghwamun.domain.order_items.entity.OrderItem;
-import com.caffeine.gwanghwamun.domain.order_status_log.entity.OrderStatusLog;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,9 +25,9 @@ public class Order extends BaseEntity {
 	private UUID orderId;
 
 	@Column(name = "total_price", nullable = false)
-	private int totalPrice;
+	private Integer totalPrice;
 
-	@Column(name = "requests", nullable = false)
+	@Column(name = "requests", nullable = true)
 	private String requests;
 
 	@Column(name = "order_status", nullable = false)
@@ -41,7 +37,7 @@ public class Order extends BaseEntity {
 	@Column(name = "delivery_address", nullable = false)
 	private String deliveryAddress;
 
-	@Column(name = "delivery_content", nullable = false)
+	@Column(name = "delivery_content", nullable = true)
 	private String deliveryContent;
 
 	@Column(name = "deleted_date", nullable = true)
@@ -62,26 +58,22 @@ public class Order extends BaseEntity {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<OrderItem> orderItems;
-
-	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<OrderStatusLog> statusLogs;
-
 	@Builder
 	public Order(
 			Store store,
-			List<OrderItem> orderItems,
+			User user,
 			OrderStatus orderStatus,
 			int totalPrice,
 			String deliveryAddress,
+			String deliveryContent,
 			String requests) {
 		this.store = store;
-		this.orderItems = orderItems != null ? orderItems : new ArrayList<>();
+		this.user = user;
 		this.orderStatus = orderStatus;
 		this.totalPrice = totalPrice;
 		this.requests = requests;
 		this.deliveryAddress = deliveryAddress;
+		this.deliveryContent = deliveryContent;
 	}
 
 	public void cancel() {
@@ -102,5 +94,9 @@ public class Order extends BaseEntity {
 
 	public void completeDelivery() {
 		this.orderStatus = OrderStatus.DELIVERY_COMPLETED;
+	}
+
+	public void updateTotalPrice(Integer totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 }

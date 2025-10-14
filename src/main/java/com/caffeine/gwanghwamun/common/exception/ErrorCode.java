@@ -29,6 +29,8 @@ public enum ErrorCode {
 	// 메뉴 (menu)
 	MENU_NOT_FOUND(HttpStatus.NOT_FOUND, "메뉴를 찾을 수 없습니다."),
 	MENU_STORE_MISMATCH(HttpStatus.FORBIDDEN, "해당 가게의 메뉴가 아닙니다."),
+	ORDER_UNABLE_MENU(HttpStatus.FORBIDDEN, "주문 불가능한 메뉴입니다."),
+	ORDER_UNABLE_MENU_OPTION(HttpStatus.FORBIDDEN, "주문 불가능한 메뉴옵션입니다."),
 
 	// 가게 (store)
 	STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 가게를 찾을 수 없습니다."),
