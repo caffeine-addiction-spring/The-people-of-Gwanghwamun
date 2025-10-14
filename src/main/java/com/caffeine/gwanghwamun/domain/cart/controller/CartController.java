@@ -27,7 +27,7 @@ public class CartController {
 	@PreAuthorize("hasRole('CUSTOMER')")
 	@Operation(summary = "장바구니 담기", description = "메뉴를 장바구니에 담는다.")
 	@PostMapping
-	public ResponseEntity<ApiResponse<SaveCartResDTO>> addCartItem(
+	public ResponseEntity<ApiResponse<SaveCartResDTO>> saveCartItem(
 			@RequestBody SaveCartReqDTO req, @AuthenticationPrincipal User user) {
 
 		SaveCartResDTO cart = cartService.saveCart(user.getUserId(), req);

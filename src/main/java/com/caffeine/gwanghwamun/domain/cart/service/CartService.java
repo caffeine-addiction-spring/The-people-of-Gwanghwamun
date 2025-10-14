@@ -1,5 +1,7 @@
 package com.caffeine.gwanghwamun.domain.cart.service;
 
+import com.caffeine.gwanghwamun.common.exception.CustomException;
+import com.caffeine.gwanghwamun.common.exception.ErrorCode;
 import com.caffeine.gwanghwamun.domain.cart.dto.SaveCartReqDTO;
 import com.caffeine.gwanghwamun.domain.cart.dto.SaveCartResDTO;
 import com.caffeine.gwanghwamun.domain.cart.repository.CartRepository;
@@ -26,11 +28,11 @@ public class CartService {
 		Store store =
 				storeRepository
 						.findById(req.storeId())
-						.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
+						.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 		Menu menu =
 				menuRepository
 						.findById(req.menuId())
-						.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메뉴입니다."));
+						.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
 		//        MenuOption option = null;
 		//        if (menuOptionId != null) {

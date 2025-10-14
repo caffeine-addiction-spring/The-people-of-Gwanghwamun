@@ -18,154 +18,159 @@ import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
 import com.caffeine.gwanghwamun.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class OrderService {
 
-    private final OrderRepository orderRepository;
-    private final StoreRepository storeRepository;
-    private final MenuRepository menuRepository;
-    private final UserRepository userRepository;
-    private final CartRepository cartRepository;
-    private final OrderStatusLogRepository orderStatusLogRepository;
-    private final OrderItemRepository orderItemRepository;
+	private final OrderRepository orderRepository;
+	private final StoreRepository storeRepository;
+	private final MenuRepository menuRepository;
+	private final UserRepository userRepository;
+	private final CartRepository cartRepository;
+	private final OrderStatusLogRepository orderStatusLogRepository;
+	private final OrderItemRepository orderItemRepository;
 
+	public Page<OrderListResDTO> findOrderList(Long userId, Pageable pageable) {
 
-    public Page<OrderListResDTO> findOrderList(Long userId, Pageable pageable) {
+		Page<Order> orderPage = orderRepository.findByUser_UserIdAndDeletedDateIsNull(userId, pageable);
 
-        Page<Order> orderPage = orderRepository
-                .findByUser_UserIdAndDeletedDateIsNull(userId, pageable);
+		return orderPage.map(OrderListResDTO::new);
+	}
 
-        return orderPage.map(OrderListResDTO::new);
-    }
+	public OrderResDTO findOrder(Long userId, UUID orderId) {
 
-    public OrderResDTO findOrder(Long userId, UUID orderId) {
+		userRepository
+				.findById(userId)
+				.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        userRepository
-                .findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+		Order order =
+				orderRepository
+						.findById(orderId)
+						.orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
 
-        Order order = orderRepository
-                .findById(orderId)
-                .orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
+		List<OrderItem> orderItemList =
+				orderItemRepository.findByOrder_OrderIdAndDeletedDateIsNull(orderId);
 
-        List<OrderItem> orderItemList = orderItemRepository
-                .findByOrder_OrderIdAndDeletedDateIsNull(orderId);
+		List<OrderItemResDTO> orderItemResDTOList =
+				orderItemList.stream().map(OrderItemResDTO::new).toList();
 
-        List<OrderItemResDTO> orderItemResDTOList = orderItemList.stream()
-                .map(OrderItemResDTO::new)
-                .toList();
+		return new OrderResDTO(order, orderItemResDTOList);
+	}
 
-        return new OrderResDTO(order, orderItemResDTOList);
-    }
+	@Transactional
+	public SaveOrderResDTO saveOrder(SaveOrderReqDTO req, Long userId) {
 
-    @Transactional
-    public SaveOrderResDTO saveOrder(SaveOrderReqDTO req, Long userId) {
+		Store store =
+				storeRepository
+						.findActiveById(req.storeId())
+						.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
-        Store store =
-                storeRepository
-                        .findActiveById(req.storeId())
-                        .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+		Order order =
+				Order.builder()
+						.store(store)
+						.deliveryAddress(req.address())
+						.orderStatus(OrderStatus.DELIVERING)
+						.build();
 
-        Order order =
-                Order.builder()
-                        .store(store)
-                        .deliveryAddress(req.address())
-                        .orderStatus(OrderStatus.DELIVERING)
-                        .build();
+		int totalPrice = 0;
 
-        int totalPrice = 0;
+		return null;
+	}
 
-        return null;
-    }
+	public OrderStatusResDTO cancelOrder(User user, UUID orderId, OrderCancelReqDTO req) {
 
-    public OrderStatusResDTO cancelOrder(User user, UUID orderId, OrderCancelReqDTO req) {
+		Order order =
+				orderRepository
+						.findById(orderId)
+						.orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
 
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
+		validateOrderAccess(user, order);
+		validateOrderTimeLimit(order);
 
-        validateOrderAccess(user, order);
-        validateOrderTimeLimit(order);
+		order.cancel();
 
-        order.cancel();
+		return new OrderStatusResDTO(order);
+	}
 
-        return new OrderStatusResDTO(order);
+	public OrderStatusResDTO acceptOrder(User user, UUID orderId) {
+		Order order =
+				orderRepository
+						.findById(orderId)
+						.orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
 
-    }
+		validateOrderAccess(user, order);
 
-    public OrderStatusResDTO acceptOrder(User user, UUID orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
+		order.accept();
 
-        validateOrderAccess(user, order);
+		return new OrderStatusResDTO(order);
+	}
 
-        order.accept();
+	public OrderStatusResDTO rejectOrder(User user, UUID orderId) {
+		Order order =
+				orderRepository
+						.findById(orderId)
+						.orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
 
-        return new OrderStatusResDTO(order);
-    }
+		validateOrderAccess(user, order);
 
-    public OrderStatusResDTO rejectOrder(User user, UUID orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
+		order.reject();
 
-        validateOrderAccess(user, order);
+		return new OrderStatusResDTO(order);
+	}
 
-        order.reject();
+	public OrderStatusResDTO completeCooking(User user, UUID orderId) {
+		Order order =
+				orderRepository
+						.findById(orderId)
+						.orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
 
-        return new OrderStatusResDTO(order);
-    }
+		validateOrderAccess(user, order);
 
-    public OrderStatusResDTO completeCooking(User user, UUID orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
+		order.completeCooking();
 
-        validateOrderAccess(user, order);
+		return new OrderStatusResDTO(order);
+	}
 
-        order.completeCooking();
+	public OrderStatusResDTO completeDelivery(User user, UUID orderId) {
+		Order order =
+				orderRepository
+						.findById(orderId)
+						.orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
 
-        return new OrderStatusResDTO(order);
-    }
+		validateOrderAccess(user, order);
 
-    public OrderStatusResDTO completeDelivery(User user, UUID orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
+		order.completeDelivery();
 
-        validateOrderAccess(user, order);
+		return new OrderStatusResDTO(order);
+	}
 
-        order.completeDelivery();
+	private void validateOrderTimeLimit(Order order) {
+		LocalDateTime limitTime = order.getCreateAt().plusMinutes(5);
+		if (LocalDateTime.now().isAfter(limitTime)) {
+			throw new CustomException(ErrorCode.ORDER_TIME_EXPIRED);
+		}
+	}
 
-        return new OrderStatusResDTO(order);
-    }
+	private void validateOrderAccess(User user, Order order) {
+		if (user.getRole() == UserRoleEnum.CUSTOMER) {
+			if (!Objects.equals(order.getUser().getUserId(), user.getUserId())) {
+				throw new CustomException(ErrorCode.UNAUTHORIZED_ORDER_ACCESS);
+			}
+		}
 
-
-    private void validateOrderTimeLimit(Order order) {
-        LocalDateTime limitTime = order.getCreateAt().plusMinutes(5);
-        if (LocalDateTime.now().isAfter(limitTime)) {
-            throw new CustomException(ErrorCode.ORDER_TIME_EXPIRED);
-        }
-    }
-
-    private void validateOrderAccess(User user, Order order) {
-        if (user.getRole() == UserRoleEnum.CUSTOMER) {
-            if (!Objects.equals(order.getUser().getUserId(), user.getUserId())) {
-                throw new CustomException(ErrorCode.UNAUTHORIZED_ORDER_ACCESS);
-            }
-        }
-
-        if (user.getRole() == UserRoleEnum.OWNER) {
-            if (!Objects.equals(order.getStore().getUser().getUserId(), user.getUserId())) {
-                throw new CustomException(ErrorCode.UNAUTHORIZED_STORE_ACCESS);
-            }
-        }
-    }
+		if (user.getRole() == UserRoleEnum.OWNER) {
+			if (!Objects.equals(order.getStore().getUser().getUserId(), user.getUserId())) {
+				throw new CustomException(ErrorCode.UNAUTHORIZED_STORE_ACCESS);
+			}
+		}
+	}
 }
