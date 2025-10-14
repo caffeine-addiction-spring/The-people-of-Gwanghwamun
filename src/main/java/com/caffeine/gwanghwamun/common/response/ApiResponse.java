@@ -27,4 +27,9 @@ public class ApiResponse<T> {
 	public static <T> ApiResponse<T> ofFailure(String message, String errorCode) {
 		return new ApiResponse<>(false, message, null, errorCode);
 	}
+
+	// 실패 응답 생성 (메시지만 있는 경우)
+	public static <T> ApiResponse<T> ofFailure(String message) {
+		return new ApiResponse<>(false, message, null, null);
+	}
 }

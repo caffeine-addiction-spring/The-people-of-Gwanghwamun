@@ -44,7 +44,12 @@ public enum SuccessCode {
 	MENU_OPTION_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 옵션 수정 성공"),
 	MENU_OPTION_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "메뉴 옵션 삭제 성공"),
 	MENU_OPTION_VISIBILITY_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 숨김 상태 변경 성공"),
-	MENU_OPTION_SOLDOUT_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 옵션 품절 상태 변경 성공");
+	MENU_OPTION_SOLDOUT_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 옵션 품절 상태 변경 성공"),
+
+	// 파일 (file)
+	FILE_UPLOAD_SUCCESS(HttpStatus.CREATED, "파일 업로드 성공"),
+	FILE_READ_SUCCESS(HttpStatus.OK, "파일 조회 성공"),
+	FILE_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "파일 삭제 성공");
 
 	private final HttpStatus httpStatus;
 	private final String message;

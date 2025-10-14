@@ -41,7 +41,11 @@ public enum ErrorCode {
 	// 메뉴 옵션 (menuOption)
 	MENU_OPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "메뉴 옵션을 찾을 수 없습니다."),
 	MENU_OPTION_MENU_MISMATCH(HttpStatus.BAD_REQUEST, "옵션이 해당 메뉴에 속하지 않습니다."),
-	MENU_OPTION_VISIBILITY_UPDATE_SUCCESS(HttpStatus.OK, "옵션 숨김 상태가 변경되었습니다.");
+	MENU_OPTION_VISIBILITY_UPDATE_SUCCESS(HttpStatus.OK, "옵션 숨김 상태가 변경되었습니다."),
+
+	// 파일 (file)
+	FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 파일을 찾을 수 없습니다."),
+	FILE_NOT_UPLOAD(HttpStatus.BAD_REQUEST, "파일을 업로드할 수 없습니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;
