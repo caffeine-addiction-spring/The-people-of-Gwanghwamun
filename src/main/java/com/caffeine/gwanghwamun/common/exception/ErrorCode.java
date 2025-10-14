@@ -22,6 +22,10 @@ public enum ErrorCode {
 	INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호 변경 실패"),
 	ALREADY_DELETED_USER(HttpStatus.CONFLICT, "회원 삭제 실패"),
 
+	// 주소 (address)
+	ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "회원 주소 조회 실패"),
+	ALREADY_DELETED_ADDRESS(HttpStatus.CONFLICT, "회원 주소 삭제 실패"),
+
 	// 메뉴 (menu)
 	MENU_NOT_FOUND(HttpStatus.NOT_FOUND, "메뉴를 찾을 수 없습니다."),
 	MENU_STORE_MISMATCH(HttpStatus.FORBIDDEN, "해당 가게의 메뉴가 아닙니다."),
@@ -33,6 +37,11 @@ public enum ErrorCode {
 	// 지역 (region)
 	REGION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 지역을 찾을 수 없습니다."),
 	REGION_DUPLICATED(HttpStatus.CONFLICT, "이미 존재하는 지역명입니다."),
+
+	// 메뉴 옵션 (menuOption)
+	MENU_OPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "메뉴 옵션을 찾을 수 없습니다."),
+	MENU_OPTION_MENU_MISMATCH(HttpStatus.BAD_REQUEST, "옵션이 해당 메뉴에 속하지 않습니다."),
+	MENU_OPTION_VISIBILITY_UPDATE_SUCCESS(HttpStatus.OK, "옵션 숨김 상태가 변경되었습니다."),
 
 	// 파일 (file)
 	FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 파일을 찾을 수 없습니다."),

@@ -3,10 +3,10 @@ package com.caffeine.gwanghwamun.domain.user.service;
 import static com.caffeine.gwanghwamun.common.exception.ErrorCode.*;
 
 import com.caffeine.gwanghwamun.common.exception.CustomException;
-import com.caffeine.gwanghwamun.domain.user.dto.PasswordChangeReqDTO;
-import com.caffeine.gwanghwamun.domain.user.dto.SignupReqDTO;
-import com.caffeine.gwanghwamun.domain.user.dto.UserInfoResDTO;
-import com.caffeine.gwanghwamun.domain.user.dto.UserInfoUpdateReqDTO;
+import com.caffeine.gwanghwamun.domain.user.dto.request.PasswordChangeReqDTO;
+import com.caffeine.gwanghwamun.domain.user.dto.request.SignupReqDTO;
+import com.caffeine.gwanghwamun.domain.user.dto.request.UserInfoUpdateReqDTO;
+import com.caffeine.gwanghwamun.domain.user.dto.response.UserInfoResDTO;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
