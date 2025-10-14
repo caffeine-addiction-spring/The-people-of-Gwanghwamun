@@ -49,7 +49,7 @@ public class FileController {
 
     @Operation(summary = "파일 정보 그룹 조회")
     @GetMapping({"/list/{gid}", "/list/{gid}/{location}"})
-    public List<FileInfoResDTO> list(
+    public List<FileInfoResDTO> getFileList(
             @PathVariable("gid") String gid,
             @PathVariable(name="location", required = false)
             String location) {
@@ -57,5 +57,13 @@ public class FileController {
         List<FileInfoResDTO> items = fileService.getList(gid, location);
 
         return items;
+    }
+
+    @Operation(summary = "파일 정보 삭제")
+    @DeleteMapping("/{uuid}")
+    public FileInfoResDTO deleteFile(@PathVariable String uuid) {
+        FileInfoResDTO item = fileService.deleteFile(UUID.fromString(uuid));
+
+        return item;
     }
 }

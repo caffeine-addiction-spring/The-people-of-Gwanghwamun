@@ -129,7 +129,7 @@ public class FileService {
     }
 
 	// 파일 등록번호로 삭제
-	FileInfoResDTO deleteFile(UUID fileuuid) {
+	public FileInfoResDTO deleteFile(UUID fileuuid) {
 		FileInfoResDTO item = get(fileuuid);
 		fileInfoRepository.deleteById(fileuuid);
 		return item;
@@ -137,7 +137,7 @@ public class FileService {
 
 	// 파일 목록 삭제, gid, location
 	@Transactional
-	List<FileInfoResDTO> deleteFiles(String gid, String location) {
+	public List<FileInfoResDTO> deleteFiles(String gid, String location) {
 		List<FileInfoResDTO> files = getList(gid, location, FileStatus.ALL);
 		List<FileInfoResDTO> deletedItems = new ArrayList<>();
 		for (FileInfoResDTO file : files) {
