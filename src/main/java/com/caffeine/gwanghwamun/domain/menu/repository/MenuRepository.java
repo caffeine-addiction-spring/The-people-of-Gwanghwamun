@@ -1,23 +1,38 @@
 package com.caffeine.gwanghwamun.domain.menu.repository;
 
 import com.caffeine.gwanghwamun.domain.menu.entity.Menu;
+import com.caffeine.gwanghwamun.domain.menu.entity.QMenu;
+import com.querydsl.core.BooleanBuilder;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 
-public interface MenuRepository extends JpaRepository<Menu, UUID> {
-	@Query("SELECT m FROM Menu m WHERE m.menuId = :menuId AND m.deletedAt IS NULL")
-	Optional<Menu> findByIdAndNotDeleted(@Param("menuId") UUID menuId);
+public interface MenuRepository extends JpaRepository<Menu, UUID>, QuerydslPredicateExecutor<Menu> {
 
-	@Query("SELECT m FROM Menu m WHERE m.storeId = :storeId AND m.deletedAt IS NULL")
-	Page<Menu> findByStoreIdAndNotDeleted(@Param("storeId") UUID storeId, Pageable pageable);
+	default Optional<Menu> findByIdAndNotDeleted(UUID menuId) {
+		BooleanBuilder builder = new BooleanBuilder();
+		QMenu menu = QMenu.menu;
+		return findOne(builder.and(menu.menuId.eq(menuId)).and(menu.deletedAt.isNull()));
+	}
 
 	@Query(
-			"SELECT m FROM Menu m WHERE m.storeId = :storeId AND m.deletedAt IS NULL AND m.isHidden = false")
-	Page<Menu> findByStoreIdAndNotDeletedAndNotHidden(
-			@Param("storeId") UUID storeId, Pageable pageable);
+			"""
+	SELECT m FROM Menu m
+	WHERE m.storeId = :storeId
+		AND m.deletedAt IS NULL
+	ORDER BY m.createAt DESC
+""")
+	Page<Menu> findByStoreIdAndNotDeleted(@Param("storeId") UUID storeId, Pageable pageable);
+
+	default Page<Menu> findByStoreIdAndNotDeletedAndNotHidden(UUID storeId, Pageable pageable) {
+		BooleanBuilder builder = new BooleanBuilder();
+		QMenu menu = QMenu.menu;
+		builder.and(menu.storeId.eq(storeId)).and(menu.deletedAt.isNull()).and(menu.isHidden.eq(false));
+		return findAll(builder, pageable);
+	}
 }

@@ -23,8 +23,8 @@ public record MenuResDTO(
 				menu.getName(),
 				menu.getPrice(),
 				menu.getMenuContent(),
-				menu.getIsHidden(),
-				menu.getIsSoldOut(),
+				menu.isHidden(),
+				menu.isSoldOut(),
 				menu.getMenuCategory(),
 				menu.getCreateAt(),
 				menu.getLastUpdatedAt());

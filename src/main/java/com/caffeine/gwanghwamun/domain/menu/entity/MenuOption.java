@@ -17,31 +17,29 @@ public class MenuOption extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "menu_option_id")
 	private UUID menuOptionId;
 
 	@Column(name = "menu_id", nullable = false)
 	private UUID menuId;
 
-	@Column(name = "option_name", nullable = false, length = 100)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "menu_id", insertable = false, updatable = false)
+	private Menu menu;
+
+	@Column(nullable = false, length = 100)
 	private String optionName;
 
-	@Column(name = "price", nullable = false)
-	private Integer price;
+	private int price;
 
-	@Column(name = "content", length = 2000)
-	private String content;
+	@Lob private String content;
 
-	@Column(name = "is_hidden", nullable = false)
-	private Boolean isHidden = false;
+	private boolean isHidden;
 
-	@Column(name = "is_sold_out", nullable = false)
-	private Boolean isSoldOut = false;
+	private boolean isSoldOut;
 
-	@Column(name = "deleted_at")
 	private LocalDateTime deletedAt;
 
-	@Column(name = "deleted_by", length = 100)
+	@Column(length = 100)
 	private String deletedBy;
 
 	@Builder

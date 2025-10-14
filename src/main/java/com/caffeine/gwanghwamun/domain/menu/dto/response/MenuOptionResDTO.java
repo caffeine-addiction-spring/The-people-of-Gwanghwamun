@@ -21,8 +21,8 @@ public record MenuOptionResDTO(
 				option.getOptionName(),
 				option.getPrice(),
 				option.getContent(),
-				option.getIsHidden(),
-				option.getIsSoldOut(),
+				option.isHidden(),
+				option.isSoldOut(),
 				option.getCreateAt(),
 				option.getLastUpdatedAt());
 	}

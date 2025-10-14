@@ -70,4 +70,9 @@ jobs:
             -e DB_NAME=${{ secrets.DB_NAME }} \
             -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
             -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            -e AWS_S3_ENABLED=${{ secrets.AWS_S3_ENABLED }} \
+            -e AWS_S3_ACCESS_KEY=${{ secrets.AWS_S3_ACCESS_KEY }} \
+            -e AWS_S3_SECRET_KEY=${{ secrets.AWS_S3_SECRET_KEY }} \
+            -e AWS_S3_BUCKET=${{ secrets.AWS_S3_BUCKET }} \
             ${{ env.IMAGE_URI }}
