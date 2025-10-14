@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.user.dto;
+package com.caffeine.gwanghwamun.domain.user.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 

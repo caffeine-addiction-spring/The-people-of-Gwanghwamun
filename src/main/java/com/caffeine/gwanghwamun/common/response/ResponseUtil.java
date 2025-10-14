@@ -1,5 +1,6 @@
 package com.caffeine.gwanghwamun.common.response;
 
+import com.caffeine.gwanghwamun.common.exception.ErrorCode;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,5 +25,11 @@ public class ResponseUtil {
 			String message, String errorCode, HttpStatus status) {
 		ApiResponse<T> response = ApiResponse.ofFailure(message, errorCode);
 		return new ResponseEntity<>(response, status);
+	}
+
+	// 실패 응답 생성 (메시지와 상태코드만 있는 경우)
+	public static <T> ResponseEntity<ApiResponse<T>> failureResponse(ErrorCode errorCode) {
+		ApiResponse<T> response = ApiResponse.ofFailure(errorCode.getMessage());
+		return new ResponseEntity<>(response, errorCode.getHttpStatus());
 	}
 }
