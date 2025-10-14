@@ -9,7 +9,7 @@ import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuOptionUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuOptionVisibilityReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuOptionResDTO;
 import com.caffeine.gwanghwamun.domain.menu.service.MenuOptionService;
-import com.caffeine.gwanghwamun.domain.user.entity.User;
+import com.caffeine.gwanghwamun.domain.user.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -36,41 +36,38 @@ public class MenuOptionController {
 			@PathVariable("storeId") UUID storeId,
 			@PathVariable("menuId") UUID menuId,
 			@RequestBody MenuOptionCreateReqDTO req,
-			@AuthenticationPrincipal User user) {
+			@AuthenticationPrincipal UserDetailsImpl user) {
 		MenuOptionResDTO res = menuOptionService.saveOption(storeId, menuId, req, user);
 		return ResponseUtil.successResponse(SuccessCode.MENU_OPTION_SAVE_SUCCESS, res);
 	}
 
-	@Operation(summary = "옵션 목록 조회", description = "메뉴 옵션 목록을 조회한다.")
 	@GetMapping
 	public ResponseEntity<ApiResponse<Page<MenuOptionResDTO>>> getOptionList(
 			@PathVariable("storeId") UUID storeId,
 			@PathVariable("menuId") UUID menuId,
-			@RequestParam(required = false) Boolean includeHidden,
-			@RequestParam(required = false) Boolean soldOut,
-			@RequestParam(required = false) String optionName,
-			@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size,
-			@AuthenticationPrincipal User user) {
+			@RequestParam(name = "includeHidden", required = false) Boolean includeHidden,
+			@RequestParam(name = "soldOut", required = false) Boolean soldOut,
+			@RequestParam(name = "optionName", required = false) String optionName,
+			@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "10") int size,
+			@AuthenticationPrincipal UserDetailsImpl principal) {
 
-		if (size != 10 && size != 30 && size != 50) {
-			size = 10;
-		}
-		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+		if (size != 10 && size != 30 && size != 50) size = 10;
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createAt"));
 		Page<MenuOptionResDTO> res =
 				menuOptionService.findOptionList(
-						storeId, menuId, includeHidden, soldOut, optionName, pageable);
+						storeId, menuId, includeHidden, soldOut, optionName, pageable, principal);
 		return ResponseUtil.successResponse(SuccessCode.MENU_OPTION_LIST_SUCCESS, res);
 	}
 
-	@Operation(summary = "옵션 상세 조회", description = "메뉴 옵션을 상세 조회한다.")
+	@Operation(summary = "옵션 상세 조회")
 	@GetMapping("/{optionId}")
 	public ResponseEntity<ApiResponse<MenuOptionResDTO>> getOption(
 			@PathVariable("storeId") UUID storeId,
 			@PathVariable("menuId") UUID menuId,
 			@PathVariable("optionId") UUID optionId,
-			@AuthenticationPrincipal User user) {
-		MenuOptionResDTO res = menuOptionService.findOption(storeId, menuId, optionId);
+			@AuthenticationPrincipal UserDetailsImpl user) {
+		MenuOptionResDTO res = menuOptionService.findOption(storeId, menuId, optionId, user);
 		return ResponseUtil.successResponse(SuccessCode.MENU_OPTION_FIND_SUCCESS, res);
 	}
 
@@ -82,8 +79,8 @@ public class MenuOptionController {
 			@PathVariable("menuId") UUID menuId,
 			@PathVariable("optionId") UUID optionId,
 			@RequestBody MenuOptionUpdateReqDTO req,
-			@AuthenticationPrincipal User user) {
-		MenuOptionResDTO res = menuOptionService.updateOption(storeId, menuId, optionId, req);
+			@AuthenticationPrincipal UserDetailsImpl user) {
+		MenuOptionResDTO res = menuOptionService.updateOption(storeId, menuId, optionId, req, user);
 		return ResponseUtil.successResponse(SuccessCode.MENU_OPTION_UPDATE_SUCCESS, res);
 	}
 
@@ -94,8 +91,8 @@ public class MenuOptionController {
 			@PathVariable("storeId") UUID storeId,
 			@PathVariable("menuId") UUID menuId,
 			@PathVariable("optionId") UUID optionId,
-			@AuthenticationPrincipal User user) {
-		menuOptionService.deleteOption(storeId, menuId, optionId, null);
+			@AuthenticationPrincipal UserDetailsImpl user) {
+		menuOptionService.deleteOption(storeId, menuId, optionId, null, user);
 		return ResponseUtil.successResponse(SuccessCode.MENU_OPTION_DELETE_SUCCESS);
 	}
 
@@ -107,9 +104,9 @@ public class MenuOptionController {
 			@PathVariable("menuId") UUID menuId,
 			@PathVariable("optionId") UUID optionId,
 			@RequestBody MenuOptionVisibilityReqDTO req,
-			@AuthenticationPrincipal User user) {
+			@AuthenticationPrincipal UserDetailsImpl user) {
 		MenuOptionResDTO res =
-				menuOptionService.updateOptionVisibility(storeId, menuId, optionId, req.hidden());
+				menuOptionService.updateOptionVisibility(storeId, menuId, optionId, req.hidden(), user);
 		return ResponseUtil.successResponse(SuccessCode.MENU_OPTION_VISIBILITY_UPDATE_SUCCESS, res);
 	}
 
@@ -121,8 +118,8 @@ public class MenuOptionController {
 			@PathVariable("menuId") UUID menuId,
 			@PathVariable("optionId") UUID optionId,
 			@RequestBody MenuOptionSoldOutReqDTO req,
-			@AuthenticationPrincipal User user) {
-		MenuOptionResDTO res = menuOptionService.updateSoldOut(storeId, menuId, optionId, req);
+			@AuthenticationPrincipal UserDetailsImpl user) {
+		MenuOptionResDTO res = menuOptionService.updateSoldOut(storeId, menuId, optionId, req, user);
 		return ResponseUtil.successResponse(SuccessCode.MENU_OPTION_SOLDOUT_UPDATE_SUCCESS, res);
 	}
 }

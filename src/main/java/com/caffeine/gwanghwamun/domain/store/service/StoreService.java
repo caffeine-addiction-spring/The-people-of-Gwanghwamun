@@ -83,7 +83,7 @@ public class StoreService {
 						.findByStoreIdAndNotDeletedAndNotHidden(storeId, pageable)
 						.getContent()
 						.stream()
-						.filter(menu -> !menu.getIsSoldOut())
+						.filter(menu -> !menu.isSoldOut())
 						.map(MenuResDTO::new)
 						.toList();
 

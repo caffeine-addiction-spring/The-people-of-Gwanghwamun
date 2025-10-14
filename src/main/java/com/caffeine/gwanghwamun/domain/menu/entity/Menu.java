@@ -1,6 +1,7 @@
 package com.caffeine.gwanghwamun.domain.menu.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
+import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -36,21 +37,18 @@ public class Menu extends BaseEntity {
 	@Column(name = "menu_content", columnDefinition = "TEXT")
 	private String menuContent;
 
-	@Column(name = "price", nullable = false)
-	private Integer price;
+	private int price;
 
-	@Column(name = "is_sold_out", nullable = false)
-	private Boolean isSoldOut = false;
+	private boolean isSoldOut;
+	;
 
-	@Column(name = "is_hidden", nullable = false)
-	private Boolean isHidden = false;
+	private boolean isHidden;
 
-	@Column(name = "deleted_at")
 	private LocalDateTime deletedAt;
 
-	// @ManyToOne(fetch = FetchType.LAZY)
-	// @JoinColumn(name = "store_id", nullable = false)
-	// private Store store;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "store_id", nullable = false, insertable = false, updatable = false)
+	private Store store;
 
 	@Builder
 	public Menu(
@@ -68,8 +66,8 @@ public class Menu extends BaseEntity {
 		this.name = name;
 		this.menuContent = menuContent;
 		this.price = price;
-		this.isSoldOut = isSoldOut;
-		this.isHidden = isHidden;
+		this.isSoldOut = isSoldOut != null ? isSoldOut : false;
+		this.isHidden = isHidden != null ? isHidden : false;
 	}
 
 	public void updateMenu(
