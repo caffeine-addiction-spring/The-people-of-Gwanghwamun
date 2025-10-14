@@ -1,6 +1,6 @@
 package com.caffeine.gwanghwamun.domain.user.security;
 
-import com.caffeine.gwanghwamun.domain.user.dto.LoginReqDTO;
+import com.caffeine.gwanghwamun.domain.user.dto.request.LoginReqDTO;
 import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
 import com.caffeine.gwanghwamun.domain.user.jwt.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;

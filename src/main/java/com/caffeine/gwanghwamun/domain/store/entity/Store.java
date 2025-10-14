@@ -1,5 +1,6 @@
 package com.caffeine.gwanghwamun.domain.store.entity;
 
+import com.caffeine.gwanghwamun.domain.store.dto.request.StoreCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -14,7 +15,7 @@ import lombok.Setter;
 @Table(name = "p_Stores")
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Store {
 
 	@Id
@@ -76,5 +77,22 @@ public class Store {
 	@PreUpdate
 	public void onUpdate() {
 		this.updatedAt = LocalDateTime.now();
+	}
+
+	public static Store create(StoreCreateReqDTO req, User user) {
+		Store store = new Store();
+		store.name = req.getName();
+		store.address = req.getAddress();
+		store.phone = req.getPhone();
+		store.storeCategory = req.getStoreCategory();
+		store.content = req.getContent();
+		store.minDeliveryPrice = req.getMinDeliveryPrice() != null ? req.getMinDeliveryPrice() : 0;
+		store.deliveryTip = req.getDeliveryTip() != null ? req.getDeliveryTip() : 0;
+		store.operationHours = req.getOperationHours();
+		store.closedDays = req.getClosedDays();
+		store.user = user;
+		store.rating = BigDecimal.ZERO;
+		store.reviewCount = 0;
+		return store;
 	}
 }
