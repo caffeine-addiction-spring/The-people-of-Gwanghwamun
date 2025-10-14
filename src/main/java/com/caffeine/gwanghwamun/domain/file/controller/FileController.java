@@ -47,4 +47,15 @@ public class FileController {
         return item;
     }
 
+    @Operation(summary = "파일 정보 그룹 조회")
+    @GetMapping({"/list/{gid}", "/list/{gid}/{location}"})
+    public List<FileInfoResDTO> list(
+            @PathVariable("gid") String gid,
+            @PathVariable(name="location", required = false)
+            String location) {
+
+        List<FileInfoResDTO> items = fileService.getList(gid, location);
+
+        return items;
+    }
 }
