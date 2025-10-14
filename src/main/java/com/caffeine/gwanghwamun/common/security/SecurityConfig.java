@@ -1,5 +1,6 @@
 package com.caffeine.gwanghwamun.common.security;
 
+import com.caffeine.gwanghwamun.common.jwt.JwtProvider;
 import com.caffeine.gwanghwamun.common.jwt.JwtUtil;
 import com.caffeine.gwanghwamun.common.security.filter.JwtAuthenticationFilter;
 import com.caffeine.gwanghwamun.common.security.filter.JwtAuthorizationFilter;
@@ -26,6 +27,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
 	private final JwtUtil jwtUtil;
+	private final JwtProvider jwtProvider;
 	private final UserDetailsServiceImpl userDetailsService;
 	private final AuthenticationConfiguration authenticationConfiguration;
 
@@ -72,13 +74,13 @@ public class SecurityConfig {
 
 	@Bean
 	public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-		JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
+		JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtProvider);
 		filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
 		return filter;
 	}
 
 	@Bean
 	public JwtAuthorizationFilter jwtAuthorizationFilter() {
-		return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
+		return new JwtAuthorizationFilter(jwtUtil, jwtProvider, userDetailsService);
 	}
 }

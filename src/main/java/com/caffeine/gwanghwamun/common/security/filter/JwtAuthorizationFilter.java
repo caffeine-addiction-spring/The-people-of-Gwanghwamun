@@ -1,5 +1,6 @@
 package com.caffeine.gwanghwamun.common.security.filter;
 
+import com.caffeine.gwanghwamun.common.jwt.JwtProvider;
 import com.caffeine.gwanghwamun.common.jwt.JwtUtil;
 import com.caffeine.gwanghwamun.common.security.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
@@ -21,6 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
 	private final JwtUtil jwtUtil;
+	private final JwtProvider jwtProvider;
 	private final UserDetailsServiceImpl userDetailsService;
 
 	@Override
@@ -34,8 +36,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
 		if (StringUtils.hasText(tokenValue)) {
 			try {
-				if (jwtUtil.validateToken(tokenValue)) {
-					Claims claims = jwtUtil.getUserInfoFromToken(tokenValue);
+				if (jwtProvider.validateToken(tokenValue)) {
+					Claims claims = jwtProvider.getUserInfoFromToken(tokenValue);
 					String email = claims.getSubject();
 
 					UserDetails userDetails = userDetailsService.loadUserByUsername(email);
