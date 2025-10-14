@@ -4,12 +4,9 @@ import com.caffeine.gwanghwamun.domain.file.dto.FileInfoResDTO;
 import com.caffeine.gwanghwamun.domain.file.dto.FileUploadReqDTO;
 import com.caffeine.gwanghwamun.domain.file.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -25,7 +22,7 @@ public class FileController {
 
 	private final FileService fileService;
 
-    @Operation(summary = "파일 업로드")
+	@Operation(summary = "파일 업로드")
 	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public List<FileInfoResDTO> upload(
 			@RequestPart(name = "file", required = false) MultipartFile[] files,
@@ -40,41 +37,39 @@ public class FileController {
 		return null;
 	}
 
-    @Operation(summary = "파일 정보 조회")
-    @GetMapping("/{uuid}")
-    public FileInfoResDTO getFile(@PathVariable String uuid) {
-        FileInfoResDTO item = fileService.get(UUID.fromString(uuid));
-        return item;
-    }
+	@Operation(summary = "파일 정보 조회")
+	@GetMapping("/{uuid}")
+	public FileInfoResDTO getFile(@PathVariable String uuid) {
+		FileInfoResDTO item = fileService.get(UUID.fromString(uuid));
+		return item;
+	}
 
-    @Operation(summary = "파일 정보 그룹 조회")
-    @GetMapping({"/list/{gid}", "/list/{gid}/{location}"})
-    public List<FileInfoResDTO> getFileList(
-            @PathVariable("gid") String gid,
-            @PathVariable(name="location", required = false)
-            String location) {
+	@Operation(summary = "파일 정보 그룹 조회")
+	@GetMapping({"/list/{gid}", "/list/{gid}/{location}"})
+	public List<FileInfoResDTO> getFileList(
+			@PathVariable("gid") String gid,
+			@PathVariable(name = "location", required = false) String location) {
 
-        List<FileInfoResDTO> items = fileService.getList(gid, location);
+		List<FileInfoResDTO> items = fileService.getList(gid, location);
 
-        return items;
-    }
+		return items;
+	}
 
-    @Operation(summary = "파일 정보 삭제")
-    @DeleteMapping("/{uuid}")
-    public FileInfoResDTO deleteFile(@PathVariable String uuid) {
-        FileInfoResDTO item = fileService.deleteFile(UUID.fromString(uuid));
+	@Operation(summary = "파일 정보 삭제")
+	@DeleteMapping("/{uuid}")
+	public FileInfoResDTO deleteFile(@PathVariable String uuid) {
+		FileInfoResDTO item = fileService.deleteFile(UUID.fromString(uuid));
 
-        return item;
-    }
+		return item;
+	}
 
-    @Operation(summary = "파일 정보 그룹 삭제")
-    @DeleteMapping({"/deletes/{gid}", "/deletes/{gid}/{location}"})
-    public List<FileInfoResDTO> deleteFileList(
-            @PathVariable("gid") String gid,
-            @PathVariable(name="location", required = false)
-            String location) {
-        List<FileInfoResDTO> items = fileService.deleteFiles(gid, location);
+	@Operation(summary = "파일 정보 그룹 삭제")
+	@DeleteMapping({"/deletes/{gid}", "/deletes/{gid}/{location}"})
+	public List<FileInfoResDTO> deleteFileList(
+			@PathVariable("gid") String gid,
+			@PathVariable(name = "location", required = false) String location) {
+		List<FileInfoResDTO> items = fileService.deleteFiles(gid, location);
 
-        return items;
-    }
+		return items;
+	}
 }

@@ -124,9 +124,9 @@ public class FileService {
 		return files.stream().map(FileInfoResDTO::fromItem).toList();
 	}
 
-    public List<FileInfoResDTO> getList(String gid, String location) {
-        return getList(gid, location, FileStatus.DONE);
-    }
+	public List<FileInfoResDTO> getList(String gid, String location) {
+		return getList(gid, location, FileStatus.DONE);
+	}
 
 	// 파일 등록번호로 삭제
 	public FileInfoResDTO deleteFile(UUID fileuuid) {
