@@ -2,13 +2,13 @@ package com.caffeine.gwanghwamun.domain.user.address.controller;
 
 import com.caffeine.gwanghwamun.common.response.ApiResponse;
 import com.caffeine.gwanghwamun.common.response.ResponseUtil;
+import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
 import com.caffeine.gwanghwamun.domain.user.address.dto.request.CreateUserAddressReqDTO;
 import com.caffeine.gwanghwamun.domain.user.address.dto.request.UpdateUserAddressReqDTO;
 import com.caffeine.gwanghwamun.domain.user.address.dto.response.DeleteUserAddressResDTO;
 import com.caffeine.gwanghwamun.domain.user.address.dto.response.GetUserAddressListResDTO;
 import com.caffeine.gwanghwamun.domain.user.address.service.UserAddressService;
-import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;

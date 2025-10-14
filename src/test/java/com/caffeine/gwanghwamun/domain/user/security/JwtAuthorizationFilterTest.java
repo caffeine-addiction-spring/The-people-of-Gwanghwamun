@@ -6,9 +6,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.caffeine.gwanghwamun.common.jwt.JwtUtil;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
-import com.caffeine.gwanghwamun.common.jwt.JwtUtil;
 import com.caffeine.gwanghwamun.domain.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;

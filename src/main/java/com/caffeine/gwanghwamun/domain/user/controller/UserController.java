@@ -2,11 +2,11 @@ package com.caffeine.gwanghwamun.domain.user.controller;
 
 import com.caffeine.gwanghwamun.common.response.ApiResponse;
 import com.caffeine.gwanghwamun.common.response.ResponseUtil;
+import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
 import com.caffeine.gwanghwamun.domain.user.dto.request.PasswordChangeReqDTO;
 import com.caffeine.gwanghwamun.domain.user.dto.request.UserInfoUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.user.dto.response.UserInfoResDTO;
-import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;

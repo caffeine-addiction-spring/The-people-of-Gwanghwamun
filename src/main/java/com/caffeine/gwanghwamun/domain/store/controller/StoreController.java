@@ -2,6 +2,7 @@ package com.caffeine.gwanghwamun.domain.store.controller;
 
 import com.caffeine.gwanghwamun.common.response.ApiResponse;
 import com.caffeine.gwanghwamun.common.response.ResponseUtil;
+import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
 import com.caffeine.gwanghwamun.domain.store.dto.request.StoreCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.request.StoreUpdateReqDTO;
@@ -10,7 +11,6 @@ import com.caffeine.gwanghwamun.domain.store.dto.response.StoreDetailResDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.response.StoreListResDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.response.StoreUpdateResDTO;
 import com.caffeine.gwanghwamun.domain.store.service.StoreService;
-import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.UUID;
