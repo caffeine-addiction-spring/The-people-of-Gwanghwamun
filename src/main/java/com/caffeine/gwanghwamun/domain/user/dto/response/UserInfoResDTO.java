@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.user.dto;
+package com.caffeine.gwanghwamun.domain.user.dto.response;
 
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
