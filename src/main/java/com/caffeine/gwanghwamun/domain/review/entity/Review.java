@@ -21,7 +21,7 @@ public class Review extends BaseEntity {
     private UUID reviewId;
 
     @Column(name = "user_id", nullable = false)
-    private UUID userId;
+    private Long userId;
 
     @Column(name = "store_id", nullable = false)
     private UUID storeId;
@@ -38,11 +38,11 @@ public class Review extends BaseEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @OneToOne(mappedBy = "reivew", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "review", fetch = FetchType.LAZY)
     private ReviewReply reply;
 
     @Builder
-    public Review(UUID userId, UUID storeId, UUID orderId, Long groupId, Long rating, String content) {
+    public Review(Long userId, UUID storeId, UUID orderId, Long groupId, Long rating, String content) {
         this.userId = userId;
         this.storeId = storeId;
         this.orderId = orderId;
