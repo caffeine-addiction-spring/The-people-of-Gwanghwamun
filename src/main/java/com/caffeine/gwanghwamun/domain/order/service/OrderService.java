@@ -3,21 +3,14 @@ package com.caffeine.gwanghwamun.domain.order.service;
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
 import com.caffeine.gwanghwamun.domain.cart.repository.CartRepository;
-import com.caffeine.gwanghwamun.domain.menu.entity.Menu;
-import com.caffeine.gwanghwamun.domain.menu.entity.MenuOption;
-import com.caffeine.gwanghwamun.domain.menu.repository.MenuOptionRepository;
-import com.caffeine.gwanghwamun.domain.menu.repository.MenuRepository;
 import com.caffeine.gwanghwamun.domain.order.dto.*;
 import com.caffeine.gwanghwamun.domain.order.entity.Order;
 import com.caffeine.gwanghwamun.domain.order.entity.OrderStatus;
 import com.caffeine.gwanghwamun.domain.order.order_items.dto.OrderItemListResDTO;
 import com.caffeine.gwanghwamun.domain.order.order_items.dto.OrderItemResDTO;
-import com.caffeine.gwanghwamun.domain.order.order_items.dto.OrderMenuItemReqDTO;
 import com.caffeine.gwanghwamun.domain.order.order_items.entity.OrderItem;
-import com.caffeine.gwanghwamun.domain.order.order_items.order_item_options.entity.OrderItemOption;
-import com.caffeine.gwanghwamun.domain.order.order_items.order_item_options.repository.OrderItemOptionRepository;
+import com.caffeine.gwanghwamun.domain.order.order_items.order_item_options.service.OrderItemService;
 import com.caffeine.gwanghwamun.domain.order.order_items.repository.OrderItemRepository;
-import com.caffeine.gwanghwamun.domain.order.order_status_log.repository.OrderStatusLogRepository;
 import com.caffeine.gwanghwamun.domain.order.repository.OrderRepository;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
@@ -31,7 +24,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -42,13 +34,10 @@ public class OrderService {
 
   private final OrderRepository orderRepository;
   private final StoreRepository storeRepository;
-  private final MenuRepository menuRepository;
   private final UserRepository userRepository;
   private final CartRepository cartRepository;
-  private final OrderStatusLogRepository orderStatusLogRepository;
   private final OrderItemRepository orderItemRepository;
-  private final OrderItemOptionRepository orderItemOptionRepository;
-  private final MenuOptionRepository menuOptionRepository;
+  private final OrderItemService orderItemService;
 
   public Page<OrderListResDTO> findOrderList(Long userId, Pageable pageable) {
 
@@ -107,7 +96,7 @@ public class OrderService {
 //      List<Cart> cartItemList = cartRepository.findByUserAndStoreAndDeletedDateIsNull(user, store);
 //      cartItemList.stream().map()
 //    } else {
-    List<OrderItemListResDTO> orderItemResList = saveOrderItem(req.menuItemList(), order);
+    List<OrderItemListResDTO> orderItemResList = orderItemService.saveOrderItem(req.menuItemList(), order);
 //    }
     totalPrice = orderItemResList.stream()
         .mapToInt(OrderItemListResDTO::totalPrice)
@@ -209,58 +198,5 @@ public class OrderService {
         throw new CustomException(ErrorCode.UNAUTHORIZED_STORE_ACCESS);
       }
     }
-  }
-
-  @Transactional
-  private List<OrderItemListResDTO> saveOrderItem(List<OrderMenuItemReqDTO> menuList, Order order) {
-
-    List<OrderItemListResDTO> orderItemInfoList = new ArrayList<>();
-
-    for (OrderMenuItemReqDTO item : menuList) {
-
-      Menu menu = menuRepository.findById(item.menuItemId())
-          .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
-
-      if (menu.getIsSoldOut() || menu.getIsHidden()) {
-        throw new CustomException(ErrorCode.ORDER_UNABLE_MENU);
-      }
-
-      List<MenuOption> menuOptions = menuOptionRepository.findAllByMenuOptionIdInAndMenuId(item.menuOptionList(), menu.getMenuId());
-
-      for (MenuOption option : menuOptions) {
-        if (option.getIsHidden() || option.getIsSoldOut()) {
-          throw new CustomException(ErrorCode.ORDER_UNABLE_MENU_OPTION);
-        }
-      }
-
-      int optionPrice = menuOptions.stream()
-          .mapToInt(MenuOption::getPrice)
-          .sum();
-
-      int itemTotalPrice = (menu.getPrice() + optionPrice) * item.quantity();
-
-      OrderItem orderItem = OrderItem.builder()
-          .order(order)
-          .menu(menu)
-          .menuName(menu.getName())
-          .quantity(item.quantity())
-          .price(menu.getPrice())
-          .build();
-
-      List<OrderItemOption> orderItemOptions = menuOptions.stream()
-          .map(option -> OrderItemOption.builder()
-              .orderItem(orderItem)
-              .menuOption(option)
-              .optionName(option.getOptionName())
-              .optionPrice(option.getPrice())
-              .build())
-          .toList();
-
-      orderItemRepository.save(orderItem);
-      orderItemOptionRepository.saveAll(orderItemOptions);
-
-      orderItemInfoList.add(new OrderItemListResDTO(orderItem, orderItemOptions, itemTotalPrice));
-    }
-    return orderItemInfoList;
   }
 }
