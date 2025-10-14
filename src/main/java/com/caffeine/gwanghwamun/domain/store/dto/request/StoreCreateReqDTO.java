@@ -29,4 +29,7 @@ public class StoreCreateReqDTO {
 	private String operationHours;
 	private String closedDays;
 	private Long groupId;
+
+	// MANAGER/MASTER
+	private Long ownerUserId;
 }

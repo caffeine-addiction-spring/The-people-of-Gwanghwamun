@@ -33,6 +33,9 @@ public enum ErrorCode {
 	// 가게 (store)
 	STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 가게를 찾을 수 없습니다."),
 	ALREADY_DELETED(HttpStatus.BAD_REQUEST, "이미 삭제된 가게입니다."),
+    OWNER_REQUIRED(HttpStatus.BAD_REQUEST, "가게 등록 시 OWNER 사용자를 지정해야 합니다."),
+    INVALID_ROLE(HttpStatus.BAD_REQUEST, "지정된 사용자가 OWNER 권한이 아닙니다."),
+    INVALID_REQUEST(HttpStatus.BAD_REQUEST, "OWNER는 userId를 지정할 수 없습니다."),
 
 	// 지역 (region)
 	REGION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 지역을 찾을 수 없습니다."),

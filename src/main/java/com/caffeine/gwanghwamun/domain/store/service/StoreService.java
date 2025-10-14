@@ -14,6 +14,7 @@ import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
+import com.caffeine.gwanghwamun.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -28,8 +29,29 @@ public class StoreService {
 
 	private final StoreRepository storeRepository;
 	private final MenuRepository menuRepository;
+	private final UserRepository userRepository;
 
 	public StoreCreateResDTO createStore(StoreCreateReqDTO req, User user) {
+		User owner = user;
+
+		if (user.getRole() == UserRoleEnum.MASTER || user.getRole() == UserRoleEnum.MANAGER) {
+			if (req.getOwnerUserId() == null) {
+				throw new CustomException(ErrorCode.OWNER_REQUIRED);
+			}
+
+			owner =
+					userRepository
+							.findById(req.getOwnerUserId())
+							.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+			if (owner.getRole() != UserRoleEnum.OWNER) {
+				throw new CustomException(ErrorCode.INVALID_ROLE);
+			}
+		}
+
+		if (user.getRole() == UserRoleEnum.OWNER && req.getOwnerUserId() != null) {
+			throw new CustomException(ErrorCode.INVALID_REQUEST);
+		}
 		Store store = Store.create(req, user);
 		storeRepository.save(store);
 
