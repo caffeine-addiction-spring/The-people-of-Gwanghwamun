@@ -65,6 +65,8 @@ dependencies {
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 
+    // AI
+    implementation("com.google.genai:google-genai:1.23.0")
 }
 
 spotless {
