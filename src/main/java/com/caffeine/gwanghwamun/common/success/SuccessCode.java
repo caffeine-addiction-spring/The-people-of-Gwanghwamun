@@ -87,7 +87,10 @@ public enum SuccessCode {
 
 	// 주문 상태 로그 (order_status_log)
 	ORDER_LOG_LIST_SUCCESS(HttpStatus.OK, "주문 상태 목록 조회 성공"),
-	ORDER_LOG_SUCCESS(HttpStatus.OK, "주문 상태 조회 성공");
+	ORDER_LOG_SUCCESS(HttpStatus.OK, "주문 상태 조회 성공"),
+
+	// AI
+	AI_SAVE_SUCCESS(HttpStatus.OK, "상품 설명 AI 생성 성공");
 
 	private final HttpStatus httpStatus;
 	private final String message;
