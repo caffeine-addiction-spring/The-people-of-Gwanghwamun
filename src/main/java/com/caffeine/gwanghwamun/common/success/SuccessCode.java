@@ -17,8 +17,6 @@ public enum SuccessCode {
 	REVIEW_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "리뷰 삭제 성공"),
 	REVIEW_REPLY_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "답글 삭제 성공"),
 
-
-
 	// 회원 (user)
 	USER_SAVE_SUCCESS(HttpStatus.CREATED, "회원가입 성공"),
 	USER_LOGIN_SUCCESS(HttpStatus.OK, "로그인 성공"),
