@@ -3,10 +3,12 @@ package com.caffeine.gwanghwamun.domain.store.dto.request;
 import com.caffeine.gwanghwamun.domain.store.entity.StoreCategoryEnum;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class StoreCreateReqDTO {
 
 	@NotBlank(message = "가게 이름은 필수 입력 항목입니다.")
