@@ -7,26 +7,30 @@ import com.caffeine.gwanghwamun.domain.store.entity.StoreCategoryEnum;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class StoreDetailResDTO {
 
-	private final UUID storeId;
-	private final String storeName;
-	private final StoreCategoryEnum category;
-	private final String address;
-	private final String phone;
-	private final String content;
-	private final Integer minDeliveryPrice;
-	private final Integer deliveryTip;
-	private final String operationHours;
-	private final String closedDays;
-	private final BigDecimal rating;
-	private final Integer reviewCount;
-	private final String gid;
-	private final List<MenuResDTO> menus;
-	private final List<FileInfoResDTO> images;
+	private UUID storeId;
+	private String storeName;
+	private StoreCategoryEnum category;
+	private String address;
+	private String phone;
+	private String content;
+	private Integer minDeliveryPrice;
+	private Integer deliveryTip;
+	private String operationHours;
+	private String closedDays;
+	private BigDecimal rating;
+	private Integer reviewCount;
+	private String gid;
+	private List<MenuResDTO> menus;
+	private List<FileInfoResDTO> images;
 
 	public StoreDetailResDTO(Store store, List<MenuResDTO> menus, List<FileInfoResDTO> images) {
 		this.storeId = store.getStoreId();
