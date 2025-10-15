@@ -31,6 +31,7 @@ public class StoreService {
 	private final MenuRepository menuRepository;
 	private final UserRepository userRepository;
 
+	@Transactional
 	public StoreCreateResDTO createStore(StoreCreateReqDTO req, User user) {
 		User owner = user;
 
@@ -59,7 +60,7 @@ public class StoreService {
 			throw new CustomException(ErrorCode.DUPLICATED_STORE);
 		}
 
-		Store store = Store.create(req, user);
+		Store store = Store.create(req, owner);
 		storeRepository.save(store);
 
 		return new StoreCreateResDTO(store.getStoreId(), store.getName(), store.getStoreCategory());
