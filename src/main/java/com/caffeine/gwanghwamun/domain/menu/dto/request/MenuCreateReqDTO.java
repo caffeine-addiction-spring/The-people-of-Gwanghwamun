@@ -14,4 +14,4 @@ public record MenuCreateReqDTO(
 		Boolean useAI,
 		@Size(max = 200) String aiPrompt,
 		@NotNull MenuCategory menuCategory,
-		Long imageGroupId) {}
+		@NotBlank @Size(max = 65) String groupId) {}
