@@ -4,7 +4,6 @@ import com.caffeine.gwanghwamun.common.response.ApiResponse;
 import com.caffeine.gwanghwamun.common.response.ResponseUtil;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -46,9 +45,6 @@ public class CustomExceptionHandler {
 		log.error("서버 내부 오류 발생: {}", e.getMessage(), e);
 
 		return ResponseUtil.failureResponse(
-				e.getMessage(),
-				ErrorCode.SERVER_ERROR.name(),
-				ErrorCode.SERVER_ERROR.getHttpStatus()
-		);
+				e.getMessage(), ErrorCode.SERVER_ERROR.name(), ErrorCode.SERVER_ERROR.getHttpStatus());
 	}
 }
