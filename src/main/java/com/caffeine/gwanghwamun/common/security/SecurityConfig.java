@@ -18,6 +18,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,60 +39,61 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.csrf(csrf -> csrf.disable());
+		return http.csrf(AbstractHttpConfigurer::disable)
+				.sessionManagement(
+						session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authorizeHttpRequests(this::configureAuthorization)
+				.exceptionHandling(this::configureExceptionHandling)
+				.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+				.addFilterAt(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+				.formLogin(AbstractHttpConfigurer::disable)
+				.httpBasic(AbstractHttpConfigurer::disable)
+				.build();
+	}
 
-		http.sessionManagement(
-				session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+	private void configureAuthorization(
+			AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry
+					auth) {
+		auth.requestMatchers("/v1/auth/**")
+				.permitAll()
+				.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**")
+				.permitAll()
+				.requestMatchers("/v1/test/public")
+				.permitAll()
+				.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+				.permitAll()
+				.requestMatchers("/error")
+				.permitAll()
+				.anyRequest()
+				.authenticated();
+	}
 
-		http.authorizeHttpRequests(
-				auth ->
-						auth.requestMatchers("/v1/auth/**")
-								.permitAll()
-								.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**")
-								.permitAll()
-								.requestMatchers("/v1/test/public")
-								.permitAll()
-								.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-								.permitAll()
-								.requestMatchers("/error")
-								.permitAll()
-								.anyRequest()
-								.authenticated());
-
-		http.exceptionHandling(
-				exception ->
-						exception
-								.authenticationEntryPoint(
-										(req, res, ex) -> {
-											res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-											res.setContentType("application/json;charset=UTF-8");
-
-											Map<String, Object> errorResponse =
-													Map.of(
-															"error", "Unauthorized",
-															"message", "인증이 필요합니다",
-															"path", req.getRequestURI());
-											new ObjectMapper().writeValue(res.getWriter(), errorResponse);
-										})
-								.accessDeniedHandler(
-										(req, res, ex) -> {
-											res.setStatus(HttpServletResponse.SC_FORBIDDEN);
-											res.setContentType("application/json;charset=UTF-8");
-
-											Map<String, Object> errorResponse =
-													Map.of(
-															"error", "Forbidden",
-															"message", "접근 권한이 없습니다",
-															"path", req.getRequestURI());
-											new ObjectMapper().writeValue(res.getWriter(), errorResponse);
-										}));
-
-		http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-		http.addFilterAt(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
-		http.formLogin(AbstractHttpConfigurer::disable).httpBasic(AbstractHttpConfigurer::disable);
-
-		return http.build();
+	private void configureExceptionHandling(ExceptionHandlingConfigurer<HttpSecurity> exception) {
+		exception
+				.authenticationEntryPoint(
+						(req, res, ex) -> {
+							res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+							res.setContentType("application/json;charset=UTF-8");
+							new ObjectMapper()
+									.writeValue(
+											res.getWriter(),
+											Map.of(
+													"error", "Unauthorized",
+													"message", "인증이 필요합니다",
+													"path", req.getRequestURI()));
+						})
+				.accessDeniedHandler(
+						(req, res, ex) -> {
+							res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+							res.setContentType("application/json;charset=UTF-8");
+							new ObjectMapper()
+									.writeValue(
+											res.getWriter(),
+											Map.of(
+													"error", "Forbidden",
+													"message", "접근 권한이 없습니다",
+													"path", req.getRequestURI()));
+						});
 	}
 
 	@Bean
