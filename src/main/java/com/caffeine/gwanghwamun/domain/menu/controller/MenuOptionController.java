@@ -2,6 +2,7 @@ package com.caffeine.gwanghwamun.domain.menu.controller;
 
 import com.caffeine.gwanghwamun.common.response.ApiResponse;
 import com.caffeine.gwanghwamun.common.response.ResponseUtil;
+import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuOptionCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuOptionSoldOutReqDTO;
@@ -9,7 +10,6 @@ import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuOptionUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuOptionVisibilityReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuOptionResDTO;
 import com.caffeine.gwanghwamun.domain.menu.service.MenuOptionService;
-import com.caffeine.gwanghwamun.domain.user.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

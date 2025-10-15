@@ -53,8 +53,8 @@ logging:
     org.springframework.jdbc.core: DEBUG
 
 jwt:
-  secret:
-    key: ${JWT_SECRET}
+  secret-key: ${JWT_SECRET}
+  expiration-time: ${JWT_EXPIRATION_TIME}
 
 server:
   port: ${SERVER_PORT}
