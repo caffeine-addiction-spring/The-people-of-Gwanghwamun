@@ -70,35 +70,11 @@ public class StoreService {
 		return new StoreCreateResDTO(store.getStoreId(), store.getName(), store.getStoreCategory());
 	}
 
+	@Transactional(readOnly = true)
 	public Page<StoreListResDTO> getStoreList(int page, int size, String sortBy, String direction) {
-		Sort sort =
-				direction.equalsIgnoreCase("asc")
-						? Sort.by(sortBy).ascending()
-						: Sort.by(sortBy).descending();
-
-		Pageable pageable = PageRequest.of(page, size, sort);
+		Pageable pageable = buildPageable(page, size, sortBy, direction);
 		Page<Store> storePage = storeRepository.findAllActiveStores(pageable);
-
-		List<StoreListResDTO> dtoList =
-				storePage.getContent().stream()
-						.map(
-								store -> {
-									List<FileInfoResDTO> Files =
-											fileService.getList(store.getGid(), "store", FileStatus.DONE);
-
-									String image = Files.isEmpty() ? null : Files.get(0).getFileUrl();
-
-									return new StoreListResDTO(
-											store.getStoreId(),
-											store.getName(),
-											store.getStoreCategory(),
-											store.getAddress(),
-											store.getGid(),
-											image);
-								})
-						.toList();
-
-		return new PageImpl<>(dtoList, pageable, storePage.getTotalElements());
+		return storeList(storePage, pageable);
 	}
 
 	@Transactional(readOnly = true)
@@ -192,35 +168,38 @@ public class StoreService {
 	@Transactional(readOnly = true)
 	public Page<StoreListResDTO> searchStores(
 			String keyword, int page, int size, String sortBy, String direction) {
+		Pageable pageable = buildPageable(page, size, sortBy, direction);
+		Page<Store> storePage = storeRepository.searchActiveStores(keyword, pageable);
+		return storeList(storePage, pageable);
+	}
 
+	private Page<StoreListResDTO> storeList(Page<Store> storePage, Pageable pageable) {
+		List<StoreListResDTO> dtoList =
+				storePage.getContent().stream()
+						.map(
+								store ->
+										new StoreListResDTO(
+												store.getStoreId(),
+												store.getName(),
+												store.getStoreCategory(),
+												store.getAddress(),
+												store.getGid(),
+												getFirstImageUrl(store.getGid())))
+						.toList();
+
+		return new PageImpl<>(dtoList, pageable, storePage.getTotalElements());
+	}
+
+	private Pageable buildPageable(int page, int size, String sortBy, String direction) {
 		Sort sort =
 				direction.equalsIgnoreCase("asc")
 						? Sort.by(sortBy).ascending()
 						: Sort.by(sortBy).descending();
+		return PageRequest.of(page, size, sort);
+	}
 
-		Pageable pageable = PageRequest.of(page, size, sort);
-
-		Page<Store> storePage = storeRepository.searchActiveStores(keyword, pageable);
-
-		List<StoreListResDTO> dtoList =
-				storePage.getContent().stream()
-						.map(
-								store -> {
-									List<FileInfoResDTO> Files =
-											fileService.getList(store.getGid(), "store", FileStatus.DONE);
-
-									String image = Files.isEmpty() ? null : Files.get(0).getFileUrl();
-
-									return new StoreListResDTO(
-											store.getStoreId(),
-											store.getName(),
-											store.getStoreCategory(),
-											store.getAddress(),
-											store.getGid(),
-											image);
-								})
-						.toList();
-
-		return new PageImpl<>(dtoList, pageable, storePage.getTotalElements());
+	private String getFirstImageUrl(String gid) {
+		List<FileInfoResDTO> files = fileService.getList(gid, "store", FileStatus.DONE);
+		return files.isEmpty() ? null : files.get(0).getFileUrl();
 	}
 }
