@@ -50,6 +50,11 @@ public enum SuccessCode {
 	STORE_SEARCH_SUCCESS(HttpStatus.OK, "가게 검색 성공"),
 	STORE_DELETE_SUCCESS(HttpStatus.OK, "가게 삭제 완료"),
 
+	// 배달 지역 (region)
+	REGION_LIST_SUCCESS(HttpStatus.OK, "지역 목록 조회 성공"),
+	REGION_CREATE_SUCCESS(HttpStatus.CREATED, "지역 생성 성공"),
+	REGION_UPDATE_SUCCESS(HttpStatus.OK, "지역 수정 성공"),
+
 	// 메뉴 옵션 (menuOption)
 	MENU_OPTION_SAVE_SUCCESS(HttpStatus.CREATED, "메뉴 옵션 생성 성공"),
 	MENU_OPTION_FIND_SUCCESS(HttpStatus.OK, "메뉴 옵션 조회 성공"),
