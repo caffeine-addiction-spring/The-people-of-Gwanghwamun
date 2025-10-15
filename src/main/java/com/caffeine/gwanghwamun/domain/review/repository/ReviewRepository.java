@@ -18,4 +18,6 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
     @EntityGraph(attributePaths = {"reply"})
     @Query("select r from Review r where r.reviewId = :id")
     Optional<Review> findByIdWithReply(@Param("id") UUID id);
+
+    boolean existsByOrderId(UUID orderId);
 }
