@@ -2,6 +2,9 @@ package com.caffeine.gwanghwamun.domain.review.service;
 
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
+import com.caffeine.gwanghwamun.domain.order.entity.Order;
+import com.caffeine.gwanghwamun.domain.order.entity.OrderStatus;
+import com.caffeine.gwanghwamun.domain.order.repository.OrderRepository;
 import com.caffeine.gwanghwamun.domain.review.dto.ReviewCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.review.dto.ReviewReplyCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.review.dto.ReviewResDTO;
@@ -21,6 +24,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.plaf.BorderUIResource;
+
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Slf4j
@@ -29,21 +34,41 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewReplyRepository reviewReplyRepository;
     private final StoreRepository storeRepository;
+    private final OrderRepository orderRepository;
 
     @Transactional
-    public ReviewResDTO saveReview(UUID storeId, ReviewCreateReqDTO reviewCreateReqDTO, Long userId) {
+    public ReviewResDTO saveReview(UUID orderId, ReviewCreateReqDTO reviewCreateReqDTO, Long userId) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow((() -> new CustomException(ErrorCode.ORDER_NOT_FOUND)));
+
+        validateSaveReview(order, userId);
+
         Review review =
                 Review.builder()
                         .userId(userId)
-                        .storeId(storeId)
-                        //.orderId()
+                        .storeId(order.getStore().getStoreId())
+                        .orderId(orderId)
                         .groupId(1L)
                         .rating(reviewCreateReqDTO.rating())
                         .content(reviewCreateReqDTO.content())
                         .build();
         Review savedReview = reviewRepository.save(review);
         return ReviewResDTO.from(savedReview);
+    }
 
+    private void validateSaveReview(Order order, Long userId){
+        if(!order.getUser().getUserId().equals(userId)){
+            throw new CustomException(ErrorCode.REVIEW_CREATE_UNAUTHORIZED);
+        }
+
+        if(order.getOrderStatus() != OrderStatus.DELIVERY_COMPLETED){
+            throw new CustomException(ErrorCode.REVIEW_CREATE_NOT_ACCEPTED);
+        }
+
+        if(reviewRepository.existsByOrderId(order.getOrderId())){
+            throw new CustomException(ErrorCode.REVIEW_DUPLICATED);
+        }
     }
 
     @Transactional
