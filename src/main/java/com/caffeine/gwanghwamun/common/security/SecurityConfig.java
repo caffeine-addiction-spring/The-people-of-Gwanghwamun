@@ -2,8 +2,8 @@ package com.caffeine.gwanghwamun.common.security;
 
 import com.caffeine.gwanghwamun.common.jwt.JwtProvider;
 import com.caffeine.gwanghwamun.common.jwt.JwtUtil;
-import com.caffeine.gwanghwamun.common.security.filter.JwtAuthenticationFilter;
-import com.caffeine.gwanghwamun.common.security.filter.JwtAuthorizationFilter;
+import com.caffeine.gwanghwamun.common.security.filter.JwtLoginFilter;
+import com.caffeine.gwanghwamun.common.security.filter.JwtTokenAuthenticationFilter;
 import com.caffeine.gwanghwamun.common.security.service.UserDetailsServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
@@ -108,14 +108,14 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-		JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtProvider);
+	public JwtLoginFilter jwtAuthenticationFilter() throws Exception {
+		JwtLoginFilter filter = new JwtLoginFilter(jwtProvider);
 		filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
 		return filter;
 	}
 
 	@Bean
-	public JwtAuthorizationFilter jwtAuthorizationFilter() {
-		return new JwtAuthorizationFilter(jwtUtil, jwtProvider, userDetailsService);
+	public JwtTokenAuthenticationFilter jwtAuthorizationFilter() {
+		return new JwtTokenAuthenticationFilter(jwtUtil, jwtProvider, userDetailsService);
 	}
 }

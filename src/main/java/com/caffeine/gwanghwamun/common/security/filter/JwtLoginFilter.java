@@ -17,11 +17,11 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Slf4j(topic = "로그인 및 JWT 생성")
-public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
 	private final JwtProvider jwtProvider;
 
-	public JwtAuthenticationFilter(JwtProvider jwtProvider) {
+	public JwtLoginFilter(JwtProvider jwtProvider) {
 		this.jwtProvider = jwtProvider;
 		setFilterProcessesUrl("/v1/auth/login");
 	}
