@@ -30,27 +30,31 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 			HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
 			throws ServletException, IOException {
 
-		log.info(req.getRequestURI());
-
 		String tokenValue = jwtUtil.getJwtFromHeader(req);
+		log.info("요청 URI: {}", req.getRequestURI());
 
-		if (StringUtils.hasText(tokenValue)) {
-			try {
-				if (jwtProvider.validateToken(tokenValue)) {
-					Claims claims = jwtProvider.getUserInfoFromToken(tokenValue);
-					String email = claims.getSubject();
+		if (!StringUtils.hasText(tokenValue)) {
+			log.info("JWT 검증 실패: 토큰 없음");
+			filterChain.doFilter(req, res);
+			return;
+		}
 
-					UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-					UsernamePasswordAuthenticationToken authentication =
-							new UsernamePasswordAuthenticationToken(
-									userDetails, null, userDetails.getAuthorities());
+		try {
+			jwtProvider.validateToken(tokenValue);
 
-					SecurityContextHolder.getContext().setAuthentication(authentication);
-					log.info("JWT 인증 완료: {}, 권한: {}", email, userDetails.getAuthorities());
-				}
-			} catch (Exception e) {
-				log.error("JWT 인증 과정 에러: {}", e.getMessage());
-			}
+			Claims claims = jwtProvider.getUserInfoFromToken(tokenValue);
+			String email = claims.getSubject();
+
+			UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+			UsernamePasswordAuthenticationToken authentication =
+					new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+
+			log.info("JWT 인증 완료: {}, 권한: {}", email, userDetails.getAuthorities());
+
+		} catch (Exception e) {
+			log.error("JWT 인증 실패: {}", e.getMessage());
+			SecurityContextHolder.clearContext();
 		}
 
 		filterChain.doFilter(req, res);

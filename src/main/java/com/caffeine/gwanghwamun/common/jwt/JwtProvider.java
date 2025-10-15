@@ -42,10 +42,9 @@ public class JwtProvider {
 						.compact();
 	}
 
-	public boolean validateToken(String token) {
+	public void validateToken(String token) {
 		try {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-			return true;
 		} catch (SecurityException | MalformedJwtException e) {
 			log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
 		} catch (ExpiredJwtException e) {
@@ -55,7 +54,6 @@ public class JwtProvider {
 		} catch (IllegalArgumentException e) {
 			log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
 		}
-		return false;
 	}
 
 	public Claims getUserInfoFromToken(String token) {

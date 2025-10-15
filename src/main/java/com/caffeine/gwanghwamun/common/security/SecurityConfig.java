@@ -5,6 +5,9 @@ import com.caffeine.gwanghwamun.common.jwt.JwtUtil;
 import com.caffeine.gwanghwamun.common.security.filter.JwtAuthenticationFilter;
 import com.caffeine.gwanghwamun.common.security.filter.JwtAuthorizationFilter;
 import com.caffeine.gwanghwamun.common.security.service.UserDetailsServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +17,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,30 +37,58 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.csrf((csrf) -> csrf.disable());
+		http.csrf(csrf -> csrf.disable());
 
 		http.sessionManagement(
-				(sessionManagement) ->
-						sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+				session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		http.authorizeHttpRequests(
-						(authorizeHttpRequests) ->
-								authorizeHttpRequests
-										.requestMatchers("/v1/auth/**")
-										.permitAll()
-										.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**")
-										.permitAll()
-										.requestMatchers("/v1/test/public")
-										.permitAll()
-										.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-										.permitAll()
-										.anyRequest()
-										.authenticated())
-				.formLogin(form -> form.disable())
-				.httpBasic(httpBasic -> httpBasic.disable());
+				auth ->
+						auth.requestMatchers("/v1/auth/**")
+								.permitAll()
+								.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**")
+								.permitAll()
+								.requestMatchers("/v1/test/public")
+								.permitAll()
+								.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+								.permitAll()
+								.requestMatchers("/error")
+								.permitAll()
+								.anyRequest()
+								.authenticated());
 
-		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-		http.addFilterAfter(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
+		http.exceptionHandling(
+				exception ->
+						exception
+								.authenticationEntryPoint(
+										(req, res, ex) -> {
+											res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+											res.setContentType("application/json;charset=UTF-8");
+
+											Map<String, Object> errorResponse =
+													Map.of(
+															"error", "Unauthorized",
+															"message", "인증이 필요합니다",
+															"path", req.getRequestURI());
+											new ObjectMapper().writeValue(res.getWriter(), errorResponse);
+										})
+								.accessDeniedHandler(
+										(req, res, ex) -> {
+											res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+											res.setContentType("application/json;charset=UTF-8");
+
+											Map<String, Object> errorResponse =
+													Map.of(
+															"error", "Forbidden",
+															"message", "접근 권한이 없습니다",
+															"path", req.getRequestURI());
+											new ObjectMapper().writeValue(res.getWriter(), errorResponse);
+										}));
+
+		http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterAt(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+		http.formLogin(AbstractHttpConfigurer::disable).httpBasic(AbstractHttpConfigurer::disable);
 
 		return http.build();
 	}
