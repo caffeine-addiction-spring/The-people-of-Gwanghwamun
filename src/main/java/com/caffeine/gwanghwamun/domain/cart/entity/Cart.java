@@ -2,6 +2,7 @@ package com.caffeine.gwanghwamun.domain.cart.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import com.caffeine.gwanghwamun.domain.menu.entity.Menu;
+import com.caffeine.gwanghwamun.domain.menu.entity.MenuOption;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -38,12 +39,12 @@ public class Cart extends BaseEntity {
 
 	private String deletedBy;
 
-	//    @ManyToOne(fetch = FetchType.LAZY)
-	//    @JoinColumn(name = "menu_option_id")
-	//    private MenuOption menuOption;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "menu_option_id")
+	private MenuOption menuOption;
 
 	private int quantity;
 
 	@Enumerated(EnumType.STRING)
-	private CartMode cartMode; // DIRECT / CART
+	private CartMode cartMode;
 }

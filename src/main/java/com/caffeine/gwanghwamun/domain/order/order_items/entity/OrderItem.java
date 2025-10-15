@@ -1,13 +1,12 @@
-package com.caffeine.gwanghwamun.domain.order_items.entity;
+package com.caffeine.gwanghwamun.domain.order.order_items.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import com.caffeine.gwanghwamun.domain.menu.entity.Menu;
 import com.caffeine.gwanghwamun.domain.order.entity.Order;
-import com.caffeine.gwanghwamun.domain.order_item_options.entity.OrderItemOption;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,8 +21,10 @@ public class OrderItem extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID orderItemId;
 
+	@Column(name = "deleted_date", nullable = true)
 	private LocalDateTime deletedDate;
 
+	@Column(name = "deleted_by", nullable = true)
 	private String deletedBy;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -34,12 +35,21 @@ public class OrderItem extends BaseEntity {
 	@JoinColumn(name = "menu_id")
 	private Menu menu;
 
+	@Column(name = "menu_name", nullable = false)
 	private String menuName;
 
-	private int quantity;
+	@Column(name = "quantity", nullable = false)
+	private Integer quantity;
 
-	private int price;
+	@Column(name = "price", nullable = false)
+	private Integer price;
 
-	@OneToMany(mappedBy = "orderItem")
-	private List<OrderItemOption> options;
+	@Builder
+	public OrderItem(Order order, Menu menu, String menuName, Integer quantity, Integer price) {
+		this.order = order;
+		this.menu = menu;
+		this.menuName = menuName;
+		this.quantity = quantity;
+		this.price = price;
+	}
 }

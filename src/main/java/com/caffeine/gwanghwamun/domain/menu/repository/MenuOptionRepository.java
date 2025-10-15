@@ -3,6 +3,7 @@ package com.caffeine.gwanghwamun.domain.menu.repository;
 import com.caffeine.gwanghwamun.domain.menu.entity.MenuOption;
 import com.caffeine.gwanghwamun.domain.menu.entity.QMenuOption;
 import com.querydsl.core.BooleanBuilder;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -47,4 +48,6 @@ public interface MenuOptionRepository
 
 		return findAll(andBuilder, pageable);
 	}
+
+	List<MenuOption> findAllByMenuOptionIdInAndMenuId(List<UUID> menuOptionIdList, UUID menuId);
 }
