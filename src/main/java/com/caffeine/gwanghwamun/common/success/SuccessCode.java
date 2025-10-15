@@ -43,6 +43,11 @@ public enum SuccessCode {
 	MENU_SOLDOUT_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 품절 상태 변경 성공"),
 
 	// 가게 (store)
+	STORE_CREATE_SUCCESS(HttpStatus.CREATED, "가게 등록 성공"),
+	STORE_LIST_SUCCESS(HttpStatus.OK, "가게 목록 조회 성공"),
+	STORE_FIND_SUCCESS(HttpStatus.OK, "가게 상세 조회 성공"),
+	STORE_UPDATE_SUCCESS(HttpStatus.OK, "가게 정보 수정 완료"),
+	STORE_SEARCH_SUCCESS(HttpStatus.OK, "가게 검색 성공"),
 	STORE_DELETE_SUCCESS(HttpStatus.OK, "가게 삭제 완료"),
 
 	// 메뉴 옵션 (menuOption)
