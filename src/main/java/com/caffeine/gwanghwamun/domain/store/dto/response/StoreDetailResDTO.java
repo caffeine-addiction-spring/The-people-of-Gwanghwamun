@@ -1,5 +1,6 @@
 package com.caffeine.gwanghwamun.domain.store.dto.response;
 
+import com.caffeine.gwanghwamun.domain.file.dto.FileInfoResDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuResDTO;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.entity.StoreCategoryEnum;
@@ -25,8 +26,9 @@ public class StoreDetailResDTO {
 	private final Integer reviewCount;
 	private final String gid;
 	private final List<MenuResDTO> menus;
+	private final List<FileInfoResDTO> images;
 
-	public StoreDetailResDTO(Store store, List<MenuResDTO> menus) {
+	public StoreDetailResDTO(Store store, List<MenuResDTO> menus, List<FileInfoResDTO> images) {
 		this.storeId = store.getStoreId();
 		this.storeName = store.getName();
 		this.category = store.getStoreCategory();
@@ -41,5 +43,6 @@ public class StoreDetailResDTO {
 		this.reviewCount = store.getReviewCount();
 		this.gid = store.getGid();
 		this.menus = menus;
+		this.images = images;
 	}
 }

@@ -2,6 +2,9 @@ package com.caffeine.gwanghwamun.domain.store.service;
 
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
+import com.caffeine.gwanghwamun.domain.file.dto.FileInfoResDTO;
+import com.caffeine.gwanghwamun.domain.file.entity.FileStatus;
+import com.caffeine.gwanghwamun.domain.file.service.FileService;
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuResDTO;
 import com.caffeine.gwanghwamun.domain.menu.repository.MenuRepository;
 import com.caffeine.gwanghwamun.domain.store.dto.request.StoreCreateReqDTO;
@@ -30,6 +33,7 @@ public class StoreService {
 	private final StoreRepository storeRepository;
 	private final MenuRepository menuRepository;
 	private final UserRepository userRepository;
+	private final FileService fileService;
 
 	@Transactional
 	public StoreCreateResDTO createStore(StoreCreateReqDTO req, User user) {
@@ -78,13 +82,20 @@ public class StoreService {
 		List<StoreListResDTO> dtoList =
 				storePage.getContent().stream()
 						.map(
-								store ->
-										new StoreListResDTO(
-												store.getStoreId(),
-												store.getName(),
-												store.getStoreCategory(),
-												store.getAddress(),
-												store.getGid()))
+								store -> {
+									List<FileInfoResDTO> Files =
+											fileService.getList(store.getGid(), "store", FileStatus.DONE);
+
+									String image = Files.isEmpty() ? null : Files.get(0).getFileUrl();
+
+									return new StoreListResDTO(
+											store.getStoreId(),
+											store.getName(),
+											store.getStoreCategory(),
+											store.getAddress(),
+											store.getGid(),
+											image);
+								})
 						.toList();
 
 		return new PageImpl<>(dtoList, pageable, storePage.getTotalElements());
@@ -118,7 +129,9 @@ public class StoreService {
 						.map(MenuResDTO::new)
 						.toList();
 
-		return new StoreDetailResDTO(store, menus);
+		List<FileInfoResDTO> images = fileService.getList(store.getGid(), "store", FileStatus.DONE);
+
+		return new StoreDetailResDTO(store, menus, images);
 	}
 
 	@Transactional
@@ -192,13 +205,20 @@ public class StoreService {
 		List<StoreListResDTO> dtoList =
 				storePage.getContent().stream()
 						.map(
-								store ->
-										new StoreListResDTO(
-												store.getStoreId(),
-												store.getName(),
-												store.getStoreCategory(),
-												store.getAddress(),
-												store.getGid()))
+								store -> {
+									List<FileInfoResDTO> Files =
+											fileService.getList(store.getGid(), "store", FileStatus.DONE);
+
+									String image = Files.isEmpty() ? null : Files.get(0).getFileUrl();
+
+									return new StoreListResDTO(
+											store.getStoreId(),
+											store.getName(),
+											store.getStoreCategory(),
+											store.getAddress(),
+											store.getGid(),
+											image);
+								})
 						.toList();
 
 		return new PageImpl<>(dtoList, pageable, storePage.getTotalElements());

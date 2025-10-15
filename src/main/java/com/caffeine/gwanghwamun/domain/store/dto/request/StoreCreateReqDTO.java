@@ -28,7 +28,8 @@ public class StoreCreateReqDTO {
 	private Integer deliveryTip;
 	private String operationHours;
 	private String closedDays;
-	private String gid;
+
+	@NotNull private String gid;
 
 	// MANAGER/MASTER
 	private Long ownerUserId;

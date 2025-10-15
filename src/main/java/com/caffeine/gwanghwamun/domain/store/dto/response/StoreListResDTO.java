@@ -15,4 +15,5 @@ public class StoreListResDTO {
 	private StoreCategoryEnum category;
 	private String address;
 	private String gid;
+	private String image;
 }
