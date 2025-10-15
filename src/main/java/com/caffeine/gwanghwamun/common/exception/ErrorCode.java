@@ -68,7 +68,11 @@ public enum ErrorCode {
 	ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다."),
 	ORDER_TIME_EXPIRED(HttpStatus.BAD_REQUEST, "취소 가능 시간이 초과되었습니다."),
 	UNAUTHORIZED_ORDER_ACCESS(HttpStatus.FORBIDDEN, "주문에 접근권한이 없습니디."),
-	UNAUTHORIZED_STORE_ACCESS(HttpStatus.FORBIDDEN, "가게에 대한 권한이 없습니다.");
+	UNAUTHORIZED_STORE_ACCESS(HttpStatus.FORBIDDEN, "가게에 대한 권한이 없습니다."),
+
+	// 장바구니 (cart)
+	CART_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 장바구니를 찾을 수 없습니다."),
+	UNAUTHORIZED_CART_ACCESS(HttpStatus.FORBIDDEN, "장바구니에 접근권한이 없습니디.");
 
 	private final HttpStatus httpStatus;
 	private final String message;
