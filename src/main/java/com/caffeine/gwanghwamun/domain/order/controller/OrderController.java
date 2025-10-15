@@ -2,10 +2,10 @@ package com.caffeine.gwanghwamun.domain.order.controller;
 
 import com.caffeine.gwanghwamun.common.response.ApiResponse;
 import com.caffeine.gwanghwamun.common.response.ResponseUtil;
+import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
 import com.caffeine.gwanghwamun.domain.order.dto.*;
 import com.caffeine.gwanghwamun.domain.order.service.OrderService;
-import com.caffeine.gwanghwamun.domain.user.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

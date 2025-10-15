@@ -3,10 +3,12 @@ package com.caffeine.gwanghwamun.domain.store.dto.request;
 import com.caffeine.gwanghwamun.domain.store.entity.StoreCategoryEnum;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class StoreCreateReqDTO {
 
 	@NotBlank(message = "가게 이름은 필수 입력 항목입니다.")
@@ -17,7 +19,7 @@ public class StoreCreateReqDTO {
 	private String address;
 
 	@NotBlank(message = "전화번호는 필수 입력 항목입니다.")
-	@Pattern(regexp = "^010\\d{8}$", message = "전화번호는 010으로 시작하는 11자리 숫자여야 합니다.")
+	@Pattern(regexp = "^(0\\d{1,2})-?\\d{3,4}-?\\d{4}$", message = "전화번호 형식이 올바르지 않습니다.")
 	private String phone;
 
 	@NotNull(message = "카테고리는 필수 선택 항목입니다.")
@@ -28,5 +30,9 @@ public class StoreCreateReqDTO {
 	private Integer deliveryTip;
 	private String operationHours;
 	private String closedDays;
-	private Long groupId;
+
+	@NotNull private String gid;
+
+	// MANAGER/MASTER
+	private Long ownerUserId;
 }

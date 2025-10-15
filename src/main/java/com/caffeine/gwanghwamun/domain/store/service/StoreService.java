@@ -2,6 +2,9 @@ package com.caffeine.gwanghwamun.domain.store.service;
 
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
+import com.caffeine.gwanghwamun.domain.file.dto.FileInfoResDTO;
+import com.caffeine.gwanghwamun.domain.file.entity.FileStatus;
+import com.caffeine.gwanghwamun.domain.file.service.FileService;
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuResDTO;
 import com.caffeine.gwanghwamun.domain.menu.repository.MenuRepository;
 import com.caffeine.gwanghwamun.domain.store.dto.request.StoreCreateReqDTO;
@@ -14,6 +17,7 @@ import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
+import com.caffeine.gwanghwamun.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -28,35 +32,49 @@ public class StoreService {
 
 	private final StoreRepository storeRepository;
 	private final MenuRepository menuRepository;
+	private final UserRepository userRepository;
+	private final FileService fileService;
 
+	@Transactional
 	public StoreCreateResDTO createStore(StoreCreateReqDTO req, User user) {
-		Store store = Store.create(req, user);
+		User owner = user;
+
+		if (user.getRole() == UserRoleEnum.MASTER || user.getRole() == UserRoleEnum.MANAGER) {
+			if (req.getOwnerUserId() == null) {
+				throw new CustomException(ErrorCode.OWNER_REQUIRED);
+			}
+
+			owner =
+					userRepository
+							.findById(req.getOwnerUserId())
+							.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+			if (owner.getRole() != UserRoleEnum.OWNER) {
+				throw new CustomException(ErrorCode.INVALID_ROLE);
+			}
+		}
+
+		if (user.getRole() == UserRoleEnum.OWNER && req.getOwnerUserId() != null) {
+			throw new CustomException(ErrorCode.INVALID_REQUEST);
+		}
+
+		boolean exists =
+				storeRepository.existsByNameAndAddressAndDeletedAtIsNull(req.getName(), req.getAddress());
+		if (exists) {
+			throw new CustomException(ErrorCode.DUPLICATED_STORE);
+		}
+
+		Store store = Store.create(req, owner);
 		storeRepository.save(store);
 
 		return new StoreCreateResDTO(store.getStoreId(), store.getName(), store.getStoreCategory());
 	}
 
+	@Transactional(readOnly = true)
 	public Page<StoreListResDTO> getStoreList(int page, int size, String sortBy, String direction) {
-		Sort sort =
-				direction.equalsIgnoreCase("asc")
-						? Sort.by(sortBy).ascending()
-						: Sort.by(sortBy).descending();
-
-		Pageable pageable = PageRequest.of(page, size, sort);
+		Pageable pageable = buildPageable(page, size, sortBy, direction);
 		Page<Store> storePage = storeRepository.findAllActiveStores(pageable);
-
-		List<StoreListResDTO> dtoList =
-				storePage.getContent().stream()
-						.map(
-								store ->
-										new StoreListResDTO(
-												store.getStoreId(),
-												store.getName(),
-												store.getStoreCategory(),
-												store.getAddress()))
-						.toList();
-
-		return new PageImpl<>(dtoList, pageable, storePage.getTotalElements());
+		return storeList(storePage, pageable);
 	}
 
 	@Transactional(readOnly = true)
@@ -87,7 +105,9 @@ public class StoreService {
 						.map(MenuResDTO::new)
 						.toList();
 
-		return new StoreDetailResDTO(store, menus);
+		List<FileInfoResDTO> images = fileService.getList(store.getGid(), "store", FileStatus.DONE);
+
+		return new StoreDetailResDTO(store, menus, images);
 	}
 
 	@Transactional
@@ -111,6 +131,9 @@ public class StoreService {
 		if (req.getDeliveryTip() != null) store.setDeliveryTip(req.getDeliveryTip());
 		if (req.getOperationHours() != null) store.setOperationHours(req.getOperationHours());
 		if (req.getClosedDays() != null) store.setClosedDays(req.getClosedDays());
+		if (req.getGid() != null && !req.getGid().equals(store.getGid())) {
+			store.setGid(req.getGid());
+		}
 
 		storeRepository.save(store);
 
@@ -145,16 +168,12 @@ public class StoreService {
 	@Transactional(readOnly = true)
 	public Page<StoreListResDTO> searchStores(
 			String keyword, int page, int size, String sortBy, String direction) {
-
-		Sort sort =
-				direction.equalsIgnoreCase("asc")
-						? Sort.by(sortBy).ascending()
-						: Sort.by(sortBy).descending();
-
-		Pageable pageable = PageRequest.of(page, size, sort);
-
+		Pageable pageable = buildPageable(page, size, sortBy, direction);
 		Page<Store> storePage = storeRepository.searchActiveStores(keyword, pageable);
+		return storeList(storePage, pageable);
+	}
 
+	private Page<StoreListResDTO> storeList(Page<Store> storePage, Pageable pageable) {
 		List<StoreListResDTO> dtoList =
 				storePage.getContent().stream()
 						.map(
@@ -163,9 +182,24 @@ public class StoreService {
 												store.getStoreId(),
 												store.getName(),
 												store.getStoreCategory(),
-												store.getAddress()))
+												store.getAddress(),
+												store.getGid(),
+												getFirstImageUrl(store.getGid())))
 						.toList();
 
 		return new PageImpl<>(dtoList, pageable, storePage.getTotalElements());
+	}
+
+	private Pageable buildPageable(int page, int size, String sortBy, String direction) {
+		Sort sort =
+				direction.equalsIgnoreCase("asc")
+						? Sort.by(sortBy).ascending()
+						: Sort.by(sortBy).descending();
+		return PageRequest.of(page, size, sort);
+	}
+
+	private String getFirstImageUrl(String gid) {
+		List<FileInfoResDTO> files = fileService.getList(gid, "store", FileStatus.DONE);
+		return files.isEmpty() ? null : files.get(0).getFileUrl();
 	}
 }

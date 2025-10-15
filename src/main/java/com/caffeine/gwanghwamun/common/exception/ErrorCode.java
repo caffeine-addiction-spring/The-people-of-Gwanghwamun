@@ -11,6 +11,17 @@ public enum ErrorCode {
 
 	// 공통
 	VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "요청 값이 유효하지 않습니다."),
+	SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생했습니다."),
+
+	// 리뷰 (review)
+	REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "리뷰를 찾을 수 없습니다."),
+	REVIEW_DELETE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "리뷰 삭제 권한이 없습니다."),
+	REVIEW_CREATE_NOT_ACCEPTED(HttpStatus.BAD_REQUEST, "배달 완료 상태가 아닙니다."),
+	REVIEW_DUPLICATED(HttpStatus.BAD_REQUEST, "주문당 1개의 리뷰만 작성할 수 있습니다."),
+	REVIEW_CREATE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "댓글 생성은 본인만 생성할 수 있습니다."),
+	REVIEW_REPLY_CREATE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "답글 생성 권한이 없습니다."),
+	REVIEW_REPLY_DELETE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "답글 삭제 권한이 없습니다."),
+	REVIEW_REPLY_DUPLICATED(HttpStatus.CONFLICT, "이미 답글이 등록되어 있습니다."),
 
 	// 회원 (user)
 	DUPLICATED(HttpStatus.CONFLICT, "회원가입 실패"),
@@ -35,6 +46,10 @@ public enum ErrorCode {
 	// 가게 (store)
 	STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 가게를 찾을 수 없습니다."),
 	ALREADY_DELETED(HttpStatus.BAD_REQUEST, "이미 삭제된 가게입니다."),
+	DUPLICATED_STORE(HttpStatus.CONFLICT, "이미 등록된 가게입니다."),
+	OWNER_REQUIRED(HttpStatus.BAD_REQUEST, "가게 등록 시 OWNER 사용자를 지정해야 합니다."),
+	INVALID_ROLE(HttpStatus.BAD_REQUEST, "지정된 사용자가 OWNER 권한이 아닙니다."),
+	INVALID_REQUEST(HttpStatus.BAD_REQUEST, "OWNER는 userId를 지정할 수 없습니다."),
 
 	// 지역 (region)
 	REGION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 지역을 찾을 수 없습니다."),

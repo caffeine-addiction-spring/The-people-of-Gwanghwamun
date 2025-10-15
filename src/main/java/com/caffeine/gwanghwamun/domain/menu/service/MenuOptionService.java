@@ -2,6 +2,7 @@ package com.caffeine.gwanghwamun.domain.menu.service;
 
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
+import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuOptionCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuOptionSoldOutReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuOptionUpdateReqDTO;
@@ -14,7 +15,6 @@ import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
-import com.caffeine.gwanghwamun.domain.user.security.UserDetailsImpl;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,5 +1,6 @@
-package com.caffeine.gwanghwamun.domain.user.security;
+package com.caffeine.gwanghwamun.common.security.service;
 
+import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
