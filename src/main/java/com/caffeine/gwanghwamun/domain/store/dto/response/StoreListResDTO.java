@@ -14,4 +14,5 @@ public class StoreListResDTO {
 	private String storeName;
 	private StoreCategoryEnum category;
 	private String address;
+	private String gid;
 }

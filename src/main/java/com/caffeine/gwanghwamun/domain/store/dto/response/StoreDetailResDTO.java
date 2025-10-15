@@ -23,6 +23,7 @@ public class StoreDetailResDTO {
 	private final String closedDays;
 	private final BigDecimal rating;
 	private final Integer reviewCount;
+	private final String gid;
 	private final List<MenuResDTO> menus;
 
 	public StoreDetailResDTO(Store store, List<MenuResDTO> menus) {
@@ -38,6 +39,7 @@ public class StoreDetailResDTO {
 		this.closedDays = store.getClosedDays();
 		this.rating = store.getRating();
 		this.reviewCount = store.getReviewCount();
+		this.gid = store.getGid();
 		this.menus = menus;
 	}
 }

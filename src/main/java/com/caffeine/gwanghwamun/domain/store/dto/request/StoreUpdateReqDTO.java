@@ -16,4 +16,5 @@ public class StoreUpdateReqDTO {
 	private Integer deliveryTip;
 	private String operationHours;
 	private String closedDays;
+	private String gid;
 }

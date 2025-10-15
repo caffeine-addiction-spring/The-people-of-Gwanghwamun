@@ -82,7 +82,8 @@ public class StoreService {
 												store.getStoreId(),
 												store.getName(),
 												store.getStoreCategory(),
-												store.getAddress()))
+												store.getAddress(),
+												store.getGid()))
 						.toList();
 
 		return new PageImpl<>(dtoList, pageable, storePage.getTotalElements());
@@ -140,6 +141,9 @@ public class StoreService {
 		if (req.getDeliveryTip() != null) store.setDeliveryTip(req.getDeliveryTip());
 		if (req.getOperationHours() != null) store.setOperationHours(req.getOperationHours());
 		if (req.getClosedDays() != null) store.setClosedDays(req.getClosedDays());
+		if (req.getGid() != null && !req.getGid().equals(store.getGid())) {
+			store.setGid(req.getGid());
+		}
 
 		storeRepository.save(store);
 
@@ -192,7 +196,8 @@ public class StoreService {
 												store.getStoreId(),
 												store.getName(),
 												store.getStoreCategory(),
-												store.getAddress()))
+												store.getAddress(),
+												store.getGid()))
 						.toList();
 
 		return new PageImpl<>(dtoList, pageable, storePage.getTotalElements());
