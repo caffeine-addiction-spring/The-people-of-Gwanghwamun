@@ -2,12 +2,12 @@ package com.caffeine.gwanghwamun.domain.review.controller;
 
 import com.caffeine.gwanghwamun.common.response.ApiResponse;
 import com.caffeine.gwanghwamun.common.response.ResponseUtil;
+import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
 import com.caffeine.gwanghwamun.domain.review.dto.ReviewCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.review.dto.ReviewReplyCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.review.dto.ReviewResDTO;
 import com.caffeine.gwanghwamun.domain.review.service.ReviewService;
-import com.caffeine.gwanghwamun.domain.user.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.UUID;
