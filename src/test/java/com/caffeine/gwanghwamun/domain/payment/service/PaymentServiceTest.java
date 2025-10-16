@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PaymentServiceTest {
@@ -45,26 +45,28 @@ class PaymentServiceTest {
         // given
         UUID orderId = UUID.randomUUID();
         UUID storeId = UUID.randomUUID();
+        UUID paymentId = UUID.randomUUID();
         Long userId = 1L;
         Integer amount = 10000;
 
-        User user = User.builder().userId(userId).build();
-        Store store = Store.builder().storeId(storeId).build();
-        Order order = Order.builder()
-                .orderId(orderId)
-                .user(user)
-                .store(store)
-                .totalPrice(amount)
-                .build();
+        // Mock 객체 생성
+        User user = mock(User.class);
+        given(user.getUserId()).willReturn(userId);
 
-        Payment payment = Payment.builder()
-                .paymentId(UUID.randomUUID())
-                .userId(userId)
-                .orderId(orderId)
-                .storeId(storeId)
-                .amount(amount)
-                .paymentStatus(PaymentStatus.PENDING)
-                .build();
+        Store store = mock(Store.class);
+        given(store.getStoreId()).willReturn(storeId);
+
+        Order order = mock(Order.class);
+        given(order.getUser()).willReturn(user);
+        given(order.getStore()).willReturn(store);
+        given(order.getTotalPrice()).willReturn(amount);
+
+        Payment payment = mock(Payment.class);
+        given(payment.getPaymentId()).willReturn(paymentId);
+        given(payment.getOrderId()).willReturn(orderId);
+        given(payment.getAmount()).willReturn(amount);
+        given(payment.getPaymentStatus()).willReturn(PaymentStatus.APPROVE);
+        given(payment.getApprovedAt()).willReturn(null);
 
         PaymentCreateReqDTO reqDTO = new PaymentCreateReqDTO(amount);
 
@@ -76,9 +78,9 @@ class PaymentServiceTest {
         PaymentResDTO result = paymentService.createPayment(orderId, reqDTO, userId);
 
         // then
-        assertThat(result.paymentId()).isEqualTo(payment.getPaymentId());
+        assertThat(result.paymentId()).isEqualTo(paymentId);
         assertThat(result.amount()).isEqualTo(amount);
-        assertThat(result.paymentStatus()).isEqualTo(PaymentStatus.APPROVED);
+        assertThat(result.paymentStatus()).isEqualTo(PaymentStatus.APPROVE);
         verify(paymentRepository).save(any(Payment.class));
     }
 
@@ -106,12 +108,11 @@ class PaymentServiceTest {
         Long userId = 1L;
         Long otherUserId = 2L;
 
-        User user = User.builder().userId(otherUserId).build();
-        Order order = Order.builder()
-                .orderId(orderId)
-                .user(user)
-                .totalPrice(10000L)
-                .build();
+        User user = mock(User.class);
+        given(user.getUserId()).willReturn(otherUserId);
+
+        Order order = mock(Order.class);
+        given(order.getUser()).willReturn(user);
 
         PaymentCreateReqDTO reqDTO = new PaymentCreateReqDTO(10000);
 
@@ -130,12 +131,11 @@ class PaymentServiceTest {
         UUID orderId = UUID.randomUUID();
         Long userId = 1L;
 
-        User user = User.builder().userId(userId).build();
-        Order order = Order.builder()
-                .orderId(orderId)
-                .user(user)
-                .totalPrice(10000L)
-                .build();
+        User user = mock(User.class);
+        given(user.getUserId()).willReturn(userId);
+
+        Order order = mock(Order.class);
+        given(order.getUser()).willReturn(user);
 
         PaymentCreateReqDTO reqDTO = new PaymentCreateReqDTO(10000);
 
@@ -155,12 +155,12 @@ class PaymentServiceTest {
         UUID orderId = UUID.randomUUID();
         Long userId = 1L;
 
-        User user = User.builder().userId(userId).build();
-        Order order = Order.builder()
-                .orderId(orderId)
-                .user(user)
-                .totalPrice(10000L)
-                .build();
+        User user = mock(User.class);
+        given(user.getUserId()).willReturn(userId);
+
+        Order order = mock(Order.class);
+        given(order.getUser()).willReturn(user);
+        given(order.getTotalPrice()).willReturn(10000);
 
         PaymentCreateReqDTO reqDTO = new PaymentCreateReqDTO(5000); // 다른 금액
 
