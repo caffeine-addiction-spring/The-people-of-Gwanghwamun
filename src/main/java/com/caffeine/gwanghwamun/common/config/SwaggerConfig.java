@@ -14,7 +14,6 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -63,33 +62,45 @@ public class SwaggerConfig {
 	private Paths customPaths() {
 		Paths paths = new Paths();
 
-		PathItem loginPath = new PathItem()
-				.post(new Operation()
-						.tags(List.of("인증"))
-						.summary("로그인 API")
-						.description("이메일, 비밀번호를 통한 로그인")
-						.requestBody(new RequestBody()
-								.content(new Content()
-										.addMediaType("application/json",
-												new MediaType()
-														.schema(new Schema<>()
-																.type("object")
-																.addProperty("email", new Schema<>().type("string").example("user@example.com"))
-																.addProperty("password", new Schema<>().type("string").example("password123"))
-														)
-										)
-								)
-						)
-						.responses(new ApiResponses()
-								.addApiResponse("200",
-										new ApiResponse()
-												.description("로그인 성공")
-												.headers(Map.of("Authorization",
-														new Header().description("JWT 토큰").schema(new Schema<>().type("string"))
-												))
-								)
-						)
-				);
+		PathItem loginPath =
+				new PathItem()
+						.post(
+								new Operation()
+										.tags(List.of("인증"))
+										.summary("로그인 API")
+										.description("이메일, 비밀번호를 통한 로그인")
+										.requestBody(
+												new RequestBody()
+														.content(
+																new Content()
+																		.addMediaType(
+																				"application/json",
+																				new MediaType()
+																						.schema(
+																								new Schema<>()
+																										.type("object")
+																										.addProperty(
+																												"email",
+																												new Schema<>()
+																														.type("string")
+																														.example("user@example.com"))
+																										.addProperty(
+																												"password",
+																												new Schema<>()
+																														.type("string")
+																														.example("password123"))))))
+										.responses(
+												new ApiResponses()
+														.addApiResponse(
+																"200",
+																new ApiResponse()
+																		.description("로그인 성공")
+																		.headers(
+																				Map.of(
+																						"Authorization",
+																						new Header()
+																								.description("JWT 토큰")
+																								.schema(new Schema<>().type("string")))))));
 
 		paths.addPathItem("/v1/auth/login", loginPath);
 		return paths;
