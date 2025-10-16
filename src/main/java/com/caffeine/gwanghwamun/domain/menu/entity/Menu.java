@@ -3,13 +3,12 @@ package com.caffeine.gwanghwamun.domain.menu.entity;
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "p_menu")
