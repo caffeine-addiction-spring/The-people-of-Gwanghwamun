@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.user.security;
+package com.caffeine.gwanghwamun.common.security.model;
 
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import java.util.Collection;

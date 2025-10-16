@@ -1,35 +1,31 @@
-package com.caffeine.gwanghwamun.domain.user.jwt;
+package com.caffeine.gwanghwamun.common.jwt;
 
 import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
-@Slf4j(topic = "JwtUtil")
+@Slf4j(topic = "JwtTokenProvider")
 @Component
-public class JwtUtil {
-	public static final String AUTHORIZATION_HEADER = "Authorization";
-	public static final String AUTHORIZATION_KEY = "auth";
-	public static final String BEARER_PREFIX = "Bearer ";
-	private final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
+@RequiredArgsConstructor
+public class JwtProvider {
 
-	@Value("${jwt.secret.key}") // Base64 Encode 한 SecretKey
-	private String secretKey;
-
+	private final JwtProperties jwtProperties;
 	private Key key;
 	private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
+	public static final String AUTHORIZATION_KEY = "auth";
+	public static final String BEARER_PREFIX = "Bearer ";
+
 	@PostConstruct
 	public void init() {
-		byte[] bytes = Base64.getDecoder().decode(secretKey);
+		byte[] bytes = Base64.getDecoder().decode(jwtProperties.getSecretKey());
 		key = Keys.hmacShaKeyFor(bytes);
 	}
 
@@ -40,24 +36,15 @@ public class JwtUtil {
 				+ Jwts.builder()
 						.setSubject(username)
 						.claim(AUTHORIZATION_KEY, role)
-						.setExpiration(new Date(date.getTime() + TOKEN_TIME))
+						.setExpiration(new Date(date.getTime() + jwtProperties.getExpirationTime()))
 						.setIssuedAt(date)
 						.signWith(key, signatureAlgorithm)
 						.compact();
 	}
 
-	public String getJwtFromHeader(HttpServletRequest request) {
-		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-			return bearerToken.substring(7);
-		}
-		return null;
-	}
-
-	public boolean validateToken(String token) {
+	public void validateToken(String token) {
 		try {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-			return true;
 		} catch (SecurityException | MalformedJwtException e) {
 			log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
 		} catch (ExpiredJwtException e) {
@@ -67,7 +54,6 @@ public class JwtUtil {
 		} catch (IllegalArgumentException e) {
 			log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
 		}
-		return false;
 	}
 
 	public Claims getUserInfoFromToken(String token) {

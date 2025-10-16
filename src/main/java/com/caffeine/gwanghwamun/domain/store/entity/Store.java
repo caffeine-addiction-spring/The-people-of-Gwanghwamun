@@ -1,5 +1,7 @@
 package com.caffeine.gwanghwamun.domain.store.entity;
 
+import com.caffeine.gwanghwamun.common.exception.CustomException;
+import com.caffeine.gwanghwamun.common.exception.ErrorCode;
 import com.caffeine.gwanghwamun.domain.store.dto.request.StoreCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -26,8 +28,8 @@ public class Store {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	// @Column(nullable = false)
-	private Long groupId;
+	@Column(nullable = false)
+	private String gid;
 
 	@Column(nullable = false, length = 255)
 	private String name;
@@ -93,6 +95,10 @@ public class Store {
 		store.user = user;
 		store.rating = BigDecimal.ZERO;
 		store.reviewCount = 0;
+		if (req.getGid() == null || req.getGid().isBlank()) {
+			throw new CustomException(ErrorCode.FILE_NOT_UPLOAD);
+		}
+		store.gid = req.getGid();
 		return store;
 	}
 }

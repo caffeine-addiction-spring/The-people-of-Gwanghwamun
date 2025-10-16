@@ -43,7 +43,17 @@ public enum SuccessCode {
 	MENU_SOLDOUT_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 품절 상태 변경 성공"),
 
 	// 가게 (store)
+	STORE_CREATE_SUCCESS(HttpStatus.CREATED, "가게 등록 성공"),
+	STORE_LIST_SUCCESS(HttpStatus.OK, "가게 목록 조회 성공"),
+	STORE_FIND_SUCCESS(HttpStatus.OK, "가게 상세 조회 성공"),
+	STORE_UPDATE_SUCCESS(HttpStatus.OK, "가게 정보 수정 완료"),
+	STORE_SEARCH_SUCCESS(HttpStatus.OK, "가게 검색 성공"),
 	STORE_DELETE_SUCCESS(HttpStatus.OK, "가게 삭제 완료"),
+
+	// 배달 지역 (region)
+	REGION_LIST_SUCCESS(HttpStatus.OK, "지역 목록 조회 성공"),
+	REGION_CREATE_SUCCESS(HttpStatus.CREATED, "지역 생성 성공"),
+	REGION_UPDATE_SUCCESS(HttpStatus.OK, "지역 수정 성공"),
 
 	// 메뉴 옵션 (menuOption)
 	MENU_OPTION_SAVE_SUCCESS(HttpStatus.CREATED, "메뉴 옵션 생성 성공"),
@@ -77,7 +87,10 @@ public enum SuccessCode {
 
 	// 주문 상태 로그 (order_status_log)
 	ORDER_LOG_LIST_SUCCESS(HttpStatus.OK, "주문 상태 목록 조회 성공"),
-	ORDER_LOG_SUCCESS(HttpStatus.OK, "주문 상태 조회 성공");
+	ORDER_LOG_SUCCESS(HttpStatus.OK, "주문 상태 조회 성공"),
+
+	// AI
+	AI_SAVE_SUCCESS(HttpStatus.OK, "상품 설명 AI 생성 성공");
 
 	private final HttpStatus httpStatus;
 	private final String message;

@@ -18,6 +18,7 @@ public class RegionService {
 
 	private final RegionRepository regionRepository;
 
+	@Transactional(readOnly = true)
 	public List<RegionResDTO> getAllRegion() {
 		List<Address> addressList = regionRepository.findAll();
 
@@ -26,6 +27,7 @@ public class RegionService {
 				.toList();
 	}
 
+	@Transactional
 	public RegionResDTO createRegion(RegionReqDTO request) {
 		if (regionRepository.existsByName(request.getName())) {
 			throw new CustomException(ErrorCode.REGION_DUPLICATED);

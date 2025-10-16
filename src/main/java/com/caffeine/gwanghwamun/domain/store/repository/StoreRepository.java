@@ -29,4 +29,6 @@ public interface StoreRepository extends JpaRepository<Store, UUID> {
 			)
 		""")
 	Page<Store> searchActiveStores(@Param("keyword") String keyword, Pageable pageable);
+
+	boolean existsByNameAndAddressAndDeletedAtIsNull(String name, String address);
 }

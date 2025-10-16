@@ -1,8 +1,10 @@
-package com.caffeine.gwanghwamun.domain.user.security;
+package com.caffeine.gwanghwamun.common.security.filter;
 
+import com.caffeine.gwanghwamun.common.jwt.JwtProvider;
+import com.caffeine.gwanghwamun.common.jwt.JwtUtil;
+import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.domain.user.dto.request.LoginReqDTO;
 import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
-import com.caffeine.gwanghwamun.domain.user.jwt.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,11 +17,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Slf4j(topic = "로그인 및 JWT 생성")
-public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-	private final JwtUtil jwtUtil;
+public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
-	public JwtAuthenticationFilter(JwtUtil jwtUtil) {
-		this.jwtUtil = jwtUtil;
+	private final JwtProvider jwtProvider;
+
+	public JwtLoginFilter(JwtProvider jwtProvider) {
+		this.jwtProvider = jwtProvider;
 		setFilterProcessesUrl("/v1/auth/login");
 	}
 
@@ -35,8 +38,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 							new UsernamePasswordAuthenticationToken(
 									requestDto.email(), requestDto.password(), null));
 		} catch (IOException e) {
-			log.error(e.getMessage());
-			throw new RuntimeException(e.getMessage());
+			log.error("로그인 요청 파싱 오류: {}", e.getMessage());
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -49,13 +52,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String email = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
 		UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
 
-		String token = jwtUtil.createToken(email, role);
+		String token = jwtProvider.createToken(email, role);
 		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+
+		log.info("JWT 발급 완료: {}", email);
 	}
 
 	@Override
 	protected void unsuccessfulAuthentication(
 			HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-		response.setStatus(401);
+		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 	}
 }

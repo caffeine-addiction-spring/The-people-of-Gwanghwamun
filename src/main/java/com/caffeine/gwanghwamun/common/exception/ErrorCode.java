@@ -11,6 +11,7 @@ public enum ErrorCode {
 
 	// 공통
 	VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "요청 값이 유효하지 않습니다."),
+	SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생했습니다."),
 
 	// 리뷰 (review)
 	REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "리뷰를 찾을 수 없습니다."),
@@ -45,6 +46,10 @@ public enum ErrorCode {
 	// 가게 (store)
 	STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 가게를 찾을 수 없습니다."),
 	ALREADY_DELETED(HttpStatus.BAD_REQUEST, "이미 삭제된 가게입니다."),
+	DUPLICATED_STORE(HttpStatus.CONFLICT, "이미 등록된 가게입니다."),
+	OWNER_REQUIRED(HttpStatus.BAD_REQUEST, "가게 등록 시 OWNER 사용자를 지정해야 합니다."),
+	INVALID_ROLE(HttpStatus.BAD_REQUEST, "지정된 사용자가 OWNER 권한이 아닙니다."),
+	INVALID_REQUEST(HttpStatus.BAD_REQUEST, "OWNER는 userId를 지정할 수 없습니다."),
 
 	// 지역 (region)
 	REGION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 지역을 찾을 수 없습니다."),
@@ -63,7 +68,11 @@ public enum ErrorCode {
 	ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다."),
 	ORDER_TIME_EXPIRED(HttpStatus.BAD_REQUEST, "취소 가능 시간이 초과되었습니다."),
 	UNAUTHORIZED_ORDER_ACCESS(HttpStatus.FORBIDDEN, "주문에 접근권한이 없습니디."),
-	UNAUTHORIZED_STORE_ACCESS(HttpStatus.FORBIDDEN, "가게에 대한 권한이 없습니다.");
+	UNAUTHORIZED_STORE_ACCESS(HttpStatus.FORBIDDEN, "가게에 대한 권한이 없습니다."),
+
+	// 장바구니 (cart)
+	CART_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 장바구니를 찾을 수 없습니다."),
+	UNAUTHORIZED_CART_ACCESS(HttpStatus.FORBIDDEN, "장바구니에 접근권한이 없습니디.");
 
 	private final HttpStatus httpStatus;
 	private final String message;
