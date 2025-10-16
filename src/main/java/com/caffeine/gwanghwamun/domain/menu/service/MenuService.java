@@ -3,6 +3,7 @@ package com.caffeine.gwanghwamun.domain.menu.service;
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
 import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
+import com.caffeine.gwanghwamun.domain.ai.service.AiService;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuResDTO;
@@ -29,6 +30,7 @@ public class MenuService {
 
 	private final MenuRepository menuRepository;
 	private final StoreRepository storeRepository;
+	private final AiService aiService;
 
 	private User requireAuthenticatedUser(UserDetailsImpl principal) {
 		if (principal == null || principal.getUser() == null) {
@@ -55,13 +57,18 @@ public class MenuService {
 	public MenuResDTO saveMenu(UUID storeId, MenuCreateReqDTO req, UserDetailsImpl principal) {
 		validateStoreOwnership(storeId, principal);
 
+		String content = req.content();
+		if (Boolean.TRUE.equals(req.useAI()) && req.aiPrompt() != null) {
+			content = aiService.ask(req.aiPrompt());
+		}
+
 		Menu menu =
 				Menu.builder()
 						.storeId(storeId)
 						.groupId(req.groupId())
 						.menuCategory(req.menuCategory())
 						.name(req.name())
-						.menuContent(req.content())
+						.menuContent(content)
 						.price(req.price())
 						.isSoldOut(false)
 						.isHidden(req.isHidden() != null ? req.isHidden() : false)
