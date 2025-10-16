@@ -25,7 +25,7 @@ public class StoreController {
 
 	private final StoreService storeService;
 
-	@Operation(summary = "가게 등록 API")
+	@Operation(summary = "가게 등록 API", description = "가게를 등록할 수 있다")
 	@PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MASTER')")
 	@PostMapping
 	public ResponseEntity<ApiResponse<StoreCreateResDTO>> createStore(
@@ -36,7 +36,7 @@ public class StoreController {
 		return ResponseUtil.successResponse(SuccessCode.STORE_CREATE_SUCCESS, response);
 	}
 
-	@Operation(summary = "가게 목록 조회 API")
+	@Operation(summary = "가게 목록 조회 API", description = "가게 목록을 조회한다")
 	@GetMapping
 	public ResponseEntity<ApiResponse<Page<StoreListResDTO>>> getStoreList(
 			@RequestParam(defaultValue = "0") int page,
@@ -51,7 +51,7 @@ public class StoreController {
 		return ResponseUtil.successResponse(SuccessCode.STORE_LIST_SUCCESS, stores);
 	}
 
-	@Operation(summary = "가게 상세 조회 API")
+	@Operation(summary = "가게 상세 조회 API", description = "가게를 상세 조회한다")
 	@GetMapping("/{storeId}")
 	public ResponseEntity<ApiResponse<StoreDetailResDTO>> getStoreDetail(
 			@PathVariable UUID storeId,
@@ -61,7 +61,7 @@ public class StoreController {
 		return ResponseUtil.successResponse(SuccessCode.STORE_FIND_SUCCESS, response);
 	}
 
-	@Operation(summary = "가게 수정 API")
+	@Operation(summary = "가게 수정 API", description = "가게 정보를 수정할 수 있다")
 	@PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MASTER')")
 	@PutMapping("/{storeId}")
 	public ResponseEntity<ApiResponse<StoreUpdateResDTO>> updateStore(
@@ -72,7 +72,7 @@ public class StoreController {
 		return ResponseUtil.successResponse(SuccessCode.STORE_UPDATE_SUCCESS, response);
 	}
 
-	@Operation(summary = "가게 삭제 API")
+	@Operation(summary = "가게 삭제 API", description = "가게를 삭제할 수 있다")
 	@PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MASTER')")
 	@DeleteMapping("/{storeId}")
 	public ResponseEntity<ApiResponse<Void>> deleteStore(
@@ -81,7 +81,7 @@ public class StoreController {
 		return ResponseUtil.successResponse(SuccessCode.STORE_DELETE_SUCCESS);
 	}
 
-	@Operation(summary = "가게 검색 API")
+	@Operation(summary = "가게 검색 API", description = "키워드로 가게를 검색할 수 있다")
 	@GetMapping("/search")
 	public ResponseEntity<ApiResponse<Page<StoreListResDTO>>> searchStores(
 			@RequestParam String keyword,
