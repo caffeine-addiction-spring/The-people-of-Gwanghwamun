@@ -13,6 +13,13 @@ public enum ErrorCode {
 	VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "요청 값이 유효하지 않습니다."),
 	SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생했습니다."),
 
+	// 결제 (payment)
+	PAYMENT_INVALID_AMOUNT(HttpStatus.BAD_REQUEST, "결제 금액이 유효하지 않습니다."),
+	PAYMENT_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "사용자 정보가 일치하지 않습니다."),
+	PAYMENT_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 결제된 주문입니다."),
+	PAYMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "결제 정보를 찾을 수 없습니다."),
+	PAYMENT_FIND_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "결제 목록 조회 권한이 없습니다."),
+
 	// 리뷰 (review)
 	REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "리뷰를 찾을 수 없습니다."),
 	REVIEW_DELETE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "리뷰 삭제 권한이 없습니다."),
