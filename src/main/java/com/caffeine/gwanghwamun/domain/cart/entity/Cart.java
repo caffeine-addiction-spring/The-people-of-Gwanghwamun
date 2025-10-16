@@ -45,18 +45,13 @@ public class Cart extends BaseEntity {
 	@Column(name = "total_price", nullable = false)
 	private int totalPrice;
 
-	@Enumerated(EnumType.STRING)
-	private CartMode cartMode;
-
 	@Builder
-	public Cart(
-			User user, Store store, Menu menu, int quantity, CartMode cartMode, Integer totalPrice) {
+	public Cart(User user, Store store, Menu menu, int quantity, Integer totalPrice) {
 		this.user = user;
 		this.store = store;
 		this.menu = menu;
 		this.quantity = quantity;
 		this.totalPrice = totalPrice;
-		this.cartMode = cartMode;
 	}
 
 	public void updateQuantity(int quantity) {

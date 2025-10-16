@@ -3,13 +3,9 @@ package com.caffeine.gwanghwamun.domain.order.service;
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
 import com.caffeine.gwanghwamun.domain.cart.entity.Cart;
-import com.caffeine.gwanghwamun.domain.cart.entity.CartMode;
 import com.caffeine.gwanghwamun.domain.cart.repository.CartRepository;
 import com.caffeine.gwanghwamun.domain.order.dto.*;
-import com.caffeine.gwanghwamun.domain.order.entity.Order;
-import com.caffeine.gwanghwamun.domain.order.entity.OrderItem;
-import com.caffeine.gwanghwamun.domain.order.entity.OrderStatus;
-import com.caffeine.gwanghwamun.domain.order.entity.OrderStatusLog;
+import com.caffeine.gwanghwamun.domain.order.entity.*;
 import com.caffeine.gwanghwamun.domain.order.repository.OrderItemRepository;
 import com.caffeine.gwanghwamun.domain.order.repository.OrderRepository;
 import com.caffeine.gwanghwamun.domain.order.repository.OrderStatusLogRepository;
@@ -89,6 +85,7 @@ public class OrderService {
 						.orderStatus(OrderStatus.ORDER_WAITING)
 						.deliveryAddress(req.address())
 						.totalPrice(totalPrice)
+						.mode(req.cartMode())
 						.deliveryContent(req.deliveryContent())
 						.requests(req.requests())
 						.build();

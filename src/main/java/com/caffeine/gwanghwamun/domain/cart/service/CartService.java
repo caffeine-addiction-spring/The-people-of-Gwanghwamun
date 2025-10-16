@@ -75,7 +75,6 @@ public class CartService {
 						.store(store)
 						.menu(menu)
 						.quantity(req.quantity())
-						.cartMode(req.cartMode())
 						.totalPrice(itemTotalPrice)
 						.build();
 
