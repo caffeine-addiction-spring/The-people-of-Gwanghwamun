@@ -4,6 +4,9 @@ import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
 import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.domain.ai.service.AiService;
+import com.caffeine.gwanghwamun.domain.file.dto.FileInfoResDTO;
+import com.caffeine.gwanghwamun.domain.file.entity.FileStatus;
+import com.caffeine.gwanghwamun.domain.file.service.FileService;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuResDTO;
@@ -20,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -31,6 +35,7 @@ public class MenuService {
 	private final MenuRepository menuRepository;
 	private final StoreRepository storeRepository;
 	private final AiService aiService;
+	private final FileService fileService;
 
 	private User requireAuthenticatedUser(UserDetailsImpl principal) {
 		if (principal == null || principal.getUser() == null) {
@@ -87,7 +92,9 @@ public class MenuService {
 		if (!menu.getStoreId().equals(storeId)) {
 			throw new CustomException(ErrorCode.MENU_STORE_MISMATCH);
 		}
-		return new MenuResDTO(menu);
+		
+		List<FileInfoResDTO> images = fileService.getList(menu.getGroupId(), "menu", FileStatus.DONE);
+		return new MenuResDTO(menu, images);
 	}
 
 	public Page<MenuResDTO> findMenuListByStore(
@@ -95,7 +102,10 @@ public class MenuService {
 		validateStoreOwnership(storeId, principal);
 
 		Page<Menu> page = menuRepository.findByStoreIdAndNotDeleted(storeId, pageable);
-		return page.map(MenuResDTO::new);
+		return page.map(menu -> {
+			List<FileInfoResDTO> images = fileService.getList(menu.getGroupId(), "menu", FileStatus.DONE);
+			return new MenuResDTO(menu, images);
+		});
 	}
 
 	@Transactional
@@ -111,7 +121,9 @@ public class MenuService {
 			throw new CustomException(ErrorCode.MENU_STORE_MISMATCH);
 		}
 		menu.updateMenu(req.name(), req.content(), req.price(), req.isSoldOut(), req.isHidden());
-		return new MenuResDTO(menu);
+		
+		List<FileInfoResDTO> images = fileService.getList(menu.getGroupId(), "menu", FileStatus.DONE);
+		return new MenuResDTO(menu, images);
 	}
 
 	@Transactional
@@ -145,7 +157,9 @@ public class MenuService {
 		} else {
 			menu.showMenu();
 		}
-		return new MenuResDTO(menu);
+		
+		List<FileInfoResDTO> images = fileService.getList(menu.getGroupId(), "menu", FileStatus.DONE);
+		return new MenuResDTO(menu, images);
 	}
 
 	@Transactional
@@ -165,6 +179,8 @@ public class MenuService {
 		} else {
 			menu.markAsAvailable();
 		}
-		return new MenuResDTO(menu);
+		
+		List<FileInfoResDTO> images = fileService.getList(menu.getGroupId(), "menu", FileStatus.DONE);
+		return new MenuResDTO(menu, images);
 	}
 }
