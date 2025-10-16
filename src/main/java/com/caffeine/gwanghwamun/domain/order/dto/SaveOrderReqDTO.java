@@ -6,9 +6,9 @@ import java.util.UUID;
 
 public record SaveOrderReqDTO(
 		UUID storeId,
+		CartMode cartMode,
 		List<OrderMenuItemReqDTO> menuItemList,
 		String address,
 		Object paymentMethod,
-		CartMode cartMode,
 		String deliveryContent,
 		String requests) {}

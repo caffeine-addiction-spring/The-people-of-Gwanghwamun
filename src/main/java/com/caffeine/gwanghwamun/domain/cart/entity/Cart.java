@@ -2,7 +2,6 @@ package com.caffeine.gwanghwamun.domain.cart.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import com.caffeine.gwanghwamun.domain.menu.entity.Menu;
-import com.caffeine.gwanghwamun.domain.menu.entity.MenuOption;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -40,10 +39,6 @@ public class Cart extends BaseEntity {
 
 	private String deletedBy;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "menu_option_id")
-	private MenuOption menuOption;
-
 	@Column(name = "quantity", nullable = false)
 	private int quantity;
 
@@ -55,24 +50,17 @@ public class Cart extends BaseEntity {
 
 	@Builder
 	public Cart(
-			User user, Store store, Menu menu, MenuOption menuOption, int quantity, CartMode cartMode) {
+			User user, Store store, Menu menu, int quantity, CartMode cartMode, Integer totalPrice) {
 		this.user = user;
 		this.store = store;
 		this.menu = menu;
-		this.menuOption = menuOption;
 		this.quantity = quantity;
-		this.totalPrice = calculateTotalPrice(menu, menuOption, quantity);
+		this.totalPrice = totalPrice;
 		this.cartMode = cartMode;
 	}
 
 	public void updateQuantity(int quantity) {
 		this.quantity = quantity;
-		this.totalPrice = calculateTotalPrice(menu, menuOption, quantity);
-	}
-
-	public void updateMenuOption(MenuOption option) {
-		this.menuOption = option;
-		this.totalPrice = calculateTotalPrice(menu, menuOption, quantity);
 	}
 
 	public void delete(User user) {
@@ -80,9 +68,7 @@ public class Cart extends BaseEntity {
 		this.deletedBy = user.getName();
 	}
 
-	private int calculateTotalPrice(Menu menu, MenuOption option, int quantity) {
-		return menuOption == null
-				? quantity * menu.getPrice()
-				: quantity * (menu.getPrice() + menuOption.getPrice());
+	public void updateTotalPrice(Integer totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 }

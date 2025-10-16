@@ -2,6 +2,8 @@ package com.caffeine.gwanghwamun.domain.order.service;
 
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
+import com.caffeine.gwanghwamun.domain.cart.entity.Cart;
+import com.caffeine.gwanghwamun.domain.cart.entity.CartMode;
 import com.caffeine.gwanghwamun.domain.cart.repository.CartRepository;
 import com.caffeine.gwanghwamun.domain.order.dto.*;
 import com.caffeine.gwanghwamun.domain.order.entity.Order;
@@ -93,18 +95,22 @@ public class OrderService {
 
 		orderRepository.save(order);
 
-		//    if (req.cartMode() == CartMode.CART) {
-		//      List<Cart> cartItemList = cartRepository.findByUserAndStoreAndDeletedDateIsNull(user,
-		// store);
-		//      cartItemList.stream().map()
-		//    } else {
-		List<OrderItemListResDTO> orderItemResList =
-				orderItemService.saveOrderItem(req.menuItemList(), order);
-		//    }
+		List<OrderItemListResDTO> orderItemResList;
+		if (req.cartMode() == CartMode.CART) {
+			List<Cart> cartList = cartRepository.findByUserAndStoreAndDeletedDateIsNull(user, store);
+			if (cartList.isEmpty()) {
+				throw new CustomException(ErrorCode.CART_NOT_FOUND);
+			}
+			orderItemResList = orderItemService.saveOrderFromCart(cartList, order);
+		} else {
+			orderItemResList = orderItemService.saveOrderItem(req.menuItemList(), order);
+		}
+
 		totalPrice = orderItemResList.stream().mapToInt(OrderItemListResDTO::totalPrice).sum();
 		if (totalPrice < store.getMinDeliveryPrice()) {
 			throw new CustomException(ErrorCode.LOW_MIN_DELEVERY_PRICE);
 		}
+
 		totalPrice += store.getDeliveryTip();
 		order.updateTotalPrice(totalPrice);
 

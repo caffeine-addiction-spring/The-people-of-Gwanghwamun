@@ -2,6 +2,8 @@ package com.caffeine.gwanghwamun.domain.order.service;
 
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
+import com.caffeine.gwanghwamun.domain.cart.entity.Cart;
+import com.caffeine.gwanghwamun.domain.cart.repository.CartItemOptionRepository;
 import com.caffeine.gwanghwamun.domain.menu.entity.Menu;
 import com.caffeine.gwanghwamun.domain.menu.entity.MenuOption;
 import com.caffeine.gwanghwamun.domain.menu.repository.MenuOptionRepository;
@@ -16,6 +18,7 @@ import com.caffeine.gwanghwamun.domain.order.repository.OrderItemRepository;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +30,7 @@ public class OrderItemService {
 	private final OrderItemOptionRepository orderItemOptionRepository;
 	private final MenuRepository menuRepository;
 	private final MenuOptionRepository menuOptionRepository;
+	private final CartItemOptionRepository cartItemOptionRepository;
 
 	@Transactional
 	public List<OrderItemListResDTO> saveOrderItem(List<OrderMenuItemReqDTO> menuList, Order order) {
@@ -85,5 +89,24 @@ public class OrderItemService {
 			orderItemInfoList.add(new OrderItemListResDTO(orderItem, orderItemOptions, itemTotalPrice));
 		}
 		return orderItemInfoList;
+	}
+
+	@Transactional
+	public List<OrderItemListResDTO> saveOrderFromCart(List<Cart> cartList, Order order) {
+
+		List<OrderMenuItemReqDTO> menuItemList =
+				cartList.stream()
+						.map(
+								cart -> {
+									List<UUID> menuOptionIds =
+											cartItemOptionRepository.findAllByCartAndDeletedDateIsNull(cart).stream()
+													.map(option -> option.getMenuOption().getMenuOptionId())
+													.toList();
+
+									return new OrderMenuItemReqDTO(cart.getMenu(), menuOptionIds, cart.getQuantity());
+								})
+						.toList();
+
+		return saveOrderItem(menuItemList, order);
 	}
 }
