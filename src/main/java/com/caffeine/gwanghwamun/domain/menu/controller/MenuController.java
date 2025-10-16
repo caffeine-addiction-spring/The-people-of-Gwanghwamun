@@ -13,8 +13,6 @@ import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuVisibilityReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuResDTO;
 import com.caffeine.gwanghwamun.domain.menu.service.MenuService;
 import io.swagger.v3.oas.annotations.Operation;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +22,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/stores/{storeId}/menus")
@@ -123,10 +124,8 @@ public class MenuController {
 			@PathVariable("storeId") UUID storeId,
 			@PathVariable("menuId") UUID menuId,
 			@AuthenticationPrincipal UserDetailsImpl user) {
-		// 메뉴 존재 여부 확인
 		menuService.findMenuById(storeId, menuId, user);
-		
-		// 메뉴의 groupId를 사용해서 이미지 목록 조회
+
 		MenuResDTO menu = menuService.findMenuById(storeId, menuId, user);
 		List<FileInfoResDTO> images = fileService.getList(menu.groupId(), "menu");
 		return ResponseUtil.successResponse(SuccessCode.FILE_READ_SUCCESS, images);
@@ -140,10 +139,8 @@ public class MenuController {
 			@PathVariable("menuId") UUID menuId,
 			@PathVariable("fileUuid") String fileUuid,
 			@AuthenticationPrincipal UserDetailsImpl user) {
-		// 메뉴 존재 여부 확인
 		menuService.findMenuById(storeId, menuId, user);
-		
-		// 파일 삭제
+
 		fileService.deleteFile(UUID.fromString(fileUuid));
 		return ResponseUtil.successResponse(SuccessCode.FILE_DELETE_SUCCESS);
 	}
@@ -155,10 +152,9 @@ public class MenuController {
 			@PathVariable("storeId") UUID storeId,
 			@PathVariable("menuId") UUID menuId,
 			@AuthenticationPrincipal UserDetailsImpl user) {
-		// 메뉴 존재 여부 확인
+
 		MenuResDTO menu = menuService.findMenuById(storeId, menuId, user);
-		
-		// 메뉴의 모든 이미지 삭제
+
 		fileService.deleteFiles(menu.groupId(), "menu");
 		return ResponseUtil.successResponse(SuccessCode.FILE_DELETE_SUCCESS);
 	}

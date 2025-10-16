@@ -16,15 +16,14 @@ import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.entity.UserRoleEnum;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -92,7 +91,7 @@ public class MenuService {
 		if (!menu.getStoreId().equals(storeId)) {
 			throw new CustomException(ErrorCode.MENU_STORE_MISMATCH);
 		}
-		
+
 		List<FileInfoResDTO> images = fileService.getList(menu.getGroupId(), "menu", FileStatus.DONE);
 		return new MenuResDTO(menu, images);
 	}
@@ -102,10 +101,12 @@ public class MenuService {
 		validateStoreOwnership(storeId, principal);
 
 		Page<Menu> page = menuRepository.findByStoreIdAndNotDeleted(storeId, pageable);
-		return page.map(menu -> {
-			List<FileInfoResDTO> images = fileService.getList(menu.getGroupId(), "menu", FileStatus.DONE);
-			return new MenuResDTO(menu, images);
-		});
+		return page.map(
+				menu -> {
+					List<FileInfoResDTO> images =
+							fileService.getList(menu.getGroupId(), "menu", FileStatus.DONE);
+					return new MenuResDTO(menu, images);
+				});
 	}
 
 	@Transactional
@@ -121,7 +122,7 @@ public class MenuService {
 			throw new CustomException(ErrorCode.MENU_STORE_MISMATCH);
 		}
 		menu.updateMenu(req.name(), req.content(), req.price(), req.isSoldOut(), req.isHidden());
-		
+
 		List<FileInfoResDTO> images = fileService.getList(menu.getGroupId(), "menu", FileStatus.DONE);
 		return new MenuResDTO(menu, images);
 	}
@@ -157,7 +158,7 @@ public class MenuService {
 		} else {
 			menu.showMenu();
 		}
-		
+
 		List<FileInfoResDTO> images = fileService.getList(menu.getGroupId(), "menu", FileStatus.DONE);
 		return new MenuResDTO(menu, images);
 	}
@@ -179,7 +180,7 @@ public class MenuService {
 		} else {
 			menu.markAsAvailable();
 		}
-		
+
 		List<FileInfoResDTO> images = fileService.getList(menu.getGroupId(), "menu", FileStatus.DONE);
 		return new MenuResDTO(menu, images);
 	}

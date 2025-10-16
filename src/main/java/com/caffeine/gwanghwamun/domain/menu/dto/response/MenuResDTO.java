@@ -31,11 +31,11 @@ public record MenuResDTO(
 				menu.isSoldOut(),
 				menu.getMenuCategory(),
 				menu.getGroupId(),
-				null, // images는 별도로 설정
+				null,
 				menu.getCreateAt(),
 				menu.getLastUpdatedAt());
 	}
-	
+
 	public MenuResDTO(Menu menu, List<FileInfoResDTO> images) {
 		this(
 				menu.getMenuId(),
