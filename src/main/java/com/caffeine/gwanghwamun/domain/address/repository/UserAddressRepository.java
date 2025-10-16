@@ -1,6 +1,6 @@
-package com.caffeine.gwanghwamun.domain.user.address.repository;
+package com.caffeine.gwanghwamun.domain.address.repository;
 
-import com.caffeine.gwanghwamun.domain.user.address.entity.UserAddress;
+import com.caffeine.gwanghwamun.domain.address.entity.UserAddress;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import java.util.List;
 import java.util.Optional;
