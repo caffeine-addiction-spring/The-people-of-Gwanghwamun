@@ -2,12 +2,12 @@ package com.caffeine.gwanghwamun.domain.payment.controller;
 
 import com.caffeine.gwanghwamun.common.response.ApiResponse;
 import com.caffeine.gwanghwamun.common.response.ResponseUtil;
+import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
 import com.caffeine.gwanghwamun.domain.payment.dto.PaymentCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.payment.dto.PaymentDetailResDTO;
 import com.caffeine.gwanghwamun.domain.payment.dto.PaymentResDTO;
 import com.caffeine.gwanghwamun.domain.payment.service.PaymentService;
-import com.caffeine.gwanghwamun.domain.user.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.UUID;
