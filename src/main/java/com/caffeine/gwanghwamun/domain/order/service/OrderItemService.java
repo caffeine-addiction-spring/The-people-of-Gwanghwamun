@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.order.order_items.order_item_options.service;
+package com.caffeine.gwanghwamun.domain.order.service;
 
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
@@ -6,13 +6,13 @@ import com.caffeine.gwanghwamun.domain.menu.entity.Menu;
 import com.caffeine.gwanghwamun.domain.menu.entity.MenuOption;
 import com.caffeine.gwanghwamun.domain.menu.repository.MenuOptionRepository;
 import com.caffeine.gwanghwamun.domain.menu.repository.MenuRepository;
+import com.caffeine.gwanghwamun.domain.order.dto.OrderItemListResDTO;
+import com.caffeine.gwanghwamun.domain.order.dto.OrderMenuItemReqDTO;
 import com.caffeine.gwanghwamun.domain.order.entity.Order;
-import com.caffeine.gwanghwamun.domain.order.order_items.dto.OrderItemListResDTO;
-import com.caffeine.gwanghwamun.domain.order.order_items.dto.OrderMenuItemReqDTO;
-import com.caffeine.gwanghwamun.domain.order.order_items.entity.OrderItem;
-import com.caffeine.gwanghwamun.domain.order.order_items.order_item_options.entity.OrderItemOption;
-import com.caffeine.gwanghwamun.domain.order.order_items.order_item_options.repository.OrderItemOptionRepository;
-import com.caffeine.gwanghwamun.domain.order.order_items.repository.OrderItemRepository;
+import com.caffeine.gwanghwamun.domain.order.entity.OrderItem;
+import com.caffeine.gwanghwamun.domain.order.entity.OrderItemOption;
+import com.caffeine.gwanghwamun.domain.order.repository.OrderItemOptionRepository;
+import com.caffeine.gwanghwamun.domain.order.repository.OrderItemRepository;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;

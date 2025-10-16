@@ -5,15 +5,12 @@ import com.caffeine.gwanghwamun.common.exception.ErrorCode;
 import com.caffeine.gwanghwamun.domain.cart.repository.CartRepository;
 import com.caffeine.gwanghwamun.domain.order.dto.*;
 import com.caffeine.gwanghwamun.domain.order.entity.Order;
+import com.caffeine.gwanghwamun.domain.order.entity.OrderItem;
 import com.caffeine.gwanghwamun.domain.order.entity.OrderStatus;
-import com.caffeine.gwanghwamun.domain.order.order_items.dto.OrderItemListResDTO;
-import com.caffeine.gwanghwamun.domain.order.order_items.dto.OrderItemResDTO;
-import com.caffeine.gwanghwamun.domain.order.order_items.entity.OrderItem;
-import com.caffeine.gwanghwamun.domain.order.order_items.order_item_options.service.OrderItemService;
-import com.caffeine.gwanghwamun.domain.order.order_items.repository.OrderItemRepository;
-import com.caffeine.gwanghwamun.domain.order.order_status_log.entity.OrderStatusLog;
-import com.caffeine.gwanghwamun.domain.order.order_status_log.repository.OrderStatusLogRepository;
+import com.caffeine.gwanghwamun.domain.order.entity.OrderStatusLog;
+import com.caffeine.gwanghwamun.domain.order.repository.OrderItemRepository;
 import com.caffeine.gwanghwamun.domain.order.repository.OrderRepository;
+import com.caffeine.gwanghwamun.domain.order.repository.OrderStatusLogRepository;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
@@ -105,7 +102,10 @@ public class OrderService {
 				orderItemService.saveOrderItem(req.menuItemList(), order);
 		//    }
 		totalPrice = orderItemResList.stream().mapToInt(OrderItemListResDTO::totalPrice).sum();
-
+		if (totalPrice < store.getMinDeliveryPrice()) {
+			throw new CustomException(ErrorCode.LOW_MIN_DELEVERY_PRICE);
+		}
+		totalPrice += store.getDeliveryTip();
 		order.updateTotalPrice(totalPrice);
 
 		saveOrderStatusLog(order, user, null, "");

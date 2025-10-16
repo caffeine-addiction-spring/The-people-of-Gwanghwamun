@@ -1,6 +1,6 @@
-package com.caffeine.gwanghwamun.domain.order.order_items.repository;
+package com.caffeine.gwanghwamun.domain.order.repository;
 
-import com.caffeine.gwanghwamun.domain.order.order_items.entity.OrderItem;
+import com.caffeine.gwanghwamun.domain.order.entity.OrderItem;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;

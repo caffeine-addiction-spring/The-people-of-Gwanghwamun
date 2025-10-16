@@ -1,6 +1,6 @@
-package com.caffeine.gwanghwamun.domain.order.order_status_log.repository;
+package com.caffeine.gwanghwamun.domain.order.repository;
 
-import com.caffeine.gwanghwamun.domain.order.order_status_log.entity.OrderStatusLog;
+import com.caffeine.gwanghwamun.domain.order.entity.OrderStatusLog;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

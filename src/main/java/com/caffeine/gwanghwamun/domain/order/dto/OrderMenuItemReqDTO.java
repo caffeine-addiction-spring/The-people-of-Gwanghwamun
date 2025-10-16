@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.order.order_items.dto;
+package com.caffeine.gwanghwamun.domain.order.dto;
 
 import com.caffeine.gwanghwamun.domain.menu.entity.Menu;
 import jakarta.validation.constraints.Min;

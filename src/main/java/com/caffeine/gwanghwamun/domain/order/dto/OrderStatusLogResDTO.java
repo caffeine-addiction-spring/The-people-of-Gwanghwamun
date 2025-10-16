@@ -1,7 +1,7 @@
-package com.caffeine.gwanghwamun.domain.order.order_status_log.dto;
+package com.caffeine.gwanghwamun.domain.order.dto;
 
 import com.caffeine.gwanghwamun.domain.order.entity.OrderStatus;
-import com.caffeine.gwanghwamun.domain.order.order_status_log.entity.OrderStatusLog;
+import com.caffeine.gwanghwamun.domain.order.entity.OrderStatusLog;
 import java.time.LocalDateTime;
 import java.util.UUID;
 

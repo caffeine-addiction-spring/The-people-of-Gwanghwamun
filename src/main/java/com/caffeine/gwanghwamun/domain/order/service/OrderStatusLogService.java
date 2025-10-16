@@ -1,10 +1,10 @@
-package com.caffeine.gwanghwamun.domain.order.order_status_log.service;
+package com.caffeine.gwanghwamun.domain.order.service;
 
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
-import com.caffeine.gwanghwamun.domain.order.order_status_log.dto.OrderStatusLogResDTO;
-import com.caffeine.gwanghwamun.domain.order.order_status_log.entity.OrderStatusLog;
-import com.caffeine.gwanghwamun.domain.order.order_status_log.repository.OrderStatusLogRepository;
+import com.caffeine.gwanghwamun.domain.order.dto.OrderStatusLogResDTO;
+import com.caffeine.gwanghwamun.domain.order.entity.OrderStatusLog;
+import com.caffeine.gwanghwamun.domain.order.repository.OrderStatusLogRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

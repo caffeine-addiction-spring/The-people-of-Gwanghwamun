@@ -1,6 +1,6 @@
-package com.caffeine.gwanghwamun.domain.order.order_items.dto;
+package com.caffeine.gwanghwamun.domain.order.dto;
 
-import com.caffeine.gwanghwamun.domain.order.order_items.entity.OrderItem;
+import com.caffeine.gwanghwamun.domain.order.entity.OrderItem;
 import java.util.UUID;
 
 public record OrderItemResDTO(UUID orderItemId, UUID menuId, String menuName, Integer quantity) {

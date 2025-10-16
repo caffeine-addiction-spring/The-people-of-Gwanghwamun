@@ -67,6 +67,7 @@ public enum ErrorCode {
 	// 주문 (order)
 	ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다."),
 	ORDER_TIME_EXPIRED(HttpStatus.BAD_REQUEST, "취소 가능 시간이 초과되었습니다."),
+	LOW_MIN_DELEVERY_PRICE(HttpStatus.BAD_REQUEST, "최소 주문금액 미만입니다.."),
 	UNAUTHORIZED_ORDER_ACCESS(HttpStatus.FORBIDDEN, "주문에 접근권한이 없습니디."),
 	UNAUTHORIZED_STORE_ACCESS(HttpStatus.FORBIDDEN, "가게에 대한 권한이 없습니다."),
 

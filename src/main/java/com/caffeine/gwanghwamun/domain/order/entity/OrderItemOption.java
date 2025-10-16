@@ -1,8 +1,7 @@
-package com.caffeine.gwanghwamun.domain.order.order_items.order_item_options.entity;
+package com.caffeine.gwanghwamun.domain.order.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import com.caffeine.gwanghwamun.domain.menu.entity.MenuOption;
-import com.caffeine.gwanghwamun.domain.order.order_items.entity.OrderItem;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;

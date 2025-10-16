@@ -1,10 +1,10 @@
-package com.caffeine.gwanghwamun.domain.order.order_status_log.controller;
+package com.caffeine.gwanghwamun.domain.order.controller;
 
 import com.caffeine.gwanghwamun.common.response.ApiResponse;
 import com.caffeine.gwanghwamun.common.response.ResponseUtil;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
-import com.caffeine.gwanghwamun.domain.order.order_status_log.dto.OrderStatusLogResDTO;
-import com.caffeine.gwanghwamun.domain.order.order_status_log.service.OrderStatusLogService;
+import com.caffeine.gwanghwamun.domain.order.dto.OrderStatusLogResDTO;
+import com.caffeine.gwanghwamun.domain.order.service.OrderStatusLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
