@@ -4,6 +4,8 @@ import com.caffeine.gwanghwamun.common.response.ApiResponse;
 import com.caffeine.gwanghwamun.common.response.ResponseUtil;
 import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
+import com.caffeine.gwanghwamun.domain.file.dto.FileInfoResDTO;
+import com.caffeine.gwanghwamun.domain.file.service.FileService;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuSoldOutReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuUpdateReqDTO;
@@ -11,6 +13,7 @@ import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuVisibilityReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuResDTO;
 import com.caffeine.gwanghwamun.domain.menu.service.MenuService;
 import io.swagger.v3.oas.annotations.Operation;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 public class MenuController {
 
 	private final MenuService menuService;
+	private final FileService fileService;
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
 	@Operation(summary = "메뉴 생성", description = "메뉴를 생성한다.")
@@ -111,5 +115,46 @@ public class MenuController {
 		MenuResDTO menuResDTO =
 				menuService.updateMenuSoldOut(storeId, menuId, menuSoldOutReqDTO.isSoldOut(), user);
 		return ResponseUtil.successResponse(SuccessCode.MENU_SOLDOUT_UPDATE_SUCCESS, menuResDTO);
+	}
+
+	@Operation(summary = "메뉴 이미지 목록 조회", description = "메뉴의 이미지 목록을 조회한다.")
+	@GetMapping("/{menuId}/images")
+	public ResponseEntity<ApiResponse<List<FileInfoResDTO>>> getMenuImages(
+			@PathVariable("storeId") UUID storeId,
+			@PathVariable("menuId") UUID menuId,
+			@AuthenticationPrincipal UserDetailsImpl user) {
+		menuService.findMenuById(storeId, menuId, user);
+
+		MenuResDTO menu = menuService.findMenuById(storeId, menuId, user);
+		List<FileInfoResDTO> images = fileService.getList(menu.groupId(), "menu");
+		return ResponseUtil.successResponse(SuccessCode.FILE_READ_SUCCESS, images);
+	}
+
+	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
+	@Operation(summary = "메뉴 이미지 삭제", description = "메뉴의 특정 이미지를 삭제한다.")
+	@DeleteMapping("/{menuId}/images/{fileUuid}")
+	public ResponseEntity<ApiResponse<Void>> deleteMenuImage(
+			@PathVariable("storeId") UUID storeId,
+			@PathVariable("menuId") UUID menuId,
+			@PathVariable("fileUuid") String fileUuid,
+			@AuthenticationPrincipal UserDetailsImpl user) {
+		menuService.findMenuById(storeId, menuId, user);
+
+		fileService.deleteFile(UUID.fromString(fileUuid));
+		return ResponseUtil.successResponse(SuccessCode.FILE_DELETE_SUCCESS);
+	}
+
+	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
+	@Operation(summary = "메뉴 이미지 전체 삭제", description = "메뉴의 모든 이미지를 삭제한다.")
+	@DeleteMapping("/{menuId}/images")
+	public ResponseEntity<ApiResponse<Void>> deleteAllMenuImages(
+			@PathVariable("storeId") UUID storeId,
+			@PathVariable("menuId") UUID menuId,
+			@AuthenticationPrincipal UserDetailsImpl user) {
+
+		MenuResDTO menu = menuService.findMenuById(storeId, menuId, user);
+
+		fileService.deleteFiles(menu.groupId(), "menu");
+		return ResponseUtil.successResponse(SuccessCode.FILE_DELETE_SUCCESS);
 	}
 }

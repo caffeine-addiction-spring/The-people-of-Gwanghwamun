@@ -31,7 +31,8 @@ public class MenuOption extends BaseEntity {
 
 	private int price;
 
-	@Lob private String content;
+	@Column(columnDefinition = "TEXT", length = 2000)
+	private String content;
 
 	private boolean isHidden;
 

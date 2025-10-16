@@ -11,4 +11,4 @@ public record MenuUpdateReqDTO(
 		Boolean isHidden,
 		Boolean isSoldOut,
 		MenuCategory menuCategory,
-		Long imageGroupId) {}
+		@Size(max = 65) String groupId) {}

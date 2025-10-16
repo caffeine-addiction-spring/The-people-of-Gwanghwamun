@@ -24,8 +24,8 @@ public class Menu extends BaseEntity {
 	@Column(name = "store_id", nullable = false)
 	private UUID storeId;
 
-	@Column(name = "group_id", nullable = false)
-	private Long groupId;
+	@Column(name = "group_id", nullable = false, length = 65)
+	private String groupId;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "menu_category", nullable = false, length = 20)
@@ -40,7 +40,6 @@ public class Menu extends BaseEntity {
 	private int price;
 
 	private boolean isSoldOut;
-	;
 
 	private boolean isHidden;
 
@@ -53,7 +52,7 @@ public class Menu extends BaseEntity {
 	@Builder
 	public Menu(
 			UUID storeId,
-			Long groupId,
+			String groupId,
 			MenuCategory menuCategory,
 			String name,
 			String menuContent,
