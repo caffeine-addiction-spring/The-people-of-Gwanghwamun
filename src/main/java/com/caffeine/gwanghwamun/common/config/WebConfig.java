@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
 		registry
 				.addMapping("/v1/**")
 				.allowedOriginPatterns("*")
-				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+				.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
 				.allowedHeaders("*")
 				.allowCredentials(true);
 	}
