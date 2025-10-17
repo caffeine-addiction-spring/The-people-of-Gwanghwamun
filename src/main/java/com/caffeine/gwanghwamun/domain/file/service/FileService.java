@@ -149,22 +149,21 @@ public class FileService {
 		return deletedItems;
 	}
 
-    private FileInfo getEntity(UUID fileuuid) {
-        return fileInfoRepository
-                .findById(fileuuid)
-                .orElseThrow(() -> new CustomException(ErrorCode.FILE_NOT_FOUND));
-    }
+	private FileInfo getEntity(UUID fileuuid) {
+		return fileInfoRepository
+				.findById(fileuuid)
+				.orElseThrow(() -> new CustomException(ErrorCode.FILE_NOT_FOUND));
+	}
 
-    @Transactional
-    public void updateFile(UUID fileuuid, FileUpdateReqDTO updateReqDTO) {
-        FileInfo fileInfo = getEntity(fileuuid);
-        fileInfo.update(
-                updateReqDTO.getGid(),
-                updateReqDTO.getLocation(),
-                updateReqDTO.getFileName(),
-                updateReqDTO.getContentType(),
-                updateReqDTO.getExtension(),
-                updateReqDTO.getFileUrl()
-        );
-    }
+	@Transactional
+	public void updateFile(UUID fileuuid, FileUpdateReqDTO updateReqDTO) {
+		FileInfo fileInfo = getEntity(fileuuid);
+		fileInfo.update(
+				updateReqDTO.getGid(),
+				updateReqDTO.getLocation(),
+				updateReqDTO.getFileName(),
+				updateReqDTO.getContentType(),
+				updateReqDTO.getExtension(),
+				updateReqDTO.getFileUrl());
+	}
 }

@@ -1,6 +1,8 @@
 package com.caffeine.gwanghwamun.domain.file.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,9 +10,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @Entity
@@ -58,19 +57,19 @@ public class FileInfo {
 	@Column(updatable = false)
 	private String createdBy;
 
-    public void update(
-            String gid,
-            String location,
-            String fileName,
-            String contentType,
-            String extension,
-            String fileUrl) {
-        if (gid != null) this.gid = gid;
-        if (location != null) this.location = location;
-        if (fileName != null) this.fileName = fileName;
-        if (contentType != null) this.contentType = contentType;
-        if (extension != null) this.extension = extension;
-        if (fileUrl != null) this.fileUrl = fileUrl;
-        this.done = true;
-    }
+	public void update(
+			String gid,
+			String location,
+			String fileName,
+			String contentType,
+			String extension,
+			String fileUrl) {
+		if (gid != null) this.gid = gid;
+		if (location != null) this.location = location;
+		if (fileName != null) this.fileName = fileName;
+		if (contentType != null) this.contentType = contentType;
+		if (extension != null) this.extension = extension;
+		if (fileUrl != null) this.fileUrl = fileUrl;
+		this.done = true;
+	}
 }

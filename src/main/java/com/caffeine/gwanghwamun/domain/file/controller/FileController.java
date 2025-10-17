@@ -60,15 +60,14 @@ public class FileController {
 		return ResponseUtil.successResponse(SuccessCode.FILE_READ_SUCCESS, items);
 	}
 
-    @Operation(summary = "파일 정보 수정")
-    @PutMapping("/{uuid}")
-    public ResponseEntity<ApiResponse<FileInfoResDTO>> updateFile(
-            @RequestBody FileUpdateReqDTO updateReqDTO,
-            @PathVariable String uuid) {
-        fileService.updateFile(UUID.fromString(uuid), updateReqDTO);
+	@Operation(summary = "파일 정보 수정")
+	@PutMapping("/{uuid}")
+	public ResponseEntity<ApiResponse<FileInfoResDTO>> updateFile(
+			@RequestBody FileUpdateReqDTO updateReqDTO, @PathVariable String uuid) {
+		fileService.updateFile(UUID.fromString(uuid), updateReqDTO);
 
-        return ResponseUtil.successResponse(SuccessCode.FILE_UPDATE_SUCCESS);
-    }
+		return ResponseUtil.successResponse(SuccessCode.FILE_UPDATE_SUCCESS);
+	}
 
 	@Operation(summary = "파일 정보 삭제")
 	@DeleteMapping("/{uuid}")
