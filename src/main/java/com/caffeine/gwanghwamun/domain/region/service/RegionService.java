@@ -9,6 +9,7 @@ import com.caffeine.gwanghwamun.domain.region.repository.RegionRepository;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +20,11 @@ public class RegionService {
 	private final RegionRepository regionRepository;
 
 	@Transactional(readOnly = true)
-	public List<RegionResDTO> getAllRegion() {
-		List<Address> addressList = regionRepository.findAll();
+	public List<RegionResDTO> getAllRegion(String direction) {
+		Sort.Direction sortDirection =
+				direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+		List<Address> addressList = regionRepository.findAll(Sort.by(sortDirection, "name"));
 
 		return addressList.stream()
 				.map(address -> new RegionResDTO(address.getAddressId(), address.getName()))
