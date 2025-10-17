@@ -161,22 +161,4 @@ public class MenuController {
 		fileService.deleteFiles(menu.groupId(), "menu");
 		return ResponseUtil.successResponse(SuccessCode.FILE_DELETE_SUCCESS);
 	}
-
-	@Operation(summary = "가게별 메뉴 검색 API", description = "특정 가게에서 키워드로 메뉴를 검색할 수 있다")
-	@GetMapping("/search")
-	public ResponseEntity<ApiResponse<Page<MenuResDTO>>> searchMenusByStore(
-			@PathVariable("storeId") UUID storeId,
-			@RequestParam String keyword,
-			@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size,
-			@RequestParam(defaultValue = "createAt") String sortBy,
-			@RequestParam(defaultValue = "desc") String direction,
-			@AuthenticationPrincipal UserDetailsImpl principal) {
-
-		if (size != 10 && size != 30 && size != 50) {
-			size = 10;
-		}
-		Page<MenuResDTO> result = menuService.searchMenusByStore(storeId, keyword, page, size, sortBy, direction, principal);
-		return ResponseUtil.successResponse(SuccessCode.MENU_SEARCH_SUCCESS, result);
-	}
 }

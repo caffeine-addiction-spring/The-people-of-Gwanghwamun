@@ -127,23 +127,4 @@ public class MenuOptionController {
 		MenuOptionResDTO res = menuOptionService.updateSoldOut(storeId, menuId, optionId, req, user);
 		return ResponseUtil.successResponse(SuccessCode.MENU_OPTION_SOLDOUT_UPDATE_SUCCESS, res);
 	}
-
-	@Operation(summary = "메뉴 옵션 검색 API", description = "특정 메뉴에서 키워드로 메뉴 옵션을 검색할 수 있다")
-	@GetMapping("/search")
-	public ResponseEntity<ApiResponse<Page<MenuOptionResDTO>>> searchOptionsByMenu(
-			@PathVariable("storeId") UUID storeId,
-			@PathVariable("menuId") UUID menuId,
-			@RequestParam String keyword,
-			@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size,
-			@RequestParam(defaultValue = "createAt") String sortBy,
-			@RequestParam(defaultValue = "desc") String direction,
-			@AuthenticationPrincipal UserDetailsImpl principal) {
-
-		if (size != 10 && size != 30 && size != 50) {
-			size = 10;
-		}
-		Page<MenuOptionResDTO> result = menuOptionService.searchOptionsByMenu(storeId, menuId, keyword, page, size, sortBy, direction, principal);
-		return ResponseUtil.successResponse(SuccessCode.MENU_OPTION_SEARCH_SUCCESS, result);
-	}
 }
