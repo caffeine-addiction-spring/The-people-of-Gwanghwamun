@@ -13,6 +13,10 @@ import com.google.genai.types.Part;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,5 +86,17 @@ public class AiService {
     public void deleteAiResult(UUID aiResultId) {
         getAiResult(aiResultId);
         aiRepository.deleteById(aiResultId);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<AiResDTO> searchAiResults(int page, int size, String sortBy, String direction) {
+        if (size != 10 && size != 30 && size != 50) size = 10;
+
+        Sort.Direction sortDirection =
+                direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+
+        Page<Ai> aiPage = aiRepository.findAllByDeletedAtIsNull(pageable);
+        return aiPage.map(AiResDTO::fromEntity);
     }
 }

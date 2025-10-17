@@ -10,6 +10,7 @@ import com.caffeine.gwanghwamun.domain.ai.service.AiService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,5 +51,17 @@ public class AiController {
     public ResponseEntity<ApiResponse<Void>> deleteAiResult(@PathVariable UUID aiResultId) {
         aiService.deleteAiResult(aiResultId);
         return ResponseUtil.successResponse(SuccessCode.AI_DELETE_SUCCESS);
+    }
+
+    @Operation(summary = "AI 결과 검색 API", description = "AI 결과를 검색한다.")
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<Page<AiResDTO>>> searchAiResults(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction) {
+
+        Page<AiResDTO> results = aiService.searchAiResults(page, size, sortBy, direction);
+        return ResponseUtil.successResponse(SuccessCode.AI_READ_SUCCESS, results);
     }
 }
