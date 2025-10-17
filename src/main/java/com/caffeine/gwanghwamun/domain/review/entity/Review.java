@@ -28,7 +28,7 @@ public class Review extends BaseEntity {
 	private UUID orderId;
 
 	@Column(name = "group_id")
-	private Long groupId;
+	private String gid;
 
 	@Column(name = "rating", nullable = false)
 	private Long rating;
@@ -40,12 +40,11 @@ public class Review extends BaseEntity {
 	private ReviewReply reply;
 
 	@Builder
-	public Review(
-			Long userId, UUID storeId, UUID orderId, Long groupId, Long rating, String content) {
+	public Review(Long userId, UUID storeId, UUID orderId, String gid, Long rating, String content) {
 		this.userId = userId;
 		this.storeId = storeId;
 		this.orderId = orderId;
-		this.groupId = groupId;
+		this.gid = gid;
 		this.rating = rating;
 		this.content = content;
 	}

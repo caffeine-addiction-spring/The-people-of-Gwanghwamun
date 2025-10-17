@@ -10,4 +10,5 @@ public record ReviewCreateReqDTO(
 		@NotNull(message = "평점은 필수입니다.")
 				@Min(value = 1, message = "평점은 최소 1점입니다")
 				@Max(value = 5, message = "평점은 최대 5점입니다")
-				Long rating) {}
+				Long rating,
+		String gid) {}
