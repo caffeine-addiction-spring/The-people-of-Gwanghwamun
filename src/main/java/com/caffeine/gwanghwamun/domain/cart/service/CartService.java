@@ -84,10 +84,14 @@ public class CartService {
 				menuOptions.stream()
 						.map(option -> CartItemOption.builder().menuOption(option).cart(cart).build())
 						.toList();
+		List<CartItemOptionResDTO> cartItemOptionResList =
+				cartItemOptions.stream()
+						.map(opt -> new CartItemOptionResDTO(opt.getMenuOption().getMenuOptionId()))
+						.toList();
 
 		cartItemOptionRepository.saveAll(cartItemOptions);
 
-		return new SaveCartResDTO(cart, cartItemOptions);
+		return new SaveCartResDTO(cart, cartItemOptionResList);
 	}
 
 	@Transactional
@@ -134,12 +138,16 @@ public class CartService {
 
 			cartItemOptionRepository.saveAll(cartItemOptionList);
 		}
+		List<CartItemOptionResDTO> cartItemOptionResList =
+				cartItemOptionList.stream()
+						.map(opt -> new CartItemOptionResDTO(opt.getMenuOption().getMenuOptionId()))
+						.toList();
 
 		int totalPrice = (cart.getMenu().getPrice() + optionPrice) * cart.getQuantity();
 
 		cart.updateTotalPrice(totalPrice);
 
-		return new CartUpdateResDTO(cart, cartItemOptionList);
+		return new CartUpdateResDTO(cart, cartItemOptionResList);
 	}
 
 	@Transactional
