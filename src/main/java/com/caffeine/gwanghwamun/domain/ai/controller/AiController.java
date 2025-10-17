@@ -32,23 +32,23 @@ public class AiController {
 
 	@Operation(summary = "AI 결과 단일 조회 API", description = "AI 결과를 조회한다.")
 	@GetMapping("/{uuid}")
-	public ResponseEntity<ApiResponse<AiResDTO>> getAiResult(@PathVariable UUID aiResultId) {
-		AiResDTO result = aiService.getAiResult(aiResultId);
+	public ResponseEntity<ApiResponse<AiResDTO>> getAiResult(@PathVariable UUID uuid) {
+		AiResDTO result = aiService.getAiResult(uuid);
 		return ResponseUtil.successResponse(SuccessCode.AI_READ_SUCCESS, result);
 	}
 
 	@Operation(summary = "AI 결과 수정 API", description = "AI 결과를 수정한다.")
 	@PutMapping("/{uuid}")
 	public ResponseEntity<ApiResponse<Void>> updateAiResult(
-			@PathVariable UUID aiResultId, @RequestBody AiUpdateReqDTO updateReqDTO) {
-		aiService.updateAiResult(aiResultId, updateReqDTO);
+			@PathVariable UUID uuid, @RequestBody AiUpdateReqDTO updateReqDTO) {
+		aiService.updateAiResult(uuid, updateReqDTO);
 		return ResponseUtil.successResponse(SuccessCode.AI_UPDATE_SUCCESS);
 	}
 
 	@Operation(summary = "AI 결과 삭제 API", description = "AI 결과를 삭제한다.")
 	@DeleteMapping("/{uuid}")
-	public ResponseEntity<ApiResponse<Void>> deleteAiResult(@PathVariable UUID aiResultId) {
-		aiService.deleteAiResult(aiResultId);
+	public ResponseEntity<ApiResponse<Void>> deleteAiResult(@PathVariable UUID uuid) {
+		aiService.deleteAiResult(uuid);
 		return ResponseUtil.successResponse(SuccessCode.AI_DELETE_SUCCESS);
 	}
 
@@ -57,7 +57,7 @@ public class AiController {
 	public ResponseEntity<ApiResponse<Page<AiResDTO>>> searchAiResults(
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size,
-			@RequestParam(defaultValue = "createdAt") String sortBy,
+			@RequestParam(defaultValue = "createAt") String sortBy,
 			@RequestParam(defaultValue = "desc") String direction) {
 
 		Page<AiResDTO> results = aiService.searchAiResults(page, size, sortBy, direction);
