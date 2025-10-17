@@ -1,5 +1,9 @@
 package com.caffeine.gwanghwamun.domain.ai.service;
 
+import com.caffeine.gwanghwamun.common.exception.CustomException;
+import com.caffeine.gwanghwamun.common.exception.ErrorCode;
+import com.caffeine.gwanghwamun.domain.ai.dto.request.AiUpdateReqDTO;
+import com.caffeine.gwanghwamun.domain.ai.dto.response.AiResDTO;
 import com.caffeine.gwanghwamun.domain.ai.entity.Ai;
 import com.caffeine.gwanghwamun.domain.ai.repository.AiRepository;
 import com.google.genai.Client;
@@ -7,9 +11,15 @@ import com.google.genai.types.Content;
 import com.google.genai.types.GenerateContentResponse;
 import com.google.genai.types.Part;
 import jakarta.annotation.PostConstruct;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +37,7 @@ public class AiService {
 		this.client = Client.builder().apiKey(apiKey).build();
 	}
 
+	@Transactional
 	public String ask(String prompt) {
 		Content content =
 				Content.builder()
@@ -54,5 +65,41 @@ public class AiService {
 		aiRepository.save(ai);
 
 		return answer;
+	}
+
+	@Transactional(readOnly = true)
+	public AiResDTO getAiResult(UUID aiResultId) {
+		Ai ai =
+				aiRepository
+						.findById(aiResultId)
+						.orElseThrow(() -> new CustomException(ErrorCode.AI_NOT_FOUND));
+		return AiResDTO.fromEntity(ai);
+	}
+
+	@Transactional
+	public void updateAiResult(UUID aiResultId, AiUpdateReqDTO updateReqDTO) {
+		Ai ai =
+				aiRepository
+						.findById(aiResultId)
+						.orElseThrow(() -> new CustomException(ErrorCode.AI_NOT_FOUND));
+		ai.updateAnswer(updateReqDTO.getQuestion(), updateReqDTO.getAnswer());
+	}
+
+	@Transactional
+	public void deleteAiResult(UUID aiResultId) {
+		getAiResult(aiResultId);
+		aiRepository.deleteById(aiResultId);
+	}
+
+	@Transactional(readOnly = true)
+	public Page<AiResDTO> searchAiResults(int page, int size, String sortBy, String direction) {
+		if (size != 10 && size != 30 && size != 50) size = 10;
+
+		Sort.Direction sortDirection =
+				direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+
+		Page<Ai> aiPage = aiRepository.findAllByDeletedAtIsNull(pageable);
+		return aiPage.map(AiResDTO::fromEntity);
 	}
 }
