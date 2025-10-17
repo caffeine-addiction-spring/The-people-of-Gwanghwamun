@@ -2,7 +2,7 @@ package com.caffeine.gwanghwamun.domain.store.service;
 
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
-import com.caffeine.gwanghwamun.domain.file.dto.FileInfoResDTO;
+import com.caffeine.gwanghwamun.domain.file.dto.response.FileInfoResDTO;
 import com.caffeine.gwanghwamun.domain.file.entity.FileStatus;
 import com.caffeine.gwanghwamun.domain.file.service.FileService;
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuResDTO;

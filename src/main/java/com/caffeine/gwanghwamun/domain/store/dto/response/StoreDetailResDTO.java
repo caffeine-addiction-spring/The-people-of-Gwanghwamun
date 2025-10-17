@@ -1,6 +1,6 @@
 package com.caffeine.gwanghwamun.domain.store.dto.response;
 
-import com.caffeine.gwanghwamun.domain.file.dto.FileInfoResDTO;
+import com.caffeine.gwanghwamun.domain.file.dto.response.FileInfoResDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuResDTO;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.entity.StoreCategoryEnum;

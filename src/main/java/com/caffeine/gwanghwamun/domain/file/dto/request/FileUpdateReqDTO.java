@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.file.dto;
+package com.caffeine.gwanghwamun.domain.file.dto.request;
 
 import lombok.Data;
 

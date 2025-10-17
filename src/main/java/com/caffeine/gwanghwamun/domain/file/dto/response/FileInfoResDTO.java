@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.file.dto;
+package com.caffeine.gwanghwamun.domain.file.dto.response;
 
 import com.caffeine.gwanghwamun.domain.file.entity.FileInfo;
 import java.util.UUID;

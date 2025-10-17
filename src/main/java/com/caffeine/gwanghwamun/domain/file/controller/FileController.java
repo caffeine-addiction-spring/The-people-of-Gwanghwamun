@@ -4,9 +4,9 @@ import com.caffeine.gwanghwamun.common.exception.ErrorCode;
 import com.caffeine.gwanghwamun.common.response.ApiResponse;
 import com.caffeine.gwanghwamun.common.response.ResponseUtil;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
-import com.caffeine.gwanghwamun.domain.file.dto.FileInfoResDTO;
-import com.caffeine.gwanghwamun.domain.file.dto.FileUpdateReqDTO;
-import com.caffeine.gwanghwamun.domain.file.dto.FileUploadReqDTO;
+import com.caffeine.gwanghwamun.domain.file.dto.request.FileUpdateReqDTO;
+import com.caffeine.gwanghwamun.domain.file.dto.request.FileUploadReqDTO;
+import com.caffeine.gwanghwamun.domain.file.dto.response.FileInfoResDTO;
 import com.caffeine.gwanghwamun.domain.file.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -50,18 +50,14 @@ public class FileController {
 		return ResponseUtil.successResponse(SuccessCode.FILE_READ_SUCCESS, item);
 	}
 
-	@Operation(summary = "파일 그룹 조회 API", description = "그룹 ID 및 위치를 기준으로 파일 목록을 페이징, 정렬하여 조회한다.")
+	@Operation(summary = "파일 정보 그룹 조회 API", description = "그룹 파일 정보를 조회한다.")
 	@GetMapping({"/list/{gid}", "/list/{gid}/{location}"})
-	public ResponseEntity<ApiResponse<Page<FileInfoResDTO>>> getFileList(
+	public ResponseEntity<ApiResponse<List<FileInfoResDTO>>> getFileList(
 			@PathVariable("gid") String gid,
-			@PathVariable(name = "location", required = false) String location,
-			@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size,
-			@RequestParam(defaultValue = "createdAt") String sortBy,
-			@RequestParam(defaultValue = "desc") String direction) {
+			@PathVariable(name = "location", required = false) String location) {
 
-		Page<FileInfoResDTO> items =
-				fileService.getFileList(gid, location, page, size, sortBy, direction);
+		List<FileInfoResDTO> items = fileService.getList(gid, location);
+
 		return ResponseUtil.successResponse(SuccessCode.FILE_READ_SUCCESS, items);
 	}
 
@@ -90,5 +86,20 @@ public class FileController {
 		fileService.deleteFiles(gid, location);
 
 		return ResponseUtil.successResponse(SuccessCode.FILE_DELETE_SUCCESS);
+	}
+
+	@Operation(summary = "파일 검색 API", description = "파일 목록을 검색한다.")
+	@GetMapping("/search")
+	public ResponseEntity<ApiResponse<Page<FileInfoResDTO>>> searchFiles(
+			@RequestParam(required = false) String gid,
+			@RequestParam(required = false) String location,
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size,
+			@RequestParam(defaultValue = "createdAt") String sortBy,
+			@RequestParam(defaultValue = "desc") String direction) {
+
+		Page<FileInfoResDTO> items =
+				fileService.searchFiles(gid, location, page, size, sortBy, direction);
+		return ResponseUtil.successResponse(SuccessCode.FILE_READ_SUCCESS, items);
 	}
 }

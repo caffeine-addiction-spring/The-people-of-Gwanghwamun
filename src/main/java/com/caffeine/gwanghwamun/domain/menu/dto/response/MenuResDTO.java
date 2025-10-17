@@ -1,6 +1,6 @@
 package com.caffeine.gwanghwamun.domain.menu.dto.response;
 
-import com.caffeine.gwanghwamun.domain.file.dto.FileInfoResDTO;
+import com.caffeine.gwanghwamun.domain.file.dto.response.FileInfoResDTO;
 import com.caffeine.gwanghwamun.domain.menu.entity.Menu;
 import com.caffeine.gwanghwamun.domain.menu.entity.MenuCategory;
 import java.time.LocalDateTime;
