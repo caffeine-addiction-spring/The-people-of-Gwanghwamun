@@ -15,42 +15,42 @@
           <img src="https://avatars.githubusercontent.com/u/46617216?v=4" width="80" alt="이태경"/><br />
           <b>이태경</b>
         </a><br />
-        <sub>팀장 / 주문, 장바구니</sub>
+        <sub>팀장 / BE<br />주문, 장바구니</sub>
       </td>
       <td align="center" valign="top" width="16%">
         <a href="https://github.com/Daae-Kim">
           <img src="https://avatars.githubusercontent.com/u/68381747?v=4" width="80" alt="김다애"/><br />
           <b>김다애</b>
         </a><br />
-        <sub>리뷰, 결제</sub>
+        <sub>BE<br />리뷰, 결제</sub>
       </td>
       <td align="center" valign="top" width="16%">
         <a href="https://github.com/minju26">
           <img src="https://avatars.githubusercontent.com/u/110724254?v=4" width="80" alt="김민주"/><br />
           <b>김민주</b>
         </a><br />
-        <sub>회원, 인증/인가</sub>
+        <sub>BE<br />회원, 인증/인가</sub>
       </td>
       <td align="center" valign="top" width="16%">
         <a href="https://github.com/S2hyeyunS2">
           <img src="https://avatars.githubusercontent.com/u/188556604?v=4" width="80" alt="김혜윤"/><br />
           <b>김혜윤</b>
         </a><br />
-        <sub>메뉴, 옵션</sub>
+        <sub>BE<br />메뉴, 옵션</sub>
       </td>
       <td align="center" valign="top" width="16%">
         <a href="https://github.com/seolbin01">
           <img src="https://avatars.githubusercontent.com/u/106576062?v=4" width="80" alt="박설빈"/><br />
           <b>박설빈</b>
         </a><br />
-        <sub>파일, AI</sub>
+        <sub>BE<br />파일, AI</sub>
       </td>
       <td align="center" valign="top" width="16%">
         <a href="https://github.com/cicle00">
           <img src="https://avatars.githubusercontent.com/u/169460927?v=4" width="80" alt="한성연"/><br />
           <b>한성연</b>
         </a><br />
-        <sub>가게, 배달 지역</sub>
+        <sub>BE<br />가게, 배달 지역</sub>
       </td>
     </tr>
   </tbody>
