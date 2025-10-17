@@ -9,12 +9,16 @@ import com.caffeine.gwanghwamun.domain.file.dto.FileUploadReqDTO;
 import com.caffeine.gwanghwamun.domain.file.entity.FileInfo;
 import com.caffeine.gwanghwamun.domain.file.entity.FileStatus;
 import com.caffeine.gwanghwamun.domain.file.repository.FileInfoRepository;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -127,6 +131,30 @@ public class FileService {
 
 	public List<FileInfoResDTO> getList(String gid, String location) {
 		return getList(gid, location, FileStatus.DONE);
+	}
+
+	@Transactional(readOnly = true)
+	public Page<FileInfoResDTO> getFileList(
+			String gid, String location, int page, int size, String sortBy, String direction) {
+
+		if (size != 10 && size != 30 && size != 50) {
+			size = 10;
+		}
+
+		Sort.Direction sortDirection =
+				direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+		Sort sort = Sort.by(sortDirection, sortBy);
+		Pageable pageable = PageRequest.of(page, size, sort);
+
+		Page<FileInfo> files;
+
+		if (StringUtils.hasText(location)) {
+			files = fileInfoRepository.findByGidAndLocation(gid, location, pageable);
+		} else {
+			files = fileInfoRepository.findByGid(gid, pageable);
+		}
+
+		return files.map(FileInfoResDTO::fromItem);
 	}
 
 	// 파일 등록번호로 삭제

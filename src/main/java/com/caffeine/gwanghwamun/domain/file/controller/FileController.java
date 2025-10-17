@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -49,14 +50,18 @@ public class FileController {
 		return ResponseUtil.successResponse(SuccessCode.FILE_READ_SUCCESS, item);
 	}
 
-	@Operation(summary = "파일 정보 그룹 조회 API", description = "그룹 파일 정보를 조회한다.")
+	@Operation(summary = "파일 그룹 조회 API", description = "그룹 ID 및 위치를 기준으로 파일 목록을 페이징, 정렬하여 조회한다.")
 	@GetMapping({"/list/{gid}", "/list/{gid}/{location}"})
-	public ResponseEntity<ApiResponse<List<FileInfoResDTO>>> getFileList(
+	public ResponseEntity<ApiResponse<Page<FileInfoResDTO>>> getFileList(
 			@PathVariable("gid") String gid,
-			@PathVariable(name = "location", required = false) String location) {
+			@PathVariable(name = "location", required = false) String location,
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size,
+			@RequestParam(defaultValue = "createdAt") String sortBy,
+			@RequestParam(defaultValue = "desc") String direction) {
 
-		List<FileInfoResDTO> items = fileService.getList(gid, location);
-
+		Page<FileInfoResDTO> items =
+				fileService.getFileList(gid, location, page, size, sortBy, direction);
 		return ResponseUtil.successResponse(SuccessCode.FILE_READ_SUCCESS, items);
 	}
 
