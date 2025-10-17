@@ -14,8 +14,10 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +34,8 @@ public class ReviewController {
 
 	private final ReviewService reviewService;
 
-	@Operation(summary = "리뷰 생성", description = "리뷰를 생성할 수 있다.")
+
+	@Operation(summary = "리뷰 생성 API", description = "리뷰를 생성할 수 있다.")
 	@PostMapping("/orders/{orderId}/reviews")
 	public ResponseEntity<ApiResponse<ReviewResDTO>> createReview(
 			@PathVariable("orderId") UUID orderId,
@@ -43,7 +46,7 @@ public class ReviewController {
 		return ResponseUtil.successResponse(SuccessCode.REVIEW_SAVE_SUCCESS, reviewResDTO);
 	}
 
-	@Operation(summary = "리뷰 단건 조회", description = "리뷰 단건 조회를 할 수 있다.")
+	@Operation(summary = "리뷰 단건 조회 API", description = "리뷰 단건 조회를 할 수 있다.")
 	@GetMapping("/reviews/{reviewId}")
 	public ResponseEntity<ApiResponse<ReviewResDTO>> getReview(
 			@PathVariable("reviewId") UUID reviewId) {
@@ -51,15 +54,16 @@ public class ReviewController {
 		return ResponseUtil.successResponse(SuccessCode.REVIEW_FIND_SUCCESS, reviewResDTO);
 	}
 
-	@Operation(summary = "가게 리뷰 목록 조회", description = "가게의 리뷰들을 조회 할 수 있다.")
+
+	@Operation(summary = "가게 리뷰 목록 조회 API", description = "가게의 리뷰들을 조회 할 수 있다.")
 	@GetMapping("/stores/{storeId}/reviews")
 	public ResponseEntity<ApiResponse<Page<ReviewResDTO>>> getReviewList(
-			@PathVariable("storeId") UUID storeId, @PageableDefault(size = 20) Pageable pageable) {
+			@PathVariable("storeId") UUID storeId, @PageableDefault(sort = "createAt", direction = Sort.Direction.ASC) Pageable pageable) {
 		Page<ReviewResDTO> reviewList = reviewService.findReviewListByStore(storeId, pageable);
 		return ResponseUtil.successResponse(SuccessCode.REVIEW_LIST_FIND_SUCCESS, reviewList);
 	}
 
-	@Operation(summary = "리뷰 삭제", description = "작성자는 리뷰 삭제를 할 수 있다.")
+	@Operation(summary = "리뷰 삭제 API", description = "작성자는 리뷰 삭제를 할 수 있다.")
 	@DeleteMapping("/reviews/{reviewId}")
 	public ResponseEntity<ApiResponse<Void>> deleteReview(
 			@PathVariable("reviewId") UUID reviewId,
@@ -68,7 +72,8 @@ public class ReviewController {
 		return ResponseUtil.successResponse(SuccessCode.REVIEW_DELETE_SUCCESS);
 	}
 
-	@Operation(summary = "사장님 리뷰 답글 작성", description = "사장님은 리뷰 답글을 작성할 수 있다.")
+	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
+	@Operation(summary = "사장님 리뷰 답글 작성 API", description = "사장님은 리뷰 답글을 작성할 수 있다.")
 	@PostMapping("/reviews/{reviewId}/reply")
 	public ResponseEntity<ApiResponse<UUID>> createReply(
 			@PathVariable("reviewId") UUID reviewId,
@@ -80,7 +85,8 @@ public class ReviewController {
 		return ResponseUtil.successResponse(SuccessCode.REVIEW_REPLY_SAVE_SUCCESS, reviewReplyId);
 	}
 
-	@Operation(summary = "사장님 답글 삭제", description = "사장님은 리뷰 답글을 삭제할 수 있다.")
+	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
+	@Operation(summary = "사장님 답글 삭제 API", description = "사장님은 리뷰 답글을 삭제할 수 있다.")
 	@DeleteMapping("/reviews/{replyId}")
 	public ResponseEntity<ApiResponse<Void>> deleteReply(
 			@PathVariable("replyId") UUID replyId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
