@@ -14,6 +14,8 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -52,7 +54,7 @@ public class PaymentController {
 	@Operation(summary = "결제 내역 조회 API", description = "회원) 결제 내역 리스트를 조회 한다.")
 	@GetMapping
 	public ResponseEntity<ApiResponse<Page<PaymentResDTO>>> getPaymentList(
-			Pageable pageable, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+			@PageableDefault(sort = "createAt", direction = Sort.Direction.ASC) Pageable pageable, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		Page<PaymentResDTO> paymentList =
 				paymentService.getPaymentList(userDetails.getUser().getUserId(), pageable);
 		return ResponseUtil.successResponse(SuccessCode.PAYMENT_LIST_FIND_SUCCESS, paymentList);
@@ -62,7 +64,7 @@ public class PaymentController {
 	@Operation(summary = "가게 결제 내역 조회 API", description = "가게) 결제 내역 리스트를 조회 한다.")
 	@GetMapping("/store/{storeId}")
 	public ResponseEntity<ApiResponse<Page<PaymentDetailResDTO>>> getPaymentListByStore(
-			Pageable pageable,
+			@PageableDefault(sort = "createAt", direction = Sort.Direction.ASC) Pageable pageable,
 			@PathVariable("storeId") UUID storeId,
 			@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		Page<PaymentDetailResDTO> storePaymentList =
