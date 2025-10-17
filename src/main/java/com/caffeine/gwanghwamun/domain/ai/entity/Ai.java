@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Getter;
+import org.springframework.util.StringUtils;
 
 @Getter
 @Entity
@@ -32,7 +33,7 @@ public class Ai extends BaseEntity {
 	}
 
 	public void updateAnswer(String question, String answer) {
-		this.question = question;
-		this.answer = answer;
+		if (StringUtils.hasText(question)) this.question = question;
+		if (StringUtils.hasText(answer)) this.answer = answer;
 	}
 }

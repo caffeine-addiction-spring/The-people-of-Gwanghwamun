@@ -29,7 +29,10 @@ public class FileController {
 
 	private final FileService fileService;
 
-	@Operation(summary = "파일 업로드 및 생성 API", description = "파일을 등록한다.")
+	@Operation(
+			summary = "파일 업로드 및 생성 API",
+			description =
+					"파일을 등록한다. 파일 등록은 formdata, requestDTO 내용은 application/json으로 받으므로 스웨거에서 테스트 불가함. 포스트맨에서 테스트 요망.")
 	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<ApiResponse<List<FileInfoResDTO>>> upload(
 			@RequestPart(name = "file", required = false) MultipartFile[] files,
