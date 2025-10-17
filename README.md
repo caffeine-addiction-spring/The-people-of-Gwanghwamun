@@ -15,7 +15,7 @@
           <img src="https://avatars.githubusercontent.com/u/46617216?v=4" width="80" alt="이태경"/><br />
           <b>이태경</b>
         </a><br />
-        <sub>팀장 / 주문, 장바구니</sub>
+        <sub>팀장 / 주문,<br>장바구니</sub>
       </td>
       <td align="center" valign="top" width="16%">
         <a href="https://github.com/Daae-Kim">
