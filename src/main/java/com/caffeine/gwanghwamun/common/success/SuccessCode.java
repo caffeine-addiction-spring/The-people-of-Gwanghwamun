@@ -73,6 +73,7 @@ public enum SuccessCode {
 	// 파일 (file)
 	FILE_UPLOAD_SUCCESS(HttpStatus.CREATED, "파일 업로드 성공"),
 	FILE_READ_SUCCESS(HttpStatus.OK, "파일 조회 성공"),
+    FILE_UPDATE_SUCCESS(HttpStatus.OK, "파일 수정 성공"),
 	FILE_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "파일 삭제 성공"),
 
 	// 장바구니 (cart)

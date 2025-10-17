@@ -4,6 +4,7 @@ import com.caffeine.gwanghwamun.common.aws.s3.S3Service;
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
 import com.caffeine.gwanghwamun.domain.file.dto.FileInfoResDTO;
+import com.caffeine.gwanghwamun.domain.file.dto.FileUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.file.dto.FileUploadReqDTO;
 import com.caffeine.gwanghwamun.domain.file.entity.FileInfo;
 import com.caffeine.gwanghwamun.domain.file.entity.FileStatus;
@@ -26,12 +27,12 @@ public class FileService {
 
 	// 파일 업로드 처리
 	@Transactional
-	public List<FileInfoResDTO> upload(MultipartFile[] files, @Valid FileUploadReqDTO requestDTO) {
-		String gid = requestDTO.getGid();
+	public List<FileInfoResDTO> upload(MultipartFile[] files, @Valid FileUploadReqDTO uploadReqDTO) {
+		String gid = uploadReqDTO.getGid();
 		gid = StringUtils.hasText(gid) ? gid : UUID.randomUUID().toString();
-		String location = requestDTO.getLocation();
-		boolean imageOnly = requestDTO.isImageOnly();
-		boolean single = requestDTO.isSingle();
+		String location = uploadReqDTO.getLocation();
+		boolean imageOnly = uploadReqDTO.isImageOnly();
+		boolean single = uploadReqDTO.isSingle();
 
 		if (files == null || files.length == 0) {
 			throw new CustomException(ErrorCode.FILE_NOT_UPLOAD);
@@ -147,4 +148,23 @@ public class FileService {
 
 		return deletedItems;
 	}
+
+    private FileInfo getEntity(UUID fileuuid) {
+        return fileInfoRepository
+                .findById(fileuuid)
+                .orElseThrow(() -> new CustomException(ErrorCode.FILE_NOT_FOUND));
+    }
+
+    @Transactional
+    public void updateFile(UUID fileuuid, FileUpdateReqDTO updateReqDTO) {
+        FileInfo fileInfo = getEntity(fileuuid);
+        fileInfo.update(
+                updateReqDTO.getGid(),
+                updateReqDTO.getLocation(),
+                updateReqDTO.getFileName(),
+                updateReqDTO.getContentType(),
+                updateReqDTO.getExtension(),
+                updateReqDTO.getFileUrl()
+        );
+    }
 }

@@ -5,6 +5,7 @@ import com.caffeine.gwanghwamun.common.response.ApiResponse;
 import com.caffeine.gwanghwamun.common.response.ResponseUtil;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
 import com.caffeine.gwanghwamun.domain.file.dto.FileInfoResDTO;
+import com.caffeine.gwanghwamun.domain.file.dto.FileUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.file.dto.FileUploadReqDTO;
 import com.caffeine.gwanghwamun.domain.file.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,13 +32,13 @@ public class FileController {
 	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<ApiResponse<List<FileInfoResDTO>>> upload(
 			@RequestPart(name = "file", required = false) MultipartFile[] files,
-			@Valid @RequestPart(name = "requestDTO") FileUploadReqDTO requestDTO,
+			@Valid @RequestPart(name = "requestDTO") FileUploadReqDTO uploadReqDTO,
 			Errors errors) {
 		if (errors.hasErrors()) {
 			return ResponseUtil.failureResponse(ErrorCode.VALIDATION_ERROR);
 		}
 
-		List<FileInfoResDTO> items = fileService.upload(files, requestDTO);
+		List<FileInfoResDTO> items = fileService.upload(files, uploadReqDTO);
 		return ResponseUtil.successResponse(SuccessCode.FILE_UPLOAD_SUCCESS, items);
 	}
 
@@ -58,6 +59,16 @@ public class FileController {
 
 		return ResponseUtil.successResponse(SuccessCode.FILE_READ_SUCCESS, items);
 	}
+
+    @Operation(summary = "파일 정보 수정")
+    @PutMapping("/{uuid}")
+    public ResponseEntity<ApiResponse<FileInfoResDTO>> updateFile(
+            @RequestBody FileUpdateReqDTO updateReqDTO,
+            @PathVariable String uuid) {
+        fileService.updateFile(UUID.fromString(uuid), updateReqDTO);
+
+        return ResponseUtil.successResponse(SuccessCode.FILE_UPDATE_SUCCESS);
+    }
 
 	@Operation(summary = "파일 정보 삭제")
 	@DeleteMapping("/{uuid}")
