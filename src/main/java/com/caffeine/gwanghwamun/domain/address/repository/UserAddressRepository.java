@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserAddressRepository extends JpaRepository<UserAddress, UUID> {
-	List<UserAddress> findAllByUserAndDeletedAtIsNull(User user);
+	List<UserAddress> findAllByUserAndDeletedAtIsNullOrderByIsDefaultDescCreateAtDesc(User user);
 
 	Optional<UserAddress> findByUserAndIsDefaultTrueAndDeletedAtIsNull(User user);
 }
