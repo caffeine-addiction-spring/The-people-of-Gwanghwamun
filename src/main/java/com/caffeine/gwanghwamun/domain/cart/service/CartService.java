@@ -16,177 +16,180 @@ import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class CartService {
 
-  private final CartRepository cartRepository;
-  private final UserRepository userRepository;
-  private final StoreRepository storeRepository;
-  private final MenuRepository menuRepository;
-  private final MenuOptionRepository menuOptionRepository;
-  private final CartItemOptionRepository cartItemOptionRepository;
+	private final CartRepository cartRepository;
+	private final UserRepository userRepository;
+	private final StoreRepository storeRepository;
+	private final MenuRepository menuRepository;
+	private final MenuOptionRepository menuOptionRepository;
+	private final CartItemOptionRepository cartItemOptionRepository;
 
-  @Transactional
-  public SaveCartResDTO saveCart(Long userId, SaveCartReqDTO req) {
+	@Transactional
+	public SaveCartResDTO saveCart(Long userId, SaveCartReqDTO req) {
 
-    User user =
-        userRepository
-            .findById(userId)
-            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+		User user =
+				userRepository
+						.findById(userId)
+						.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-    Store store =
-        storeRepository
-            .findActiveById(req.storeId())
-            .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+		Store store =
+				storeRepository
+						.findActiveById(req.storeId())
+						.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
-    Menu menu =
-        menuRepository
-            .findByIdAndNotDeleted(req.menuId())
-            .orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
+		Menu menu =
+				menuRepository
+						.findByIdAndNotDeleted(req.menuId())
+						.orElseThrow(() -> new CustomException(ErrorCode.MENU_NOT_FOUND));
 
-    if (menu.isSoldOut() || menu.isHidden()) {
-      throw new CustomException(ErrorCode.ORDER_UNABLE_MENU);
-    }
+		if (menu.isSoldOut() || menu.isHidden()) {
+			throw new CustomException(ErrorCode.ORDER_UNABLE_MENU);
+		}
 
-    List<MenuOption> menuOptions =
-        menuOptionRepository.findAllByMenuOptionIdInAndMenuId(
-            req.menuOptionIdList(), menu.getMenuId());
+		List<MenuOption> menuOptions =
+				menuOptionRepository.findAllByMenuOptionIdInAndMenuId(
+						req.menuOptionIdList(), menu.getMenuId());
 
-    for (MenuOption option : menuOptions) {
-      if (option.isSoldOut() || option.isHidden()) {
-        throw new CustomException(ErrorCode.ORDER_UNABLE_MENU_OPTION);
-      }
-    }
+		for (MenuOption option : menuOptions) {
+			if (option.isSoldOut() || option.isHidden()) {
+				throw new CustomException(ErrorCode.ORDER_UNABLE_MENU_OPTION);
+			}
+		}
 
+		int optionPrice = menuOptions.stream().mapToInt(MenuOption::getPrice).sum();
+		int itemTotalPrice = (menu.getPrice() + optionPrice) * req.quantity();
 
-    int optionPrice = menuOptions.stream().mapToInt(MenuOption::getPrice).sum();
-    int itemTotalPrice = (menu.getPrice() + optionPrice) * req.quantity();
+		Set<UUID> menuOptionIds =
+				menuOptions.stream().map(MenuOption::getMenuOptionId).collect(Collectors.toSet());
 
+		List<CartItemOption> cartItemOptions =
+				cartItemOptionRepository.findAllByMenuOption_MenuOptionIdIn(req.menuOptionIdList());
 
-    Set<UUID> menuOptionIds = menuOptions.stream()
-        .map(MenuOption::getMenuOptionId)
-        .collect(Collectors.toSet());
+		Set<UUID> cartOptionIds =
+				cartItemOptions.stream()
+						.map(c -> c.getMenuOption().getMenuOptionId())
+						.collect(Collectors.toSet());
 
+		if (menuOptionIds.containsAll(cartOptionIds)) {
 
-    List<CartItemOption> cartItemOptions = cartItemOptionRepository.findAllByMenuOption_MenuOptionIdIn(req.menuOptionIdList());
+			Cart cart =
+					cartRepository.findByCartIdAndDeletedDateIsNull(
+							cartItemOptions.get(0).getCart().getCartId());
 
-    Set<UUID> cartOptionIds = cartItemOptions.stream()
-        .map(c -> c.getMenuOption().getMenuOptionId())
-        .collect(Collectors.toSet());
+			cart.updateQuantity(cart.getQuantity() + req.quantity());
+			cart.updateTotalPrice(cart.getTotalPrice() + itemTotalPrice);
+			cartRepository.save(cart);
 
-    if (menuOptionIds.containsAll(cartOptionIds)) {
+			return new SaveCartResDTO(
+					cart,
+					cartItemOptions.stream()
+							.map(option -> new CartItemOptionResDTO(option.getMenuOption().getMenuOptionId()))
+							.toList());
+		} else {
+			Cart cart =
+					Cart.builder()
+							.user(user)
+							.store(store)
+							.menu(menu)
+							.quantity(req.quantity())
+							.totalPrice(itemTotalPrice)
+							.build();
+			cartRepository.save(cart);
 
-      Cart cart = cartRepository.findByCartIdAndDeletedDateIsNull(cartItemOptions.get(0).getCart().getCartId());
+			cartItemOptions =
+					menuOptions.stream()
+							.map(option -> CartItemOption.builder().menuOption(option).cart(cart).build())
+							.toList();
 
-      cart.updateQuantity(cart.getQuantity() + req.quantity());
-      cart.updateTotalPrice(cart.getTotalPrice() + itemTotalPrice);
-      cartRepository.save(cart);
+			cartItemOptionRepository.saveAll(cartItemOptions);
 
-      return new SaveCartResDTO(cart,
-          cartItemOptions.stream()
-              .map(option -> new CartItemOptionResDTO(option.getMenuOption().getMenuOptionId()))
-              .toList());
-    } else {
-      Cart cart = Cart.builder()
-          .user(user)
-          .store(store)
-          .menu(menu)
-          .quantity(req.quantity())
-          .totalPrice(itemTotalPrice)
-          .build();
-      cartRepository.save(cart);
+			List<CartItemOptionResDTO> cartItemOptionResList =
+					cartItemOptions.stream()
+							.map(opt -> new CartItemOptionResDTO(opt.getMenuOption().getMenuOptionId()))
+							.toList();
 
-      cartItemOptions = menuOptions.stream()
-          .map(option -> CartItemOption.builder().menuOption(option).cart(cart).build())
-          .toList();
+			return new SaveCartResDTO(cart, cartItemOptionResList);
+		}
+	}
 
-      cartItemOptionRepository.saveAll(cartItemOptions);
+	@Transactional
+	public List<CartResDTO> findCartList(User user) {
+		List<Cart> cartList = cartRepository.findByUserAndDeletedDateIsNullOrderByCreateAtDesc(user);
+		return cartList.stream().map(CartResDTO::new).toList();
+	}
 
-      List<CartItemOptionResDTO> cartItemOptionResList = cartItemOptions.stream()
-          .map(opt -> new CartItemOptionResDTO(opt.getMenuOption().getMenuOptionId()))
-          .toList();
+	@Transactional
+	public CartUpdateResDTO updateCart(User user, UUID cartId, UpdateCartReqDTO req) {
+		Cart cart =
+				cartRepository
+						.findById(cartId)
+						.orElseThrow(() -> new CustomException(ErrorCode.CART_NOT_FOUND));
 
-      return new SaveCartResDTO(cart, cartItemOptionResList);
-    }
-  }
+		if (!cart.getUser().getUserId().equals(user.getUserId())) {
+			throw new CustomException(ErrorCode.UNAUTHORIZED_CART_ACCESS);
+		}
 
-  @Transactional
-  public List<CartResDTO> findCartList(User user) {
-    List<Cart> cartList = cartRepository.findByUserAndDeletedDateIsNullOrderByCreateAtDesc(user);
-    return cartList.stream().map(CartResDTO::new).toList();
-  }
+		cart.updateQuantity(req.quantity());
 
-  @Transactional
-  public CartUpdateResDTO updateCart(User user, UUID cartId, UpdateCartReqDTO req) {
-    Cart cart =
-        cartRepository
-            .findById(cartId)
-            .orElseThrow(() -> new CustomException(ErrorCode.CART_NOT_FOUND));
+		int optionPrice = 0;
 
-    if (!cart.getUser().getUserId().equals(user.getUserId())) {
-      throw new CustomException(ErrorCode.UNAUTHORIZED_CART_ACCESS);
-    }
+		List<CartItemOption> cartItemOptionList = null;
 
-    cart.updateQuantity(req.quantity());
+		if (req.menuOptionIdList() != null && !req.menuOptionIdList().isEmpty()) {
+			List<MenuOption> menuOptions =
+					menuOptionRepository.findAllByMenuOptionIdInAndMenuId(
+							req.menuOptionIdList(), cart.getMenu().getMenuId());
 
-    int optionPrice = 0;
+			for (MenuOption option : menuOptions) {
+				if (option.isSoldOut() || option.isHidden()) {
+					throw new CustomException(ErrorCode.ORDER_UNABLE_MENU_OPTION);
+				}
+			}
 
-    List<CartItemOption> cartItemOptionList = null;
+			optionPrice = menuOptions.stream().mapToInt(MenuOption::getPrice).sum();
 
-    if (req.menuOptionIdList() != null && !req.menuOptionIdList().isEmpty()) {
-      List<MenuOption> menuOptions =
-          menuOptionRepository.findAllByMenuOptionIdInAndMenuId(
-              req.menuOptionIdList(), cart.getMenu().getMenuId());
+			cartItemOptionRepository.deleteAllByCart(cart);
+			cartItemOptionList =
+					menuOptions.stream()
+							.map(opt -> CartItemOption.builder().cart(cart).menuOption(opt).build())
+							.toList();
 
-      for (MenuOption option : menuOptions) {
-        if (option.isSoldOut() || option.isHidden()) {
-          throw new CustomException(ErrorCode.ORDER_UNABLE_MENU_OPTION);
-        }
-      }
+			cartItemOptionRepository.saveAll(cartItemOptionList);
+		}
+		List<CartItemOptionResDTO> cartItemOptionResList =
+				cartItemOptionList.stream()
+						.map(opt -> new CartItemOptionResDTO(opt.getMenuOption().getMenuOptionId()))
+						.toList();
 
-      optionPrice = menuOptions.stream().mapToInt(MenuOption::getPrice).sum();
+		int totalPrice = (cart.getMenu().getPrice() + optionPrice) * cart.getQuantity();
 
-      cartItemOptionRepository.deleteAllByCart(cart);
-      cartItemOptionList =
-          menuOptions.stream()
-              .map(opt -> CartItemOption.builder().cart(cart).menuOption(opt).build())
-              .toList();
+		cart.updateTotalPrice(totalPrice);
 
-      cartItemOptionRepository.saveAll(cartItemOptionList);
-    }
-    List<CartItemOptionResDTO> cartItemOptionResList =
-        cartItemOptionList.stream()
-            .map(opt -> new CartItemOptionResDTO(opt.getMenuOption().getMenuOptionId()))
-            .toList();
+		return new CartUpdateResDTO(cart, cartItemOptionResList);
+	}
 
-    int totalPrice = (cart.getMenu().getPrice() + optionPrice) * cart.getQuantity();
+	@Transactional
+	public void deleteCart(User user, UUID cartId) {
+		Cart cart =
+				cartRepository
+						.findById(cartId)
+						.orElseThrow(() -> new CustomException(ErrorCode.CART_NOT_FOUND));
 
-    cart.updateTotalPrice(totalPrice);
+		if (!cart.getUser().getUserId().equals(user.getUserId())) {
+			throw new CustomException(ErrorCode.UNAUTHORIZED_CART_ACCESS);
+		}
 
-    return new CartUpdateResDTO(cart, cartItemOptionResList);
-  }
-
-  @Transactional
-  public void deleteCart(User user, UUID cartId) {
-    Cart cart =
-        cartRepository
-            .findById(cartId)
-            .orElseThrow(() -> new CustomException(ErrorCode.CART_NOT_FOUND));
-
-    if (!cart.getUser().getUserId().equals(user.getUserId())) {
-      throw new CustomException(ErrorCode.UNAUTHORIZED_CART_ACCESS);
-    }
-
-    cart.delete(user);
-  }
+		cart.delete(user);
+	}
 }
