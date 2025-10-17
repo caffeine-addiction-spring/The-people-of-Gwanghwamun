@@ -4,6 +4,7 @@ import com.caffeine.gwanghwamun.common.response.ApiResponse;
 import com.caffeine.gwanghwamun.common.response.ResponseUtil;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
 import com.caffeine.gwanghwamun.domain.ai.dto.AiResDTO;
+import com.caffeine.gwanghwamun.domain.ai.dto.AiUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.ai.dto.request.AiPromptReqDTO;
 import com.caffeine.gwanghwamun.domain.ai.service.AiService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,11 +30,18 @@ public class AiController {
 		return ResponseUtil.successResponse(SuccessCode.AI_SAVE_SUCCESS, result);
 	}
 
-    @Operation(summary = "AI 응답 단일 조회 API", description = "AI 응답을 조회한다.")
+    @Operation(summary = "AI 결과 단일 조회 API", description = "AI 결과를 조회한다.")
     @GetMapping("/{uuid}")
     public ResponseEntity<ApiResponse<AiResDTO>> getAiResult(@PathVariable UUID aiResultId) {
         AiResDTO result = aiService.getAiResult(aiResultId);
         return ResponseUtil.successResponse(SuccessCode.AI_READ_SUCCESS, result);
     }
 
+    @Operation(summary = "AI 결과 수정 API", description = "AI 결과를 수정한다.")
+    @PutMapping("/{uuid}")
+    public ResponseEntity<ApiResponse<Void>> updateAiResult(
+            @PathVariable UUID aiResultId, @RequestBody AiUpdateReqDTO updateReqDTO) {
+        aiService.updateAiResult(aiResultId, updateReqDTO);
+        return ResponseUtil.successResponse(SuccessCode.AI_UPDATE_SUCCESS);
+    }
 }

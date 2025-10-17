@@ -31,4 +31,9 @@ public class Ai extends BaseEntity {
 		ai.answer = answer;
 		return ai;
 	}
+
+    public void updateAnswer(String question, String answer) {
+        this.question = question;
+        this.answer = answer;
+    }
 }

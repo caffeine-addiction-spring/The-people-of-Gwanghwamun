@@ -3,6 +3,7 @@ package com.caffeine.gwanghwamun.domain.ai.service;
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
 import com.caffeine.gwanghwamun.domain.ai.dto.AiResDTO;
+import com.caffeine.gwanghwamun.domain.ai.dto.AiUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.ai.entity.Ai;
 import com.caffeine.gwanghwamun.domain.ai.repository.AiRepository;
 import com.google.genai.Client;
@@ -68,5 +69,12 @@ public class AiService {
         Ai ai = aiRepository.findById(aiResultId)
                 .orElseThrow(() -> new CustomException(ErrorCode.AI_NOT_FOUND));
         return AiResDTO.fromEntity(ai);
+    }
+
+    @Transactional
+    public void updateAiResult(UUID aiResultId, AiUpdateReqDTO updateReqDTO) {
+        Ai ai = aiRepository.findById(aiResultId)
+                .orElseThrow(() -> new CustomException(ErrorCode.AI_NOT_FOUND));
+        ai.updateAnswer(updateReqDTO.getQuestion(), updateReqDTO.getAnswer());
     }
 }
