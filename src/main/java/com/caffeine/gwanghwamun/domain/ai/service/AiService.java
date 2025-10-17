@@ -77,4 +77,10 @@ public class AiService {
                 .orElseThrow(() -> new CustomException(ErrorCode.AI_NOT_FOUND));
         ai.updateAnswer(updateReqDTO.getQuestion(), updateReqDTO.getAnswer());
     }
+
+    @Transactional
+    public void deleteAiResult(UUID aiResultId) {
+        getAiResult(aiResultId);
+        aiRepository.deleteById(aiResultId);
+    }
 }

@@ -44,4 +44,11 @@ public class AiController {
         aiService.updateAiResult(aiResultId, updateReqDTO);
         return ResponseUtil.successResponse(SuccessCode.AI_UPDATE_SUCCESS);
     }
+
+    @Operation(summary = "AI 결과 삭제 API", description = "AI 결과를 삭제한다.")
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<ApiResponse<Void>> deleteAiResult(@PathVariable UUID aiResultId) {
+        aiService.deleteAiResult(aiResultId);
+        return ResponseUtil.successResponse(SuccessCode.AI_DELETE_SUCCESS);
+    }
 }
