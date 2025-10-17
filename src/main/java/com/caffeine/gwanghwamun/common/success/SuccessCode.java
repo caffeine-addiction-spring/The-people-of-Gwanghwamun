@@ -47,6 +47,7 @@ public enum SuccessCode {
 	MENU_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "메뉴 삭제 성공"),
 	MENU_VISIBILITY_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 숨김 상태 변경 성공"),
 	MENU_SOLDOUT_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 품절 상태 변경 성공"),
+	MENU_SEARCH_SUCCESS(HttpStatus.OK, "메뉴 검색 성공"),
 
 	// 가게 (store)
 	STORE_CREATE_SUCCESS(HttpStatus.CREATED, "가게 등록 성공"),
@@ -70,6 +71,7 @@ public enum SuccessCode {
 	MENU_OPTION_DELETE_SUCCESS(HttpStatus.NO_CONTENT, "메뉴 옵션 삭제 성공"),
 	MENU_OPTION_VISIBILITY_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 숨김 상태 변경 성공"),
 	MENU_OPTION_SOLDOUT_UPDATE_SUCCESS(HttpStatus.OK, "메뉴 옵션 품절 상태 변경 성공"),
+	MENU_OPTION_SEARCH_SUCCESS(HttpStatus.OK, "메뉴 옵션 검색 성공"),
 
 	// 파일 (file)
 	FILE_UPLOAD_SUCCESS(HttpStatus.CREATED, "파일 업로드 성공"),
