@@ -47,7 +47,7 @@ public class ReviewService {
 						.userId(userId)
 						.storeId(order.getStore().getStoreId())
 						.orderId(orderId)
-						.groupId(1L)
+						.gid(reviewCreateReqDTO.gid())
 						.rating(reviewCreateReqDTO.rating())
 						.content(reviewCreateReqDTO.content())
 						.build();
