@@ -9,6 +9,12 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum SuccessCode {
 
+	// 결제 (payment)
+	PAYMENT_CREATE_SUCCESS(HttpStatus.CREATED, "결제 생성 성공"),
+	PAYMENT_FIND_SUCCESS(HttpStatus.OK, "결제 단건 조회 성공"),
+	PAYMENT_LIST_FIND_SUCCESS(HttpStatus.OK, "결제 내역 조회 성공"),
+	PAYMENT_STORE_LIST_FIND_SUCCESS(HttpStatus.OK, "가게 결제 내역 조회 성공"),
+
 	// 리뷰 (review)
 	REVIEW_SAVE_SUCCESS(HttpStatus.CREATED, "리뷰 생성 성공"),
 	REVIEW_REPLY_SAVE_SUCCESS(HttpStatus.CREATED, "답글 생성 성공"),

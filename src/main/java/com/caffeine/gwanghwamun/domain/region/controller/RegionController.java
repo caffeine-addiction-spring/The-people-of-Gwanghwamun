@@ -22,14 +22,14 @@ public class RegionController {
 
 	private final RegionService regionService;
 
-	@Operation(summary = "지역 목록 조회 API")
+	@Operation(summary = "지역 목록 조회 API", description = "지역 목록을 조회한다")
 	@GetMapping
 	public ResponseEntity<ApiResponse<List<RegionResDTO>>> getRegion() {
 		List<RegionResDTO> response = regionService.getAllRegion();
 		return ResponseUtil.successResponse(SuccessCode.REGION_LIST_SUCCESS, response);
 	}
 
-	@Operation(summary = "지역 생성 API")
+	@Operation(summary = "지역 생성 API", description = "관리자가 지역을 생성할 수 있다")
 	@PreAuthorize("hasAnyRole('MANAGER', 'MASTER')")
 	@PostMapping
 	public ResponseEntity<ApiResponse<RegionResDTO>> createRegion(
@@ -38,7 +38,7 @@ public class RegionController {
 		return ResponseUtil.successResponse(SuccessCode.REGION_CREATE_SUCCESS, response);
 	}
 
-	@Operation(summary = "지역 수정 API")
+	@Operation(summary = "지역 수정 API", description = "관리자가 지역을 수정할 수 있다")
 	@PreAuthorize("hasAnyRole('MANAGER', 'MASTER')")
 	@PutMapping("/{addressId}")
 	public ResponseEntity<ApiResponse<RegionResDTO>> updateRegion(
