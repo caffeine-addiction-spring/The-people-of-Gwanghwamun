@@ -11,7 +11,6 @@ import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuOptionVisibilityReqD
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuOptionResDTO;
 import com.caffeine.gwanghwamun.domain.menu.service.MenuOptionService;
 import io.swagger.v3.oas.annotations.Operation;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/stores/{storeId}/menus/{menuId}/options")
@@ -51,7 +52,7 @@ public class MenuOptionController {
 			@RequestParam(name = "optionName", required = false) String optionName,
 			@RequestParam(name = "page", defaultValue = "0") int page,
 			@RequestParam(name = "size", defaultValue = "10") int size,
-			@RequestParam(name = "sortBy", defaultValue = "createdAt") String sortBy,
+			@RequestParam(name = "sortBy", defaultValue = "createAt") String sortBy,
 			@RequestParam(name = "direction", defaultValue = "desc") String direction,
 			@AuthenticationPrincipal UserDetailsImpl principal) {
 
@@ -135,7 +136,7 @@ public class MenuOptionController {
 			@RequestParam String keyword,
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size,
-			@RequestParam(defaultValue = "createdAt") String sortBy,
+			@RequestParam(defaultValue = "createAt") String sortBy,
 			@RequestParam(defaultValue = "desc") String direction,
 			@AuthenticationPrincipal UserDetailsImpl principal) {
 
