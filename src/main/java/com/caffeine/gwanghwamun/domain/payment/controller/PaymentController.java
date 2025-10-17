@@ -54,7 +54,8 @@ public class PaymentController {
 	@Operation(summary = "결제 내역 조회 API", description = "회원) 결제 내역 리스트를 조회 한다.")
 	@GetMapping
 	public ResponseEntity<ApiResponse<Page<PaymentResDTO>>> getPaymentList(
-			@PageableDefault(sort = "createAt", direction = Sort.Direction.ASC) Pageable pageable, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+			@PageableDefault(sort = "createAt", direction = Sort.Direction.ASC) Pageable pageable,
+			@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		Page<PaymentResDTO> paymentList =
 				paymentService.getPaymentList(userDetails.getUser().getUserId(), pageable);
 		return ResponseUtil.successResponse(SuccessCode.PAYMENT_LIST_FIND_SUCCESS, paymentList);
