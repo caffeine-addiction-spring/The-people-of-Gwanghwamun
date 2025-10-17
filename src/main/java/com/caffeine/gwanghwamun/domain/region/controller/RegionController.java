@@ -24,8 +24,9 @@ public class RegionController {
 
 	@Operation(summary = "지역 목록 조회 API", description = "지역 목록을 조회한다.")
 	@GetMapping
-	public ResponseEntity<ApiResponse<List<RegionResDTO>>> getRegion() {
-		List<RegionResDTO> response = regionService.getAllRegion();
+	public ResponseEntity<ApiResponse<List<RegionResDTO>>> getRegion(
+			@RequestParam(defaultValue = "asc") String direction) {
+		List<RegionResDTO> response = regionService.getAllRegion(direction);
 		return ResponseUtil.successResponse(SuccessCode.REGION_LIST_SUCCESS, response);
 	}
 
