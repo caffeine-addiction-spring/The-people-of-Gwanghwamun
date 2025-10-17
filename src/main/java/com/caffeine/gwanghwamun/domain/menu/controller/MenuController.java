@@ -4,7 +4,7 @@ import com.caffeine.gwanghwamun.common.response.ApiResponse;
 import com.caffeine.gwanghwamun.common.response.ResponseUtil;
 import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
-import com.caffeine.gwanghwamun.domain.file.dto.FileInfoResDTO;
+import com.caffeine.gwanghwamun.domain.file.dto.response.FileInfoResDTO;
 import com.caffeine.gwanghwamun.domain.file.service.FileService;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuSoldOutReqDTO;
