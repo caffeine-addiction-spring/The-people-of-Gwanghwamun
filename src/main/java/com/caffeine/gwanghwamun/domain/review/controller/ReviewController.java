@@ -86,7 +86,7 @@ public class ReviewController {
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
 	@Operation(summary = "사장님 답글 삭제 API", description = "사장님은 리뷰 답글을 삭제할 수 있다.")
-	@DeleteMapping("/reviews/{replyId}")
+	@DeleteMapping("/owner/reviews/{replyId}")
 	public ResponseEntity<ApiResponse<Void>> deleteReply(
 			@PathVariable("replyId") UUID replyId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		reviewService.deleteReply(replyId, userDetails.getUser().getUserId());
