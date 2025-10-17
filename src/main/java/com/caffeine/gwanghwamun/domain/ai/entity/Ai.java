@@ -2,10 +2,9 @@ package com.caffeine.gwanghwamun.domain.ai.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.Getter;
 
 @Getter
 @Entity
@@ -32,8 +31,8 @@ public class Ai extends BaseEntity {
 		return ai;
 	}
 
-    public void updateAnswer(String question, String answer) {
-        this.question = question;
-        this.answer = answer;
-    }
+	public void updateAnswer(String question, String answer) {
+		this.question = question;
+		this.answer = answer;
+	}
 }

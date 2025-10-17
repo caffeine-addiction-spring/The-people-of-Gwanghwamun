@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AiUpdateReqDTO {
-    String question;
-    String answer;
+	String question;
+	String answer;
 }
