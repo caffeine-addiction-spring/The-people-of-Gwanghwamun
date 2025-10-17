@@ -7,6 +7,7 @@ import com.caffeine.gwanghwamun.domain.file.entity.FileStatus;
 import com.caffeine.gwanghwamun.domain.file.service.FileService;
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuResDTO;
 import com.caffeine.gwanghwamun.domain.menu.repository.MenuRepository;
+import com.caffeine.gwanghwamun.domain.review.repository.ReviewRepository;
 import com.caffeine.gwanghwamun.domain.store.dto.request.StoreCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.request.StoreUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.store.dto.response.StoreCreateResDTO;
@@ -34,6 +35,7 @@ public class StoreService {
 	private final MenuRepository menuRepository;
 	private final UserRepository userRepository;
 	private final FileService fileService;
+	private final ReviewRepository reviewRepository;
 
 	@Transactional
 	public StoreCreateResDTO createStore(StoreCreateReqDTO req, User user) {
@@ -184,7 +186,8 @@ public class StoreService {
 												store.getStoreCategory(),
 												store.getAddress(),
 												store.getGid(),
-												getFirstImageUrl(store.getGid())))
+												getFirstImageUrl(store.getGid()),
+												store.getRating()))
 						.toList();
 
 		return new PageImpl<>(dtoList, pageable, storePage.getTotalElements());
@@ -201,5 +204,20 @@ public class StoreService {
 	private String getFirstImageUrl(String gid) {
 		List<FileInfoResDTO> files = fileService.getList(gid, "store", FileStatus.DONE);
 		return files.isEmpty() ? null : files.get(0).getFileUrl();
+	}
+
+	@Transactional
+	public void updateStoreRating(UUID storeId) {
+		Double avg = reviewRepository.findAverageRatingByStoreId(storeId);
+
+		Double rounded = (avg != null) ? Math.round(avg * 10) / 10.0 : null;
+
+		Store store =
+				storeRepository
+						.findById(storeId)
+						.orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
+
+		store.setRating(rounded);
+		storeRepository.save(store);
 	}
 }

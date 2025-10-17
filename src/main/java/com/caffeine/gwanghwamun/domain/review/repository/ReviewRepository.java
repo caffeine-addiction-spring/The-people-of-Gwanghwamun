@@ -19,4 +19,12 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
 	Optional<Review> findByIdWithReply(@Param("id") UUID id);
 
 	boolean existsByOrderId(UUID orderId);
+
+	@Query(
+			"""
+				SELECT COALESCE(AVG(r.rating), 0)
+				FROM com.caffeine.gwanghwamun.domain.review.entity.Review r
+				WHERE r.storeId = :storeId
+		""")
+	Double findAverageRatingByStoreId(@Param("storeId") UUID storeId);
 }

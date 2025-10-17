@@ -4,7 +4,6 @@ import com.caffeine.gwanghwamun.domain.file.dto.response.FileInfoResDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuResDTO;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.entity.StoreCategoryEnum;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -24,7 +23,7 @@ public class StoreDetailResDTO {
 	private Integer deliveryTip;
 	private String operationHours;
 	private String closedDays;
-	private BigDecimal rating;
+	private Double rating;
 	private Integer reviewCount;
 	private String gid;
 	private List<MenuResDTO> menus;
