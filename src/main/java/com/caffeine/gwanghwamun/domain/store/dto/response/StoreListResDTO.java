@@ -14,4 +14,5 @@ public class StoreListResDTO {
 	private String address;
 	private String gid;
 	private String image;
+	private Double rating;
 }

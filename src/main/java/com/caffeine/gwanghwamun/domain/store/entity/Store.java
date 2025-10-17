@@ -5,7 +5,6 @@ import com.caffeine.gwanghwamun.common.exception.ErrorCode;
 import com.caffeine.gwanghwamun.domain.store.dto.request.StoreCreateReqDTO;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import jakarta.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AccessLevel;
@@ -49,8 +48,8 @@ public class Store {
 	@Column(nullable = false)
 	private Integer deliveryTip = 0;
 
-	@Column(nullable = false, precision = 2, scale = 1)
-	private BigDecimal rating = BigDecimal.ZERO;
+	@Column(nullable = false)
+	private Double rating = 0.0;
 
 	@Column(nullable = false)
 	private Integer reviewCount = 0;
@@ -93,7 +92,7 @@ public class Store {
 		store.operationHours = req.getOperationHours();
 		store.closedDays = req.getClosedDays();
 		store.user = user;
-		store.rating = BigDecimal.ZERO;
+		store.rating = 0.0;
 		store.reviewCount = 0;
 		if (req.getGid() == null || req.getGid().isBlank()) {
 			throw new CustomException(ErrorCode.FILE_NOT_UPLOAD);

@@ -14,6 +14,7 @@ import com.caffeine.gwanghwamun.domain.review.repository.ReviewReplyRepository;
 import com.caffeine.gwanghwamun.domain.review.repository.ReviewRepository;
 import com.caffeine.gwanghwamun.domain.store.entity.Store;
 import com.caffeine.gwanghwamun.domain.store.repository.StoreRepository;
+import com.caffeine.gwanghwamun.domain.store.service.StoreService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ public class ReviewService {
 	private final ReviewReplyRepository reviewReplyRepository;
 	private final StoreRepository storeRepository;
 	private final OrderRepository orderRepository;
+	private final StoreService storeService;
 
 	@Transactional
 	public ReviewResDTO saveReview(UUID orderId, ReviewCreateReqDTO reviewCreateReqDTO, Long userId) {
@@ -52,6 +54,7 @@ public class ReviewService {
 						.content(reviewCreateReqDTO.content())
 						.build();
 		Review savedReview = reviewRepository.save(review);
+		storeService.updateStoreRating(review.getStoreId());
 		return ReviewResDTO.from(savedReview);
 	}
 
@@ -88,6 +91,7 @@ public class ReviewService {
 			throw new CustomException(ErrorCode.REVIEW_DELETE_UNAUTHORIZED);
 		}
 		reviewRepository.deleteById(reviewId);
+		storeService.updateStoreRating(review.getStoreId());
 	}
 
 	@Transactional
