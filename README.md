@@ -4,48 +4,47 @@
 > 스프링 부트 기반 모놀리식 아키텍처 개발 경험과 직관적인 API 문서를 제공하는 것을 목표로 합니다.
 
 ## Contributors
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="17%">
+      <td align="center" valign="top">
         <a href="https://github.com/taeaeaeae">
           <img src="https://avatars.githubusercontent.com/u/46617216?v=4" width="80" alt="이태경"/><br />
           <b>이태경</b>
         </a><br />
         <div>팀장 / BE<br />주문, 장바구니</div>
       </td>
-      <td align="center" valign="top" width="17%">
+      <td align="center" valign="top">
         <a href="https://github.com/Daae-Kim">
           <img src="https://avatars.githubusercontent.com/u/68381747?v=4" width="80" alt="김다애"/><br />
           <b>김다애</b>
         </a><br />
         <div>BE<br />리뷰, 결제</div>
       </td>
-      <td align="center" valign="top" width="17%">
+      <td align="center" valign="top">
         <a href="https://github.com/minju26">
           <img src="https://avatars.githubusercontent.com/u/110724254?v=4" width="80" alt="김민주"/><br />
           <b>김민주</b>
         </a><br />
         <div>BE<br />회원, 인증/인가</div>
       </td>
-      <td align="center" valign="top" width="17%">
+    </tr>
+    <tr>
+      <td align="center" valign="top">
         <a href="https://github.com/S2hyeyunS2">
           <img src="https://avatars.githubusercontent.com/u/188556604?v=4" width="80" alt="김혜윤"/><br />
           <b>김혜윤</b>
         </a><br />
         <div>BE<br />메뉴, 옵션</div>
       </td>
-      <td align="center" valign="top" width="17%">
+      <td align="center" valign="top">
         <a href="https://github.com/seolbin01">
           <img src="https://avatars.githubusercontent.com/u/106576062?v=4" width="80" alt="박설빈"/><br />
           <b>박설빈</b>
         </a><br />
         <div>BE<br />파일, AI</div>
       </td>
-      <td align="center" valign="top" width="17%">
+      <td align="center" valign="top">
         <a href="https://github.com/cicle00">
           <img src="https://avatars.githubusercontent.com/u/169460927?v=4" width="80" alt="한성연"/><br />
           <b>한성연</b>
@@ -55,9 +54,6 @@
     </tr>
   </tbody>
 </table>
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 
 ## Deploy Link
