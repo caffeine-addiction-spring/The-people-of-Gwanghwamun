@@ -1,14 +1,14 @@
-package com.caffeine.gwanghwamun.domain.user.address.controller;
+package com.caffeine.gwanghwamun.domain.address.controller;
 
 import com.caffeine.gwanghwamun.common.response.ApiResponse;
 import com.caffeine.gwanghwamun.common.response.ResponseUtil;
 import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
-import com.caffeine.gwanghwamun.domain.user.address.dto.request.CreateUserAddressReqDTO;
-import com.caffeine.gwanghwamun.domain.user.address.dto.request.UpdateUserAddressReqDTO;
-import com.caffeine.gwanghwamun.domain.user.address.dto.response.DeleteUserAddressResDTO;
-import com.caffeine.gwanghwamun.domain.user.address.dto.response.GetUserAddressListResDTO;
-import com.caffeine.gwanghwamun.domain.user.address.service.UserAddressService;
+import com.caffeine.gwanghwamun.domain.address.dto.request.CreateUserAddressReqDTO;
+import com.caffeine.gwanghwamun.domain.address.dto.request.UpdateUserAddressReqDTO;
+import com.caffeine.gwanghwamun.domain.address.dto.response.DeleteUserAddressResDTO;
+import com.caffeine.gwanghwamun.domain.address.dto.response.GetUserAddressListResDTO;
+import com.caffeine.gwanghwamun.domain.address.service.UserAddressService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -28,7 +28,7 @@ public class UserAddressController {
 
 	private final UserAddressService userAddressService;
 
-	@Operation(summary = "주소 생성 API")
+	@Operation(summary = "주소 생성 API", description = "회원이 새로운 배송지 주소를 추가한다.")
 	@PostMapping("")
 	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
 	public ResponseEntity<ApiResponse<Void>> createAddress(
@@ -38,7 +38,7 @@ public class UserAddressController {
 		return ResponseUtil.successResponse(SuccessCode.ADDRESS_SAVE_SUCCESS);
 	}
 
-	@Operation(summary = "주소 수정 API")
+	@Operation(summary = "주소 수정 API", description = "회원이 기존 배송지 주소의 정보를 수정한다.")
 	@PutMapping("/{addressId}")
 	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
 	public ResponseEntity<ApiResponse<Void>> updateAddress(
@@ -49,7 +49,7 @@ public class UserAddressController {
 		return ResponseUtil.successResponse(SuccessCode.ADDRESS_UPDATE_SUCCESS);
 	}
 
-	@Operation(summary = "주소 삭제 API")
+	@Operation(summary = "주소 삭제 API", description = "회원이 등록된 배송지 주소를 삭제한다.")
 	@DeleteMapping("/{addressId}")
 	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
 	public ResponseEntity<ApiResponse<DeleteUserAddressResDTO>> deleteAddress(
@@ -59,7 +59,7 @@ public class UserAddressController {
 		return ResponseUtil.successResponse(SuccessCode.ADDRESS_DELETE_SUCCESS, response);
 	}
 
-	@Operation(summary = "주소 목록 조회 API")
+	@Operation(summary = "주소 목록 조회 API", description = "회원이 등록한 모든 배송지 주소 목록을 조회한다.")
 	@GetMapping("")
 	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
 	public ResponseEntity<ApiResponse<List<GetUserAddressListResDTO>>> getAddressList(
@@ -69,7 +69,7 @@ public class UserAddressController {
 		return ResponseUtil.successResponse(SuccessCode.ADDRESS_LIST_FETCH_SUCCESS, response);
 	}
 
-	@Operation(summary = "주소 상세 조회 API")
+	@Operation(summary = "주소 상세 조회 API", description = "특정 배송지 주소의 상세 정보를 조회한다.")
 	@GetMapping("/{addressId}")
 	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
 	public ResponseEntity<ApiResponse<GetUserAddressListResDTO>> getAddress(
@@ -79,7 +79,7 @@ public class UserAddressController {
 		return ResponseUtil.successResponse(SuccessCode.ADDRESS_FETCH_SUCCESS, response);
 	}
 
-	@Operation(summary = "기본 배송지 주소 설정 API")
+	@Operation(summary = "기본 배송지 설정 API", description = "회원이 지정한 주소를 기본 배송지로 설정한다.")
 	@PostMapping("/{addressId}")
 	@PreAuthorize("hasAnyRole('MASTER', 'CUSTOMER')")
 	public ResponseEntity<ApiResponse<Void>> setDefaultAddress(

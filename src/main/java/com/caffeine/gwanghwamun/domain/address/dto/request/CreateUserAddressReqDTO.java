@@ -1,6 +1,6 @@
-package com.caffeine.gwanghwamun.domain.user.address.dto.request;
+package com.caffeine.gwanghwamun.domain.address.dto.request;
 
-import com.caffeine.gwanghwamun.domain.user.address.entity.UserAddress;
+import com.caffeine.gwanghwamun.domain.address.entity.UserAddress;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

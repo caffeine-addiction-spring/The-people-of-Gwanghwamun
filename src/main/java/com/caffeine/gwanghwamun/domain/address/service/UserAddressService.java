@@ -1,14 +1,14 @@
-package com.caffeine.gwanghwamun.domain.user.address.service;
+package com.caffeine.gwanghwamun.domain.address.service;
 
 import static com.caffeine.gwanghwamun.common.exception.ErrorCode.*;
 
 import com.caffeine.gwanghwamun.common.exception.CustomException;
-import com.caffeine.gwanghwamun.domain.user.address.dto.request.CreateUserAddressReqDTO;
-import com.caffeine.gwanghwamun.domain.user.address.dto.request.UpdateUserAddressReqDTO;
-import com.caffeine.gwanghwamun.domain.user.address.dto.response.DeleteUserAddressResDTO;
-import com.caffeine.gwanghwamun.domain.user.address.dto.response.GetUserAddressListResDTO;
-import com.caffeine.gwanghwamun.domain.user.address.entity.UserAddress;
-import com.caffeine.gwanghwamun.domain.user.address.repository.UserAddressRepository;
+import com.caffeine.gwanghwamun.domain.address.dto.request.CreateUserAddressReqDTO;
+import com.caffeine.gwanghwamun.domain.address.dto.request.UpdateUserAddressReqDTO;
+import com.caffeine.gwanghwamun.domain.address.dto.response.DeleteUserAddressResDTO;
+import com.caffeine.gwanghwamun.domain.address.dto.response.GetUserAddressListResDTO;
+import com.caffeine.gwanghwamun.domain.address.entity.UserAddress;
+import com.caffeine.gwanghwamun.domain.address.repository.UserAddressRepository;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.repository.UserRepository;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.user.address.dto.request;
+package com.caffeine.gwanghwamun.domain.address.dto.request;
 
 import jakarta.validation.constraints.Pattern;
 import org.springframework.lang.Nullable;
