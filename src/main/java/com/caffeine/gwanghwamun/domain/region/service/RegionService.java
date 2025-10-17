@@ -52,4 +52,14 @@ public class RegionService {
 
 		return new RegionResDTO(address.getAddressId(), address.getName());
 	}
+
+	@Transactional
+	public void deleteRegion(UUID addressId) {
+		Address region =
+				regionRepository
+						.findById(addressId)
+						.orElseThrow(() -> new CustomException(ErrorCode.REGION_NOT_FOUND));
+
+		regionRepository.delete(region);
+	}
 }
