@@ -13,8 +13,6 @@ import com.caffeine.gwanghwamun.domain.menu.dto.request.MenuVisibilityReqDTO;
 import com.caffeine.gwanghwamun.domain.menu.dto.response.MenuResDTO;
 import com.caffeine.gwanghwamun.domain.menu.service.MenuService;
 import io.swagger.v3.oas.annotations.Operation;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +23,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/v1/stores/{storeId}/menus")
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class MenuController {
 	private final FileService fileService;
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
-	@Operation(summary = "메뉴 생성", description = "메뉴를 생성한다.")
+	@Operation(summary = "메뉴 생성 API", description = "메뉴를 생성한다.")
 	@PostMapping
 	public ResponseEntity<ApiResponse<MenuResDTO>> createMenu(
 			@PathVariable("storeId") UUID storeId,
@@ -44,7 +45,7 @@ public class MenuController {
 		return ResponseUtil.successResponse(SuccessCode.MENU_SAVE_SUCCESS, menuResDTO);
 	}
 
-	@Operation(summary = "메뉴 상세 조회", description = "메뉴를 상세 조회할 수 있다.")
+	@Operation(summary = "메뉴 상세 조회 API", description = "메뉴를 상세 조회한다.")
 	@GetMapping("/{menuId}")
 	public ResponseEntity<ApiResponse<MenuResDTO>> getMenu(
 			@PathVariable("storeId") UUID storeId,
@@ -54,7 +55,7 @@ public class MenuController {
 		return ResponseUtil.successResponse(SuccessCode.MENU_FIND_SUCCESS, menuResDTO);
 	}
 
-	@Operation(summary = "메뉴 목록 조회", description = "메뉴 목록을 조회할 수 있다.")
+	@Operation(summary = "메뉴 목록 조회 API", description = "메뉴 목록을 조회한다.")
 	@GetMapping
 	public ResponseEntity<ApiResponse<Page<MenuResDTO>>> getMenuList(
 			@PathVariable("storeId") UUID storeId,
@@ -69,7 +70,7 @@ public class MenuController {
 	}
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
-	@Operation(summary = "메뉴 수정", description = "메뉴를 수정할 수 있다.")
+	@Operation(summary = "메뉴 수정 API", description = "메뉴를 수정한다.")
 	@PatchMapping("/{menuId}")
 	public ResponseEntity<ApiResponse<MenuResDTO>> updateMenu(
 			@PathVariable("storeId") UUID storeId,
@@ -81,7 +82,7 @@ public class MenuController {
 	}
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
-	@Operation(summary = "메뉴 삭제", description = "메뉴를 삭제할 수 있다.")
+	@Operation(summary = "메뉴 삭제 API", description = "메뉴를 삭제한다.")
 	@DeleteMapping("/{menuId}")
 	public ResponseEntity<ApiResponse<Void>> deleteMenu(
 			@PathVariable("storeId") UUID storeId,
@@ -92,7 +93,7 @@ public class MenuController {
 	}
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
-	@Operation(summary = "메뉴 숨김", description = "메뉴를 숨길 수 있다.")
+	@Operation(summary = "메뉴 숨김/복구 API", description = "메뉴 숨김 여부를 변경한다.")
 	@PostMapping("/{menuId}/visibility")
 	public ResponseEntity<ApiResponse<MenuResDTO>> updateMenuVisibility(
 			@PathVariable("storeId") UUID storeId,
@@ -105,7 +106,7 @@ public class MenuController {
 	}
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
-	@Operation(summary = "메뉴 품절", description = "메뉴 품절 여부를 표시한다.")
+	@Operation(summary = "메뉴 품절/복구 API", description = "메뉴 품절 여부를 변경한다.")
 	@PostMapping("/{menuId}/soldout")
 	public ResponseEntity<ApiResponse<MenuResDTO>> updateMenuSoldOut(
 			@PathVariable("storeId") UUID storeId,
@@ -117,7 +118,7 @@ public class MenuController {
 		return ResponseUtil.successResponse(SuccessCode.MENU_SOLDOUT_UPDATE_SUCCESS, menuResDTO);
 	}
 
-	@Operation(summary = "메뉴 이미지 목록 조회", description = "메뉴의 이미지 목록을 조회한다.")
+	@Operation(summary = "메뉴 이미지 목록 조회 API", description = "메뉴의 이미지 목록을 조회한다.")
 	@GetMapping("/{menuId}/images")
 	public ResponseEntity<ApiResponse<List<FileInfoResDTO>>> getMenuImages(
 			@PathVariable("storeId") UUID storeId,
@@ -131,7 +132,7 @@ public class MenuController {
 	}
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
-	@Operation(summary = "메뉴 이미지 삭제", description = "메뉴의 특정 이미지를 삭제한다.")
+	@Operation(summary = "메뉴 이미지 삭제 API", description = "메뉴의 특정 이미지를 삭제한다.")
 	@DeleteMapping("/{menuId}/images/{fileUuid}")
 	public ResponseEntity<ApiResponse<Void>> deleteMenuImage(
 			@PathVariable("storeId") UUID storeId,
@@ -145,7 +146,7 @@ public class MenuController {
 	}
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
-	@Operation(summary = "메뉴 이미지 전체 삭제", description = "메뉴의 모든 이미지를 삭제한다.")
+	@Operation(summary = "메뉴 이미지 전체 삭제 API", description = "메뉴의 모든 이미지를 삭제한다.")
 	@DeleteMapping("/{menuId}/images")
 	public ResponseEntity<ApiResponse<Void>> deleteAllMenuImages(
 			@PathVariable("storeId") UUID storeId,
