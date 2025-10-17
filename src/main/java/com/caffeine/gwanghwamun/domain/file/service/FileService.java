@@ -116,14 +116,22 @@ public class FileService {
 		List<FileInfo> files;
 
 		if (status == FileStatus.ALL) {
-			if (StringUtils.hasText(location)) {
-				files = fileInfoRepository.findByGidAndLocation(gid, location);
-			} else {
+			if (!StringUtils.hasText(gid) && !StringUtils.hasText(location)) {
+				files = fileInfoRepository.findAll();
+			} else if (StringUtils.hasText(gid) && !StringUtils.hasText(location)) {
 				files = fileInfoRepository.findByGid(gid);
+			} else {
+				files = fileInfoRepository.findByGidAndLocation(gid, location);
 			}
 		} else {
 			boolean done = (status == FileStatus.DONE);
-			files = fileInfoRepository.findByGidAndLocationAndDone(gid, location, done);
+			if (!StringUtils.hasText(gid) && !StringUtils.hasText(location)) {
+				files = fileInfoRepository.findByDone(done);
+			} else if (StringUtils.hasText(gid) && !StringUtils.hasText(location)) {
+				files = fileInfoRepository.findByGidAndDone(gid, done);
+			} else {
+				files = fileInfoRepository.findByGidAndLocationAndDone(gid, location, done);
+			}
 		}
 
 		return files.stream().map(FileInfoResDTO::fromItem).toList();
@@ -148,10 +156,12 @@ public class FileService {
 
 		Page<FileInfo> files;
 
-		if (StringUtils.hasText(location)) {
-			files = fileInfoRepository.findByGidAndLocation(gid, location, pageable);
-		} else {
+		if (!StringUtils.hasText(gid) && !StringUtils.hasText(location)) {
+			files = fileInfoRepository.findAll(pageable);
+		} else if (StringUtils.hasText(gid) && !StringUtils.hasText(location)) {
 			files = fileInfoRepository.findByGid(gid, pageable);
+		} else {
+			files = fileInfoRepository.findByGidAndLocation(gid, location, pageable);
 		}
 
 		return files.map(FileInfoResDTO::fromItem);

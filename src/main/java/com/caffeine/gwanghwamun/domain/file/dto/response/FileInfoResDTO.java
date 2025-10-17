@@ -8,6 +8,7 @@ import lombok.Data;
 public class FileInfoResDTO {
 	private UUID fileId;
 	private String gid;
+	private String location;
 	private String fileName;
 	private String fileUrl;
 	private boolean done;
@@ -16,6 +17,7 @@ public class FileInfoResDTO {
 		FileInfoResDTO resDTO = new FileInfoResDTO();
 		resDTO.setFileId(item.getFileId());
 		resDTO.setGid(item.getGid());
+		resDTO.setLocation(item.getLocation());
 		resDTO.setFileName(item.getFileName());
 		resDTO.setFileUrl(item.getFileUrl());
 		resDTO.setDone(item.isDone());

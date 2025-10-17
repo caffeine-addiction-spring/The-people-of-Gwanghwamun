@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.util.StringUtils;
 
 @Data
 @Entity
@@ -64,12 +65,13 @@ public class FileInfo {
 			String contentType,
 			String extension,
 			String fileUrl) {
-		if (gid != null) this.gid = gid;
-		if (location != null) this.location = location;
-		if (fileName != null) this.fileName = fileName;
-		if (contentType != null) this.contentType = contentType;
-		if (extension != null) this.extension = extension;
-		if (fileUrl != null) this.fileUrl = fileUrl;
+
+		if (StringUtils.hasText(gid)) this.gid = gid;
+		if (StringUtils.hasText(location)) this.location = location;
+		if (StringUtils.hasText(fileName)) this.fileName = fileName;
+		if (StringUtils.hasText(contentType)) this.contentType = contentType;
+		if (StringUtils.hasText(extension)) this.extension = extension;
+		if (StringUtils.hasText(fileUrl)) this.fileUrl = fileUrl;
 		this.done = true;
 	}
 }

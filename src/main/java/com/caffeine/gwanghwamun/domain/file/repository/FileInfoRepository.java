@@ -17,4 +17,8 @@ public interface FileInfoRepository extends JpaRepository<FileInfo, UUID> {
 	Page<FileInfo> findByGid(String gid, Pageable pageable);
 
 	Page<FileInfo> findByGidAndLocation(String gid, String location, Pageable pageable);
+
+	List<FileInfo> findByDone(boolean done);
+
+	List<FileInfo> findByGidAndDone(String gid, boolean done);
 }
