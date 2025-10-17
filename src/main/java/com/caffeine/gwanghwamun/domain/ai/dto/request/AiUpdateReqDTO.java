@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.ai.dto;
+package com.caffeine.gwanghwamun.domain.ai.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

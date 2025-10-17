@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.ai.dto;
+package com.caffeine.gwanghwamun.domain.ai.dto.response;
 
 import com.caffeine.gwanghwamun.domain.ai.entity.Ai;
 import java.time.LocalDateTime;
