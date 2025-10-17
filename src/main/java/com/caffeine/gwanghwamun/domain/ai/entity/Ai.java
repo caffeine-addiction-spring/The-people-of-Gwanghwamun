@@ -4,7 +4,9 @@ import com.caffeine.gwanghwamun.domain.BaseEntity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "p_ai_results")
 public class Ai extends BaseEntity {
@@ -27,5 +29,10 @@ public class Ai extends BaseEntity {
 		ai.question = question;
 		ai.answer = answer;
 		return ai;
+	}
+
+	public void updateAnswer(String question, String answer) {
+		this.question = question;
+		this.answer = answer;
 	}
 }
