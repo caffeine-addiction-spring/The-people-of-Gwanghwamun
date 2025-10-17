@@ -97,7 +97,8 @@ public enum SuccessCode {
 	ORDER_LOG_SUCCESS(HttpStatus.OK, "주문 상태 조회 성공"),
 
 	// AI
-	AI_SAVE_SUCCESS(HttpStatus.OK, "상품 설명 AI 생성 성공");
+	AI_SAVE_SUCCESS(HttpStatus.OK, "상품 설명 AI 생성 성공"),
+    AI_READ_SUCCESS(HttpStatus.OK, "AI 응답 조회 성공");
 
 	private final HttpStatus httpStatus;
 	private final String message;

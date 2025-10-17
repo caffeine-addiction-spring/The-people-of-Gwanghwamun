@@ -1,5 +1,8 @@
 package com.caffeine.gwanghwamun.domain.ai.service;
 
+import com.caffeine.gwanghwamun.common.exception.CustomException;
+import com.caffeine.gwanghwamun.common.exception.ErrorCode;
+import com.caffeine.gwanghwamun.domain.ai.dto.AiResDTO;
 import com.caffeine.gwanghwamun.domain.ai.entity.Ai;
 import com.caffeine.gwanghwamun.domain.ai.repository.AiRepository;
 import com.google.genai.Client;
@@ -10,6 +13,9 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +33,7 @@ public class AiService {
 		this.client = Client.builder().apiKey(apiKey).build();
 	}
 
+    @Transactional
 	public String ask(String prompt) {
 		Content content =
 				Content.builder()
@@ -55,4 +62,11 @@ public class AiService {
 
 		return answer;
 	}
+
+    @Transactional(readOnly = true)
+    public AiResDTO getAiResult(UUID aiResultId) {
+        Ai ai = aiRepository.findById(aiResultId)
+                .orElseThrow(() -> new CustomException(ErrorCode.AI_NOT_FOUND));
+        return AiResDTO.fromEntity(ai);
+    }
 }

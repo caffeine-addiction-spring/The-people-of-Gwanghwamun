@@ -80,7 +80,10 @@ public enum ErrorCode {
 
 	// 장바구니 (cart)
 	CART_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 장바구니를 찾을 수 없습니다."),
-	UNAUTHORIZED_CART_ACCESS(HttpStatus.FORBIDDEN, "장바구니에 접근권한이 없습니디.");
+	UNAUTHORIZED_CART_ACCESS(HttpStatus.FORBIDDEN, "장바구니에 접근권한이 없습니디."),
+
+    // AI
+    AI_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 AI 응답을 찾을 수 없습니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;

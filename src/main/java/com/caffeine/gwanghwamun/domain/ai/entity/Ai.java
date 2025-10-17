@@ -2,9 +2,12 @@ package com.caffeine.gwanghwamun.domain.ai.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Getter
 @Entity
 @Table(name = "p_ai_results")
 public class Ai extends BaseEntity {
