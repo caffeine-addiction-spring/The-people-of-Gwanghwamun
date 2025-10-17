@@ -30,7 +30,7 @@ public class MenuOptionController {
 	private final MenuOptionService menuOptionService;
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
-	@Operation(summary = "옵션 등록", description = "메뉴 옵션을 등록한다.")
+	@Operation(summary = "메뉴 옵션 생성 API", description = "메뉴 옵션을 생성한다.")
 	@PostMapping
 	public ResponseEntity<ApiResponse<MenuOptionResDTO>> createOption(
 			@PathVariable("storeId") UUID storeId,
@@ -41,6 +41,7 @@ public class MenuOptionController {
 		return ResponseUtil.successResponse(SuccessCode.MENU_OPTION_SAVE_SUCCESS, res);
 	}
 
+	@Operation(summary = "메뉴 옵션 목록 조회 API", description = "메뉴 옵션 목록을 조회한다.")
 	@GetMapping
 	public ResponseEntity<ApiResponse<Page<MenuOptionResDTO>>> getOptionList(
 			@PathVariable("storeId") UUID storeId,
@@ -60,7 +61,7 @@ public class MenuOptionController {
 		return ResponseUtil.successResponse(SuccessCode.MENU_OPTION_LIST_SUCCESS, res);
 	}
 
-	@Operation(summary = "옵션 상세 조회")
+	@Operation(summary = "메뉴 옵션 상세 조회 API", description = "메뉴 옵션을 상세 조회한다.")
 	@GetMapping("/{optionId}")
 	public ResponseEntity<ApiResponse<MenuOptionResDTO>> getOption(
 			@PathVariable("storeId") UUID storeId,
@@ -72,7 +73,7 @@ public class MenuOptionController {
 	}
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
-	@Operation(summary = "옵션 수정", description = "메뉴 옵션을 수정한다.")
+	@Operation(summary = "메뉴 옵션 수정 API", description = "메뉴 옵션을 수정한다.")
 	@PatchMapping("/{optionId}")
 	public ResponseEntity<ApiResponse<MenuOptionResDTO>> updateOption(
 			@PathVariable("storeId") UUID storeId,
@@ -85,7 +86,7 @@ public class MenuOptionController {
 	}
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
-	@Operation(summary = "옵션 삭제", description = "메뉴 옵션을 삭제한다.")
+	@Operation(summary = "메뉴 옵션 삭제 API", description = "메뉴 옵션을 삭제한다.")
 	@DeleteMapping("/{optionId}")
 	public ResponseEntity<ApiResponse<Void>> deleteOption(
 			@PathVariable("storeId") UUID storeId,
@@ -97,7 +98,7 @@ public class MenuOptionController {
 	}
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
-	@Operation(summary = "옵션 숨김/복구", description = "옵션을 숨기거나 다시 보이게 할 수 있다.")
+	@Operation(summary = "메뉴 옵션 숨김/복구 API", description = "메뉴 옵션 숨김 여부를 변경한다.")
 	@PostMapping("/{optionId}/visibility")
 	public ResponseEntity<ApiResponse<MenuOptionResDTO>> updateOptionVisibility(
 			@PathVariable("storeId") UUID storeId,
@@ -111,7 +112,7 @@ public class MenuOptionController {
 	}
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
-	@Operation(summary = "옵션 품절/복구", description = "메뉴 옵션 품절 여부를 변경한다.")
+	@Operation(summary = "메뉴 옵션 품절/복구 API", description = "메뉴 옵션 품절 여부를 변경한다.")
 	@PostMapping("/{optionId}/soldout")
 	public ResponseEntity<ApiResponse<MenuOptionResDTO>> updateSoldOut(
 			@PathVariable("storeId") UUID storeId,

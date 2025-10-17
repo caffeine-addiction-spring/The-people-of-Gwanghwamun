@@ -1,4 +1,4 @@
-package com.caffeine.gwanghwamun.domain.user.address.entity;
+package com.caffeine.gwanghwamun.domain.address.entity;
 
 import com.caffeine.gwanghwamun.domain.BaseEntity;
 import com.caffeine.gwanghwamun.domain.user.entity.User;
