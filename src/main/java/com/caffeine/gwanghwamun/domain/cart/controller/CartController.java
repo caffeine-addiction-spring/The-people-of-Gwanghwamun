@@ -4,10 +4,7 @@ import com.caffeine.gwanghwamun.common.response.ApiResponse;
 import com.caffeine.gwanghwamun.common.response.ResponseUtil;
 import com.caffeine.gwanghwamun.common.security.model.UserDetailsImpl;
 import com.caffeine.gwanghwamun.common.success.SuccessCode;
-import com.caffeine.gwanghwamun.domain.cart.dto.CartResDTO;
-import com.caffeine.gwanghwamun.domain.cart.dto.SaveCartReqDTO;
-import com.caffeine.gwanghwamun.domain.cart.dto.SaveCartResDTO;
-import com.caffeine.gwanghwamun.domain.cart.dto.UpdateCartReqDTO;
+import com.caffeine.gwanghwamun.domain.cart.dto.*;
 import com.caffeine.gwanghwamun.domain.cart.service.CartService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
@@ -48,12 +45,12 @@ public class CartController {
 	@PreAuthorize("hasRole('CUSTOMER')")
 	@Operation(summary = "장바구니 항목 수정", description = "장바구니에 담긴 메뉴의 옵션과 수량을 수정한다.")
 	@PutMapping("/{cartId}")
-	public ResponseEntity<ApiResponse<CartResDTO>> updateCart(
+	public ResponseEntity<ApiResponse<CartUpdateResDTO>> updateCart(
 			@PathVariable("cartId") UUID cartId,
 			@RequestBody UpdateCartReqDTO cartUpdateReqDTO,
 			@AuthenticationPrincipal UserDetailsImpl user) {
 
-		CartResDTO updatedCart = cartService.updateCart(user.getUser(), cartId, cartUpdateReqDTO);
+		CartUpdateResDTO updatedCart = cartService.updateCart(user.getUser(), cartId, cartUpdateReqDTO);
 		return ResponseUtil.successResponse(SuccessCode.CART_UPDATE_SUCCESS, updatedCart);
 	}
 

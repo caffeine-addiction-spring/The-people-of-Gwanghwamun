@@ -40,6 +40,10 @@ public class Order extends BaseEntity {
 	@Column(name = "delivery_content", nullable = true)
 	private String deliveryContent;
 
+	@Column(name = "mode", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private CartMode mode;
+
 	@Column(name = "deleted_date", nullable = true)
 	private LocalDateTime deletedDate;
 
@@ -66,12 +70,14 @@ public class Order extends BaseEntity {
 			int totalPrice,
 			String deliveryAddress,
 			String deliveryContent,
-			String requests) {
+			String requests,
+			CartMode mode) {
 		this.store = store;
 		this.user = user;
 		this.orderStatus = orderStatus;
 		this.totalPrice = totalPrice;
 		this.requests = requests;
+		this.mode = mode;
 		this.deliveryAddress = deliveryAddress;
 		this.deliveryContent = deliveryContent;
 	}
