@@ -34,7 +34,6 @@ public class ReviewController {
 
 	private final ReviewService reviewService;
 
-
 	@Operation(summary = "리뷰 생성 API", description = "리뷰를 생성할 수 있다.")
 	@PostMapping("/orders/{orderId}/reviews")
 	public ResponseEntity<ApiResponse<ReviewResDTO>> createReview(
@@ -54,11 +53,11 @@ public class ReviewController {
 		return ResponseUtil.successResponse(SuccessCode.REVIEW_FIND_SUCCESS, reviewResDTO);
 	}
 
-
 	@Operation(summary = "가게 리뷰 목록 조회 API", description = "가게의 리뷰들을 조회 할 수 있다.")
 	@GetMapping("/stores/{storeId}/reviews")
 	public ResponseEntity<ApiResponse<Page<ReviewResDTO>>> getReviewList(
-			@PathVariable("storeId") UUID storeId, @PageableDefault(sort = "createAt", direction = Sort.Direction.ASC) Pageable pageable) {
+			@PathVariable("storeId") UUID storeId,
+			@PageableDefault(sort = "createAt", direction = Sort.Direction.ASC) Pageable pageable) {
 		Page<ReviewResDTO> reviewList = reviewService.findReviewListByStore(storeId, pageable);
 		return ResponseUtil.successResponse(SuccessCode.REVIEW_LIST_FIND_SUCCESS, reviewList);
 	}
