@@ -4,16 +4,21 @@ import com.caffeine.gwanghwamun.common.aws.s3.S3Service;
 import com.caffeine.gwanghwamun.common.exception.CustomException;
 import com.caffeine.gwanghwamun.common.exception.ErrorCode;
 import com.caffeine.gwanghwamun.domain.file.dto.FileInfoResDTO;
+import com.caffeine.gwanghwamun.domain.file.dto.FileUpdateReqDTO;
 import com.caffeine.gwanghwamun.domain.file.dto.FileUploadReqDTO;
 import com.caffeine.gwanghwamun.domain.file.entity.FileInfo;
 import com.caffeine.gwanghwamun.domain.file.entity.FileStatus;
 import com.caffeine.gwanghwamun.domain.file.repository.FileInfoRepository;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,12 +31,12 @@ public class FileService {
 
 	// 파일 업로드 처리
 	@Transactional
-	public List<FileInfoResDTO> upload(MultipartFile[] files, @Valid FileUploadReqDTO requestDTO) {
-		String gid = requestDTO.getGid();
+	public List<FileInfoResDTO> upload(MultipartFile[] files, @Valid FileUploadReqDTO uploadReqDTO) {
+		String gid = uploadReqDTO.getGid();
 		gid = StringUtils.hasText(gid) ? gid : UUID.randomUUID().toString();
-		String location = requestDTO.getLocation();
-		boolean imageOnly = requestDTO.isImageOnly();
-		boolean single = requestDTO.isSingle();
+		String location = uploadReqDTO.getLocation();
+		boolean imageOnly = uploadReqDTO.isImageOnly();
+		boolean single = uploadReqDTO.isSingle();
 
 		if (files == null || files.length == 0) {
 			throw new CustomException(ErrorCode.FILE_NOT_UPLOAD);
@@ -128,6 +133,30 @@ public class FileService {
 		return getList(gid, location, FileStatus.DONE);
 	}
 
+	@Transactional(readOnly = true)
+	public Page<FileInfoResDTO> getFileList(
+			String gid, String location, int page, int size, String sortBy, String direction) {
+
+		if (size != 10 && size != 30 && size != 50) {
+			size = 10;
+		}
+
+		Sort.Direction sortDirection =
+				direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+		Sort sort = Sort.by(sortDirection, sortBy);
+		Pageable pageable = PageRequest.of(page, size, sort);
+
+		Page<FileInfo> files;
+
+		if (StringUtils.hasText(location)) {
+			files = fileInfoRepository.findByGidAndLocation(gid, location, pageable);
+		} else {
+			files = fileInfoRepository.findByGid(gid, pageable);
+		}
+
+		return files.map(FileInfoResDTO::fromItem);
+	}
+
 	// 파일 등록번호로 삭제
 	public FileInfoResDTO deleteFile(UUID fileuuid) {
 		FileInfoResDTO item = get(fileuuid);
@@ -146,5 +175,23 @@ public class FileService {
 		}
 
 		return deletedItems;
+	}
+
+	private FileInfo getEntity(UUID fileuuid) {
+		return fileInfoRepository
+				.findById(fileuuid)
+				.orElseThrow(() -> new CustomException(ErrorCode.FILE_NOT_FOUND));
+	}
+
+	@Transactional
+	public void updateFile(UUID fileuuid, FileUpdateReqDTO updateReqDTO) {
+		FileInfo fileInfo = getEntity(fileuuid);
+		fileInfo.update(
+				updateReqDTO.getGid(),
+				updateReqDTO.getLocation(),
+				updateReqDTO.getFileName(),
+				updateReqDTO.getContentType(),
+				updateReqDTO.getExtension(),
+				updateReqDTO.getFileUrl());
 	}
 }
