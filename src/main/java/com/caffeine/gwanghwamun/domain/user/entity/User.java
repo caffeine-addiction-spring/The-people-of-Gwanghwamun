@@ -40,7 +40,8 @@ public class User extends BaseEntity {
 	private LocalDateTime deletedAt;
 
 	@Builder
-	public User(Long groupId, String email, String password, String name, String phone, UserRoleEnum role) {
+	public User(
+			Long groupId, String email, String password, String name, String phone, UserRoleEnum role) {
 		this.groupId = groupId;
 		this.email = email;
 		this.password = password;
