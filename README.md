@@ -149,7 +149,7 @@ cd gwanghwamun
 ```
 **3. Gradle Build**
 ```bash
-./gradlew clean build
+./gradlew clean build -x test
 ```
 **4. Run Application**
 ```
