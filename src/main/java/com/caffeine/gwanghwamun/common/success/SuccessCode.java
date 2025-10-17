@@ -60,6 +60,7 @@ public enum SuccessCode {
 	REGION_LIST_SUCCESS(HttpStatus.OK, "지역 목록 조회 성공"),
 	REGION_CREATE_SUCCESS(HttpStatus.CREATED, "지역 생성 성공"),
 	REGION_UPDATE_SUCCESS(HttpStatus.OK, "지역 수정 성공"),
+    REGION_DELETE_SUCCESS(HttpStatus.OK, "지역 삭제 완료"),
 
 	// 메뉴 옵션 (menuOption)
 	MENU_OPTION_SAVE_SUCCESS(HttpStatus.CREATED, "메뉴 옵션 생성 성공"),
