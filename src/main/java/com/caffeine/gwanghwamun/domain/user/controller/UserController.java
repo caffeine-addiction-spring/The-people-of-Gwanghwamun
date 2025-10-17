@@ -25,10 +25,7 @@ public class UserController {
 
 	private final UserService userService;
 
-	@Operation(
-			summary = "회원 정보 조회 API",
-			description = "로그인한 회원의 상세 정보를 조회한다."
-	)
+	@Operation(summary = "회원 정보 조회 API", description = "로그인한 회원의 상세 정보를 조회한다.")
 	@GetMapping("/me")
 	public ResponseEntity<ApiResponse<UserInfoResDTO>> findUserInfo(
 			@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -36,10 +33,7 @@ public class UserController {
 				SuccessCode.USER_READ_SUCCESS, userService.findUserInfo(userDetails.getUser()));
 	}
 
-	@Operation(
-			summary = "회원 정보 수정 API",
-			description = "회원이 자신의 프로필 정보를 수정한다."
-	)
+	@Operation(summary = "회원 정보 수정 API", description = "회원이 자신의 프로필 정보를 수정한다.")
 	@PatchMapping("/me")
 	public ResponseEntity<ApiResponse<UserInfoResDTO>> updateUser(
 			@RequestBody @Valid UserInfoUpdateReqDTO requestDto,
@@ -49,10 +43,7 @@ public class UserController {
 				userService.updateUserInfo(userDetails.getUser(), requestDto));
 	}
 
-	@Operation(
-			summary = "비밀번호 수정 API",
-			description = "회원이 현재 비밀번호를 검증 후 새 비밀번호로 변경한다."
-	)
+	@Operation(summary = "비밀번호 수정 API", description = "회원이 현재 비밀번호를 검증 후 새 비밀번호로 변경한다.")
 	@PatchMapping("/me/password")
 	public ResponseEntity<ApiResponse<Void>> updatePassword(
 			@RequestBody @Valid PasswordChangeReqDTO requestDto,
@@ -62,10 +53,7 @@ public class UserController {
 		return ResponseUtil.successResponse(SuccessCode.PASSWORD_UPDATE_SUCCESS);
 	}
 
-	@Operation(
-			summary = "회원 삭제 API",
-			description = "관리자가 특정 회원 계정을 삭제한다."
-	)
+	@Operation(summary = "회원 삭제 API", description = "관리자가 특정 회원 계정을 삭제한다.")
 	@DeleteMapping("/{userId}")
 	@PreAuthorize("hasRole('MASTER')")
 	public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Long userId) {
