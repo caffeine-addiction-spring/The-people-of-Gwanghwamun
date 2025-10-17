@@ -1,6 +1,7 @@
 # The-people-of-Gwanghwamun
+
 ## Project Objective
-> 광화문 지역 기반 배달 주문 관리 플랫폼을 개발하여, 주문 접수와 처리 과정을 자동화하고,
+> 광화문 지역 기반 배달 주문 관리 플랫폼을 개발하여, 주문 접수와 처리 과정을 자동화하고,  
 > 스프링 부트 기반 모놀리식 아키텍처 개발 경험과 직관적인 API 문서를 제공하는 것을 목표로 합니다.
 
 ## Contributors
@@ -72,10 +73,10 @@
 #### InfraStructure
 
 ### ERD
-![ERD](images/)
+![ERD](images/ERD.png)
 
 ### System Architecture
-![Architecture](images/)
+![Architecture](images/architecture.png)
 
 ### Directory Structure
 ```text
@@ -113,4 +114,28 @@ src
       │  └─user
       ├─BaseEntity.java
       └─GwanghwamunApplication.java
+```
+
+## Service Setup & Execution
+### Development Environment
+- Java 17
+- Spring Boot 3.x
+
+###  Execution
+**1. Project Clone**
+```bash
+git clone https://github.com/your-org/gwanghwamun.git
+cd gwanghwamun
+```
+**2. Environment Setup**
+```bash
+# 루트 디렉토리에 .env.dev 파일 생성
+```
+**3. Gradle Build**
+```bash
+./gradlew clean build
+```
+**4. Run Application**
+```
+./gradlew bootRun
 ```
