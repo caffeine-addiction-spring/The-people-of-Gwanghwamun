@@ -74,7 +74,9 @@ public class UserAddressService {
 	@Transactional(readOnly = true)
 	public List<GetUserAddressListResDTO> getUserAddresses(User authenticatedUser) {
 		User user = getUserOrThrow(authenticatedUser);
-		return userAddressRepository.findAllByUserAndDeletedAtIsNull(user).stream()
+		return userAddressRepository
+				.findAllByUserAndDeletedAtIsNullOrderByIsDefaultDescCreateAtDesc(user)
+				.stream()
 				.map(GetUserAddressListResDTO::from)
 				.toList();
 	}

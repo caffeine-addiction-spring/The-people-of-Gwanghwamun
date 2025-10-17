@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public record SignupReqDTO(
+		Long groupId,
 		@NotBlank(message = "이메일은 필수 입력 값입니다.") @Email(message = "이메일 형식에 맞지 않습니다.") String email,
 		@NotBlank(message = "비밀번호는 필수 입력 값입니다.") String password,
 		@NotBlank(message = "이름은 필수 입력 값입니다.") String name,
@@ -18,6 +19,7 @@ public record SignupReqDTO(
 
 	public User toUser(String encodedPassword) {
 		return User.builder()
+				.groupId(groupId)
 				.email(email)
 				.password(encodedPassword)
 				.name(name)
