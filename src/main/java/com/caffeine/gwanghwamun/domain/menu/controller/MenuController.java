@@ -60,10 +60,13 @@ public class MenuController {
 			@PathVariable("storeId") UUID storeId,
 			@RequestParam(name = "page", defaultValue = "0") int page,
 			@RequestParam(name = "size", defaultValue = "10") int size,
+			@RequestParam(name = "sortBy", defaultValue = "createdAt") String sortBy,
+			@RequestParam(name = "direction", defaultValue = "desc") String direction,
 			@AuthenticationPrincipal UserDetailsImpl principal) {
 
 		if (size != 10 && size != 30 && size != 50) size = 10;
-		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createAt"));
+		Sort.Direction sortDirection = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
 		Page<MenuResDTO> menuResDTOPage = menuService.findMenuListByStore(storeId, pageable, principal);
 		return ResponseUtil.successResponse(SuccessCode.MENU_LIST_SUCCESS, menuResDTOPage);
 	}
@@ -156,5 +159,23 @@ public class MenuController {
 
 		fileService.deleteFiles(menu.groupId(), "menu");
 		return ResponseUtil.successResponse(SuccessCode.FILE_DELETE_SUCCESS);
+	}
+
+	@Operation(summary = "가게별 메뉴 검색 API", description = "특정 가게에서 키워드로 메뉴를 검색할 수 있다")
+	@GetMapping("/search")
+	public ResponseEntity<ApiResponse<Page<MenuResDTO>>> searchMenusByStore(
+			@PathVariable("storeId") UUID storeId,
+			@RequestParam String keyword,
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size,
+			@RequestParam(defaultValue = "createdAt") String sortBy,
+			@RequestParam(defaultValue = "desc") String direction,
+			@AuthenticationPrincipal UserDetailsImpl principal) {
+
+		if (size != 10 && size != 30 && size != 50) {
+			size = 10;
+		}
+		Page<MenuResDTO> result = menuService.searchMenusByStore(storeId, keyword, page, size, sortBy, direction, principal);
+		return ResponseUtil.successResponse(SuccessCode.MENU_SEARCH_SUCCESS, result);
 	}
 }

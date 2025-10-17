@@ -35,4 +35,29 @@ public interface MenuRepository extends JpaRepository<Menu, UUID>, QuerydslPredi
 		builder.and(menu.storeId.eq(storeId)).and(menu.deletedAt.isNull()).and(menu.isHidden.eq(false));
 		return findAll(builder, pageable);
 	}
+
+	@Query(
+			"""
+		SELECT m FROM Menu m
+		WHERE m.storeId = :storeId
+			AND m.deletedAt IS NULL
+			AND (
+					LOWER(m.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+					LOWER(m.menuContent) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+					LOWER(m.menuCategory) LIKE LOWER(CONCAT('%', :keyword, '%'))
+			)
+		""")
+	Page<Menu> searchMenusByStore(@Param("storeId") UUID storeId, @Param("keyword") String keyword, Pageable pageable);
+
+	@Query(
+			"""
+		SELECT m FROM Menu m
+		WHERE m.deletedAt IS NULL
+			AND (
+					LOWER(m.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+					LOWER(m.menuContent) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+					LOWER(m.menuCategory) LIKE LOWER(CONCAT('%', :keyword, '%'))
+			)
+		""")
+	Page<Menu> searchAllMenus(@Param("keyword") String keyword, Pageable pageable);
 }

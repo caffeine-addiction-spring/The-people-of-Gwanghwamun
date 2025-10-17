@@ -21,7 +21,9 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -184,4 +186,49 @@ public class MenuService {
 		List<FileInfoResDTO> images = fileService.getList(menu.getGroupId(), "menu", FileStatus.DONE);
 		return new MenuResDTO(menu, images);
 	}
+
+	@Transactional(readOnly = true)
+	public Page<MenuResDTO> searchMenus(
+			String keyword, int page, int size, String sortBy, String direction) {
+		if (size != 10 && size != 30 && size != 50) {
+			size = 10;
+		}
+
+		Sort.Direction sortDirection =
+				direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+		Sort sort = Sort.by(sortDirection, sortBy);
+		Pageable pageable = PageRequest.of(page, size, sort);
+
+		Page<Menu> menuPage = menuRepository.searchAllMenus(keyword, pageable);
+		return menuPage.map(
+				menu -> {
+					List<FileInfoResDTO> images =
+							fileService.getList(menu.getGroupId(), "menu", FileStatus.DONE);
+					return new MenuResDTO(menu, images);
+				});
+	}
+
+	@Transactional(readOnly = true)
+	public Page<MenuResDTO> searchMenusByStore(
+			UUID storeId, String keyword, int page, int size, String sortBy, String direction, UserDetailsImpl principal) {
+		validateStoreOwnership(storeId, principal);
+
+		if (size != 10 && size != 30 && size != 50) {
+			size = 10;
+		}
+
+		Sort.Direction sortDirection =
+				direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+		Sort sort = Sort.by(sortDirection, sortBy);
+		Pageable pageable = PageRequest.of(page, size, sort);
+
+		Page<Menu> menuPage = menuRepository.searchMenusByStore(storeId, keyword, pageable);
+		return menuPage.map(
+				menu -> {
+					List<FileInfoResDTO> images =
+							fileService.getList(menu.getGroupId(), "menu", FileStatus.DONE);
+					return new MenuResDTO(menu, images);
+				});
+	}
+
 }

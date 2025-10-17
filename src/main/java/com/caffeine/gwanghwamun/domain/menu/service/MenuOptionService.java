@@ -19,7 +19,9 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -195,4 +197,40 @@ public class MenuOptionService {
 
 		return new MenuOptionResDTO(option);
 	}
+
+	@Transactional(readOnly = true)
+	public Page<MenuOptionResDTO> searchOptions(
+			String keyword, int page, int size, String sortBy, String direction) {
+		if (size != 10 && size != 30 && size != 50) {
+			size = 10;
+		}
+
+		Sort.Direction sortDirection =
+				direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+		Sort sort = Sort.by(sortDirection, sortBy);
+		Pageable pageable = PageRequest.of(page, size, sort);
+
+		Page<MenuOption> optionPage = menuOptionRepository.searchAllOptions(keyword, pageable);
+		return optionPage.map(MenuOptionResDTO::new);
+	}
+
+	@Transactional(readOnly = true)
+	public Page<MenuOptionResDTO> searchOptionsByMenu(
+			UUID storeId, UUID menuId, String keyword, int page, int size, String sortBy, String direction, UserDetailsImpl principal) {
+		validateStoreOwnership(storeId, principal);
+		validateMenuBelongsToStore(storeId, menuId);
+
+		if (size != 10 && size != 30 && size != 50) {
+			size = 10;
+		}
+
+		Sort.Direction sortDirection =
+				direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+		Sort sort = Sort.by(sortDirection, sortBy);
+		Pageable pageable = PageRequest.of(page, size, sort);
+
+		Page<MenuOption> optionPage = menuOptionRepository.searchOptionsByMenu(menuId, keyword, pageable);
+		return optionPage.map(MenuOptionResDTO::new);
+	}
+
 }
