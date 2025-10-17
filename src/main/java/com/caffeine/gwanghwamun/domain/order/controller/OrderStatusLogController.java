@@ -27,7 +27,7 @@ public class OrderStatusLogController {
 
 	private final OrderStatusLogService orderStatusLogService;
 
-	@Operation(summary = "전체 로그 조회", description = "모든 주문 상태 로그를 조회한다.")
+	@Operation(summary = "전체 로그 조회 API", description = "모든 주문 상태 로그를 조회한다.")
 	@GetMapping
 	public ResponseEntity<ApiResponse<Page<OrderStatusLogResDTO>>> getAllLogs(
 			@PageableDefault(page = 0, size = 10, sort = "createAt", direction = Sort.Direction.DESC)
@@ -36,7 +36,7 @@ public class OrderStatusLogController {
 		return ResponseUtil.successResponse(SuccessCode.ORDER_LOG_LIST_SUCCESS, logList);
 	}
 
-	@Operation(summary = "회원별 로그 조회", description = "회원별 주문 상태 로그를 조회한다.")
+	@Operation(summary = "회원별 로그 조회 API", description = "회원별 주문 상태 로그를 조회한다.")
 	@GetMapping("/user/{userId}")
 	public ResponseEntity<ApiResponse<Page<OrderStatusLogResDTO>>> getLogsByUser(
 			@PathVariable Long userId,
@@ -46,7 +46,7 @@ public class OrderStatusLogController {
 		return ResponseUtil.successResponse(SuccessCode.ORDER_LOG_LIST_SUCCESS, logList);
 	}
 
-	@Operation(summary = "가게별 로그 조회", description = "가게별 주문 상태 로그를 조회한다.")
+	@Operation(summary = "가게별 로그 조회 API", description = "가게별 주문 상태 로그를 조회한다.")
 	@GetMapping("/store/{storeId}")
 	public ResponseEntity<ApiResponse<Page<OrderStatusLogResDTO>>> getLogsByStore(
 			@PathVariable UUID storeId,
@@ -56,7 +56,7 @@ public class OrderStatusLogController {
 		return ResponseUtil.successResponse(SuccessCode.ORDER_LOG_LIST_SUCCESS, logList);
 	}
 
-	@Operation(summary = "주문별 로그 조회", description = "주문별 상태 로그를 조회한다.")
+	@Operation(summary = "주문별 로그 조회 API", description = "주문별 상태 로그를 조회한다.")
 	@GetMapping("/order/{orderId}")
 	public ResponseEntity<ApiResponse<Page<OrderStatusLogResDTO>>> getLogsByOrder(
 			@PathVariable UUID orderId,
@@ -66,7 +66,7 @@ public class OrderStatusLogController {
 		return ResponseUtil.successResponse(SuccessCode.ORDER_LOG_LIST_SUCCESS, logList);
 	}
 
-	@Operation(summary = "개별 로그 조회", description = "특정 로그 ID로 조회한다.")
+	@Operation(summary = "개별 로그 조회 API", description = "특정 로그 ID로 조회한다.")
 	@GetMapping("/{logId}")
 	public ResponseEntity<ApiResponse<OrderStatusLogResDTO>> getLogById(@PathVariable UUID logId) {
 		OrderStatusLogResDTO logList = orderStatusLogService.findLogById(logId);

@@ -17,7 +17,9 @@ import com.caffeine.gwanghwamun.domain.user.entity.User;
 import com.caffeine.gwanghwamun.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -66,37 +68,64 @@ public class CartService {
 		}
 
 		int optionPrice = menuOptions.stream().mapToInt(MenuOption::getPrice).sum();
-
 		int itemTotalPrice = (menu.getPrice() + optionPrice) * req.quantity();
 
-		Cart cart =
-				Cart.builder()
-						.user(user)
-						.store(store)
-						.menu(menu)
-						.quantity(req.quantity())
-						.totalPrice(itemTotalPrice)
-						.build();
-
-		cartRepository.save(cart);
+		Set<UUID> menuOptionIds =
+				menuOptions.stream().map(MenuOption::getMenuOptionId).collect(Collectors.toSet());
 
 		List<CartItemOption> cartItemOptions =
-				menuOptions.stream()
-						.map(option -> CartItemOption.builder().menuOption(option).cart(cart).build())
-						.toList();
-		List<CartItemOptionResDTO> cartItemOptionResList =
+				cartItemOptionRepository.findAllByMenuOption_MenuOptionIdIn(req.menuOptionIdList());
+
+		Set<UUID> cartOptionIds =
 				cartItemOptions.stream()
-						.map(opt -> new CartItemOptionResDTO(opt.getMenuOption().getMenuOptionId()))
-						.toList();
+						.map(c -> c.getMenuOption().getMenuOptionId())
+						.collect(Collectors.toSet());
 
-		cartItemOptionRepository.saveAll(cartItemOptions);
+		if (menuOptionIds.containsAll(cartOptionIds)) {
 
-		return new SaveCartResDTO(cart, cartItemOptionResList);
+			Cart cart =
+					cartRepository.findByCartIdAndDeletedDateIsNull(
+							cartItemOptions.get(0).getCart().getCartId());
+
+			cart.updateQuantity(cart.getQuantity() + req.quantity());
+			cart.updateTotalPrice(cart.getTotalPrice() + itemTotalPrice);
+			cartRepository.save(cart);
+
+			return new SaveCartResDTO(
+					cart,
+					cartItemOptions.stream()
+							.map(option -> new CartItemOptionResDTO(option.getMenuOption().getMenuOptionId()))
+							.toList());
+		} else {
+			Cart cart =
+					Cart.builder()
+							.user(user)
+							.store(store)
+							.menu(menu)
+							.quantity(req.quantity())
+							.totalPrice(itemTotalPrice)
+							.build();
+			cartRepository.save(cart);
+
+			cartItemOptions =
+					menuOptions.stream()
+							.map(option -> CartItemOption.builder().menuOption(option).cart(cart).build())
+							.toList();
+
+			cartItemOptionRepository.saveAll(cartItemOptions);
+
+			List<CartItemOptionResDTO> cartItemOptionResList =
+					cartItemOptions.stream()
+							.map(opt -> new CartItemOptionResDTO(opt.getMenuOption().getMenuOptionId()))
+							.toList();
+
+			return new SaveCartResDTO(cart, cartItemOptionResList);
+		}
 	}
 
 	@Transactional
 	public List<CartResDTO> findCartList(User user) {
-		List<Cart> cartList = cartRepository.findByUserAndDeletedDateIsNull(user);
+		List<Cart> cartList = cartRepository.findByUserAndDeletedDateIsNullOrderByCreateAtDesc(user);
 		return cartList.stream().map(CartResDTO::new).toList();
 	}
 

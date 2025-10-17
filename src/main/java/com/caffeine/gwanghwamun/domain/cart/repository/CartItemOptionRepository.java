@@ -11,4 +11,6 @@ public interface CartItemOptionRepository extends JpaRepository<CartItemOption, 
 	List<CartItemOption> findAllByCartAndDeletedDateIsNull(Cart cart);
 
 	void deleteAllByCart(Cart cart);
+
+	List<CartItemOption> findAllByMenuOption_MenuOptionIdIn(List<UUID> uuids);
 }

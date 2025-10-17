@@ -33,7 +33,7 @@ public class CartController {
 	}
 
 	@PreAuthorize("hasRole('CUSTOMER')")
-	@Operation(summary = "장바구니 조회", description = "장바구니 목록을 조회한다.")
+	@Operation(summary = "장바구니 조회 API", description = "장바구니 목록을 조회한다.")
 	@GetMapping
 	public ResponseEntity<ApiResponse<List<CartResDTO>>> findCartList(
 			@AuthenticationPrincipal UserDetailsImpl user) {
@@ -43,7 +43,7 @@ public class CartController {
 	}
 
 	@PreAuthorize("hasRole('CUSTOMER')")
-	@Operation(summary = "장바구니 항목 수정", description = "장바구니에 담긴 메뉴의 옵션과 수량을 수정한다.")
+	@Operation(summary = "장바구니 항목 수정 API", description = "장바구니에 담긴 메뉴의 옵션과 수량을 수정한다.")
 	@PutMapping("/{cartId}")
 	public ResponseEntity<ApiResponse<CartUpdateResDTO>> updateCart(
 			@PathVariable("cartId") UUID cartId,
@@ -55,7 +55,7 @@ public class CartController {
 	}
 
 	@PreAuthorize("hasAnyRole('CUSTOMER', 'MASTER')")
-	@Operation(summary = "장바구니 항목 삭제", description = "장바구니에서 항목을 삭제한다.")
+	@Operation(summary = "장바구니 항목 삭제 API", description = "장바구니에서 항목을 삭제한다.")
 	@DeleteMapping("/{cartId}")
 	public ResponseEntity<ApiResponse<Void>> deleteCart(
 			@PathVariable("cartId") UUID cartId, @AuthenticationPrincipal UserDetailsImpl user) {

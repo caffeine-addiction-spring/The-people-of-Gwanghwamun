@@ -49,7 +49,7 @@ public class OrderController {
 	}
 
 	@PreAuthorize("hasAnyRole('CUSTOMER','OWNER','MANAGER','MASTER')")
-	@Operation(summary = "주문 상세 조회", description = "주문 상세 정보를 조회한다.")
+	@Operation(summary = "주문 상세 조회 API", description = "주문 상세 정보를 조회한다.")
 	@GetMapping("/{orderId}")
 	public ResponseEntity<ApiResponse<OrderResDTO>> findOrder(
 			@PathVariable UUID orderId, @AuthenticationPrincipal UserDetailsImpl user) {
@@ -59,7 +59,7 @@ public class OrderController {
 	}
 
 	@PreAuthorize("hasAnyRole('CUSTOMER','OWNER','MANAGER','MASTER')")
-	@Operation(summary = "주문 취소", description = "주문을 취소한다. 주문 후 5분 이내만 가능")
+	@Operation(summary = "주문 취소 API", description = "주문을 취소한다. 주문 후 5분 이내만 가능하다.")
 	@PutMapping("/{orderId}/cancel")
 	public ResponseEntity<ApiResponse<OrderStatusResDTO>> cancelOrder(
 			@PathVariable UUID orderId,
@@ -71,7 +71,7 @@ public class OrderController {
 	}
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
-	@Operation(summary = "주문 수락", description = "가게 주문을 수락한다.")
+	@Operation(summary = "주문 수락 API", description = "가게 주문을 수락한다.")
 	@PutMapping("/{orderId}/accept")
 	public ResponseEntity<ApiResponse<OrderStatusResDTO>> acceptOrder(
 			@PathVariable UUID orderId, @AuthenticationPrincipal UserDetailsImpl user) {
@@ -81,7 +81,7 @@ public class OrderController {
 	}
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
-	@Operation(summary = "주문 거절", description = "가게 주문을 거절한다.")
+	@Operation(summary = "주문 거절 API", description = "가게 주문을 거절한다.")
 	@PutMapping("/{orderId}/reject")
 	public ResponseEntity<ApiResponse<OrderStatusResDTO>> rejectOrder(
 			@PathVariable UUID orderId, @AuthenticationPrincipal UserDetailsImpl user) {
@@ -91,7 +91,7 @@ public class OrderController {
 	}
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
-	@Operation(summary = "조리 완료", description = "주문 조리를 완료 처리한다.")
+	@Operation(summary = "조리 완료 API", description = "주문 조리를 완료 처리한다.")
 	@PutMapping("/{orderId}/cook-complete")
 	public ResponseEntity<ApiResponse<OrderStatusResDTO>> completeCooking(
 			@PathVariable UUID orderId, @AuthenticationPrincipal UserDetailsImpl user) {
@@ -101,7 +101,7 @@ public class OrderController {
 	}
 
 	@PreAuthorize("hasAnyRole('OWNER','MANAGER','MASTER')")
-	@Operation(summary = "배달 완료", description = "주문 배달 완료 처리한다.")
+	@Operation(summary = "배달 완료 API", description = "주문 배달 완료 처리한다.")
 	@PutMapping("/{orderId}/delivery-complete")
 	public ResponseEntity<ApiResponse<OrderStatusResDTO>> completeDelivery(
 			@PathVariable UUID orderId, @AuthenticationPrincipal UserDetailsImpl user) {
