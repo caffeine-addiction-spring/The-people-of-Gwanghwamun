@@ -134,7 +134,7 @@ public class FileService {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<FileInfoResDTO> getFileList(
+	public Page<FileInfoResDTO> searchFiles(
 			String gid, String location, int page, int size, String sortBy, String direction) {
 
 		if (size != 10 && size != 30 && size != 50) {
