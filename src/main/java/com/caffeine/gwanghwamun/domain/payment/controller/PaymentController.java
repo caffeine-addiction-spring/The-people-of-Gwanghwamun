@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,7 @@ public class PaymentController {
 		return ResponseUtil.successResponse(SuccessCode.PAYMENT_CREATE_SUCCESS, paymentResDTO);
 	}
 
+	@PreAuthorize("hasAnyRole('CUSTOMER','OWNER','MANAGER','MASTER')")
 	@Operation(summary = "결제 단건 조회 API", description = "결제 내역 상세를 조회 한다.")
 	@GetMapping("/{paymentId}")
 	public ResponseEntity<ApiResponse<PaymentResDTO>> findPayment(
@@ -56,6 +58,7 @@ public class PaymentController {
 		return ResponseUtil.successResponse(SuccessCode.PAYMENT_LIST_FIND_SUCCESS, paymentList);
 	}
 
+	@PreAuthorize("hasAnyRole('OWNER')")
 	@Operation(summary = "가게 결제 내역 조회 API", description = "가게) 결제 내역 리스트를 조회 한다.")
 	@GetMapping("/store/{storeId}")
 	public ResponseEntity<ApiResponse<Page<PaymentDetailResDTO>>> getPaymentListByStore(
