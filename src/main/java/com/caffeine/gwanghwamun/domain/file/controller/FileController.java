@@ -28,7 +28,7 @@ public class FileController {
 
 	private final FileService fileService;
 
-	@Operation(summary = "파일 업로드")
+	@Operation(summary = "파일 업로드 및 생성 API", description = "파일을 등록한다.")
 	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<ApiResponse<List<FileInfoResDTO>>> upload(
 			@RequestPart(name = "file", required = false) MultipartFile[] files,
@@ -42,14 +42,14 @@ public class FileController {
 		return ResponseUtil.successResponse(SuccessCode.FILE_UPLOAD_SUCCESS, items);
 	}
 
-	@Operation(summary = "파일 정보 조회")
+	@Operation(summary = "파일 정보 단일 조회 API", description = "단일 파일 정보를 조회한다.")
 	@GetMapping("/{uuid}")
 	public ResponseEntity<ApiResponse<FileInfoResDTO>> getFile(@PathVariable String uuid) {
 		FileInfoResDTO item = fileService.get(UUID.fromString(uuid));
 		return ResponseUtil.successResponse(SuccessCode.FILE_READ_SUCCESS, item);
 	}
 
-	@Operation(summary = "파일 정보 그룹 조회")
+	@Operation(summary = "파일 정보 그룹 조회 API", description = "그룹 파일 정보를 조회한다.")
 	@GetMapping({"/list/{gid}", "/list/{gid}/{location}"})
 	public ResponseEntity<ApiResponse<List<FileInfoResDTO>>> getFileList(
 			@PathVariable("gid") String gid,
@@ -60,7 +60,7 @@ public class FileController {
 		return ResponseUtil.successResponse(SuccessCode.FILE_READ_SUCCESS, items);
 	}
 
-	@Operation(summary = "파일 정보 수정")
+	@Operation(summary = "파일 정보 수정 API", description = "파일 정보를 수정한다.")
 	@PutMapping("/{uuid}")
 	public ResponseEntity<ApiResponse<FileInfoResDTO>> updateFile(
 			@RequestBody FileUpdateReqDTO updateReqDTO, @PathVariable String uuid) {
@@ -69,7 +69,7 @@ public class FileController {
 		return ResponseUtil.successResponse(SuccessCode.FILE_UPDATE_SUCCESS);
 	}
 
-	@Operation(summary = "파일 정보 삭제")
+	@Operation(summary = "파일 정보 단일 삭제 API", description = "단일 파일 정보를 삭제한다.")
 	@DeleteMapping("/{uuid}")
 	public ResponseEntity<ApiResponse<Void>> deleteFile(@PathVariable String uuid) {
 		fileService.deleteFile(UUID.fromString(uuid));
@@ -77,7 +77,7 @@ public class FileController {
 		return ResponseUtil.successResponse(SuccessCode.FILE_DELETE_SUCCESS);
 	}
 
-	@Operation(summary = "파일 정보 그룹 삭제")
+	@Operation(summary = "파일 정보 그룹 삭제 API", description = "그룹 파일 정보를 삭제한다.")
 	@DeleteMapping({"/deletes/{gid}", "/deletes/{gid}/{location}"})
 	public ResponseEntity<ApiResponse<Void>> deleteFileList(
 			@PathVariable("gid") String gid,
