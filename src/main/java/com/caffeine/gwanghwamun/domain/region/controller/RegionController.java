@@ -46,4 +46,12 @@ public class RegionController {
 		RegionResDTO response = regionService.updateRegion(addressId, request);
 		return ResponseUtil.successResponse(SuccessCode.REGION_UPDATE_SUCCESS, response);
 	}
+
+    @Operation(summary = "지역 삭제 API", description = "관리자가 지역을 삭제한다.")
+    @PreAuthorize("hasAnyRole('MANAGER', 'MASTER')")
+    @DeleteMapping("/{addressId}")
+    public ResponseEntity<ApiResponse<Void>> deleteRegion(@PathVariable UUID addressId) {
+        regionService.deleteRegion(addressId);
+        return ResponseUtil.successResponse(SuccessCode.REGION_DELETE_SUCCESS);
+    }
 }
