@@ -36,7 +36,9 @@ public class Review extends BaseEntity {
 	@Column(name = "content", nullable = false)
 	private String content;
 
-	@OneToOne(mappedBy = "review", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "review",
+			cascade = CascadeType.REMOVE,
+			orphanRemoval = true)
 	private ReviewReply reply;
 
 	@Builder
