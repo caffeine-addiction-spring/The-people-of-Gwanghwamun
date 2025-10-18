@@ -8,7 +8,7 @@ public record OrderItemResDTO(UUID orderItemId, UUID menuId, String menuName, In
 		this(
 				orderItem.getOrderItemId(),
 				orderItem.getMenu().getMenuId(),
-				orderItem.getMenu().getName(),
+				orderItem.getMenuName(),
 				orderItem.getQuantity());
 	}
 }
