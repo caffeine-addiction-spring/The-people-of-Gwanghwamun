@@ -23,7 +23,7 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
 	@Query(
 			"""
 				SELECT COALESCE(AVG(r.rating), 0)
-				FROM com.caffeine.gwanghwamun.domain.review.entity.Review r
+				FROM Review r
 				WHERE r.storeId = :storeId
 		""")
 	Double findAverageRatingByStoreId(@Param("storeId") UUID storeId);
