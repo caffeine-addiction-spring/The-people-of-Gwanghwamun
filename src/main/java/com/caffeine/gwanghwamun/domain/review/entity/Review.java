@@ -36,9 +36,7 @@ public class Review extends BaseEntity {
 	@Column(name = "content", nullable = false)
 	private String content;
 
-	@OneToOne(mappedBy = "review",
-			cascade = CascadeType.REMOVE,
-			orphanRemoval = true)
+	@OneToOne(mappedBy = "review", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private ReviewReply reply;
 
 	@Builder
