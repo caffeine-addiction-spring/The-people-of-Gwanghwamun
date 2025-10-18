@@ -19,7 +19,7 @@ public record OrderItemListResDTO(
 			this(
 					orderItem.getOrderItemId(),
 					orderItem.getMenu().getMenuId(),
-					orderItem.getMenu().getName(),
+					orderItem.getMenuName(),
 					orderItemOptionList,
 					orderItem.getQuantity(),
 					itemPrice);
