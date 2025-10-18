@@ -90,7 +90,9 @@ public class ReviewService {
 		if (!review.getUserId().equals(userId)) {
 			throw new CustomException(ErrorCode.REVIEW_DELETE_UNAUTHORIZED);
 		}
+		reviewReplyRepository.deleteByReviewId(reviewId);
 		reviewRepository.deleteById(reviewId);
+		reviewRepository.flush();
 		storeService.updateStoreRating(review.getStoreId());
 	}
 
